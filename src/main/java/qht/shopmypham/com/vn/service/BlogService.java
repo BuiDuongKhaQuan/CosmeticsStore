@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BlogService {
-    public static List<Blog> get4Blog() {
+    public static List<Blog> get8Blog() {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM blog LIMIT 8")
                         .mapToBean(Blog.class)
@@ -17,9 +17,10 @@ public class BlogService {
                         .collect(Collectors.toList())
         );
     }
-    public static List<Blog> get3Blog() {
+    public static List<Blog> getLimitBlog(int quantity) {
         return JDBiConnector.me().withHandle(h ->
-                h.createQuery("SELECT * FROM blog LIMIT 3")
+                h.createQuery("SELECT * FROM blog LIMIT ?")
+                        .bind(0, quantity)
                         .mapToBean(Blog.class)
                         .stream()
                         .collect(Collectors.toList())

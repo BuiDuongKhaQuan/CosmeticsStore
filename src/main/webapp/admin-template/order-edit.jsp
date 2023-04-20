@@ -1,4 +1,3 @@
-
 <%@ page import="qht.shopmypham.com.vn.model.CheckOut" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -52,37 +51,31 @@
                         <div class="card">
                             <div class="body">
                                 <div class="row">
-
                                     <div class="col-xl-12 col-lg-12 col-md-12">
-
-
                                         <div class="product details">
-                                            <input value="<%=checkOut.getIdCk()%>" type="hidden" name="idCk" id="idCk">
-                                            <input value="<%=checkOut.getConfirmDate()%>" type="hidden" name="dateConfirm" id="confirm">
-                                            <input value="<%=checkOut.getReceivedDate()%>" type="hidden" name="dateRecieded" id="dateRecieded">
                                             <label for="name">Tên người nhận</label>
                                             <div class="form-group">
                                                 <input type="text" id="name" class="form-control"
-                                                       name="name" value="<%=checkOut.getName()%>">
+                                                       value="<%=checkOut.getName()%>">
                                             </div>
 
                                             <label for="address">Địa chỉ</label>
                                             <div class="form-group">
                                                 <input type="text" id="address" class="form-control"
-                                                       name="address" value="<%=checkOut.getAddress()%>">
+                                                       value="<%=checkOut.getAddress()%>">
                                             </div>
                                             <label for="phone">Số điện thoại</label>
                                             <div class="form-group">
                                                 <input type="text" id="phone" class="form-control"
-                                                       name="phone" value="<%=checkOut.getPhone()%>">
+                                                       value="<%=checkOut.getPhone()%>">
                                             </div>
                                             <label for="note">Ghi chú</label>
                                             <div class="form-group">
                                                 <input type="text" id="note" class="form-control"
-                                                       name="note" value="<%=checkOut.getNote()%>">
+                                                       value="<%=checkOut.getNote()%>">
                                             </div>
                                         </div>
-                                        <button type="submit" onclick="saveOrder()"
+                                        <button onclick="saveOrder(<%=checkOut.getIdCk()%>)"
                                                 class="btn btn-raised btn-primary btn-round waves-effect">Lưu
                                         </button>
                                     </div>
@@ -105,18 +98,15 @@
 
 <%----%>
 <script>
-    function saveOrder() {
+    function saveOrder(idCk) {
         var name = document.getElementById("name").value;
         var address = document.getElementById("address").value;
         var phone = document.getElementById("phone").value;
         var note = document.getElementById("note").value;
-        var idCk = document.getElementById("IdCk").value;
-        var dateConfirm = document.getElementById("dateConfirm").value;
-        var dateRecieded = document.getElementById("dateConfirm").value;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "admin-order", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 alert("Đơn hàng đã được cập nhật thành công.");
             }
@@ -125,9 +115,7 @@
             + "&address=" + encodeURIComponent(address)
             + "&phone=" + encodeURIComponent(phone)
             + "&note=" + encodeURIComponent(note)
-            + "&idCk=" + encodeURIComponent(idCk)
-            + "&dateConfirm=" + encodeURIComponent(dateConfirm)
-            + "&dateRecieded=" + encodeURIComponent(dateRecieded)
+            + "&idCk=" + idCk
             + "&command=edit");
     }
 </script><!-- Custom Js -->

@@ -1,7 +1,7 @@
 package qht.shopmypham.com.vn.service;
 
 import qht.shopmypham.com.vn.db.JDBiConnector;
-import qht.shopmypham.com.vn.model.Product;
+import qht.shopmypham.com.vn.model.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +43,7 @@ public class ProductService {
         });
     }
 
-    public static Product getProductById(String pid) {
+    public static Product getProductById(int pid) {
         List<Product> products = JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM product WHERE idP = ?")
                         .bind(0, pid)
@@ -78,6 +78,7 @@ public class ProductService {
 
         return products;
     }
+
     public static List<Product> getTop8ProductIsNew() {
         List<Product> products = JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM product WHERE isNew = 1 LIMIT 8")
@@ -88,6 +89,7 @@ public class ProductService {
 
         return products;
     }
+
     public static List<Product> getTop8IsPromotion() {
         List<Product> products = JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM product WHERE isPro = 1 LIMIT 8")
@@ -98,6 +100,7 @@ public class ProductService {
 
         return products;
     }
+
     public static List<Product> getProductByPrice(String price1, String price2) {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM product WHERE price>? AND price<?")
@@ -120,6 +123,7 @@ public class ProductService {
         );
 
     }
+
     public static List<Product> getProductByIsNew() {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM product where isNew = 1")
@@ -129,6 +133,7 @@ public class ProductService {
         );
 
     }
+
     public static List<Product> getProductSortAscendingByPrice() {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM product ORDER BY price DESC ")
@@ -158,49 +163,42 @@ public class ProductService {
         );
     }
 
-    public static void addProduct(String name, String img1, String img2, String img3, String img4,
-                                  String isNew, String isPro, String idB, String idTrademark, String information,
+    public static void addProduct(String idP, String name, String trademark, String information,
                                   String idC, String price, String quantity) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("insert into product(name,img1,img2,img3,img4,trademark,price,information,idC,quantity,isNew,isPro,idB) " +
-                                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)")
-                        .bind(0, name)
-                        .bind(1, img1)
-                        .bind(2, img2)
-                        .bind(3, img3)
-                        .bind(4, img4)
-                        .bind(5, idTrademark)
-                        .bind(6, price)
-                        .bind(7, information)
-                        .bind(8, idC)
-                        .bind(9, quantity)
-                        .bind(10, isNew)
-                        .bind(11, isPro)
-                        .bind(12, idB)
+                h.createUpdate("insert into product(idP,name,trademark,price,information, idC,quantity) values (?,?,?,?,?,?,?)")
+                        .bind(0, idP)
+                        .bind(1, name)
+                        .bind(2, trademark)
+                        .bind(3, price)
+                        .bind(4, information)
+                        .bind(5, idC)
+                        .bind(6, quantity)
                         .execute()
         );
     }
 
-    public static void editProductById(String name, String img1, String img2, String img3, String img4,
-                                       String isNew, String isPro, String idB, String idTrademark, String information,
+
+    public static void editProductById(String name, String trademark, String information,
                                        String idC, String price, String quantity, String idP) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update product set name = ?,img1 =?,img2 =?,img3 =?,img4 =?,trademark= ?,price= ?,information= ?," +
-                                "idC= ?,quantity= ?,isNew= ?,isPro= ?,idB= ? where idP = ?")
+                h.createUpdate("update product set name = ?, trademark= ?,price= ?,information= ?, idC= ?,quantity= ? where idP = ?")
                         .bind(0, name)
-                        .bind(1, img1)
-                        .bind(2, img2)
-                        .bind(3, img3)
-                        .bind(4, img4)
-                        .bind(5, idTrademark)
-                        .bind(6, price)
-                        .bind(7, information)
-                        .bind(8, idC)
-                        .bind(9, quantity)
-                        .bind(10, isNew)
-                        .bind(11, isPro)
-                        .bind(12, idB)
-                        .bind(13, idP)
+                        .bind(1, trademark)
+                        .bind(2, price)
+                        .bind(3, information)
+                        .bind(4, idC)
+                        .bind(5, quantity)
+                        .bind(6, idP)
+                        .execute()
+        );
+    }
+
+    public static void editImgProductById(String img, String idImg) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("update images set img = ? where id = ? ")
+                        .bind(0, img)
+                        .bind(1, idImg)
                         .execute()
         );
     }
@@ -214,6 +212,209 @@ public class ProductService {
         );
     }
 
+    public static List<Image> getImages(String idP) {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM images where idP=? ")
+                        .bind(0, idP)
+                        .mapToBean(Image.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+
+    }
+
+    public static void addImageByIdP(String idP, String img) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("insert into images(idP,img) VALUES (?,?)")
+                        .bind(0, idP)
+                        .bind(1, img)
+                        .execute()
+        );
+
+    }
+
+    // lấy tên theo id Sp
+    public static Product getName(String idP) {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT name FROM product where idP=? ")
+                        .bind(0, idP)
+                        .mapToBean(Product.class)
+                        .stream()
+                        .collect(Collectors.toList()).get(0)
+        );
+
+    }
+
+    //lấy giá theo id
+    public static Product getPrice(String idP) {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT price FROM product where idP=? ")
+                        .bind(0, idP)
+                        .mapToBean(Product.class)
+                        .stream()
+                        .collect(Collectors.toList()).get(0)
+        );
+
+    }
+
+    public static Product getP(String idP) {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM product where idP=? ")
+                        .bind(0, idP)
+                        .mapToBean(Product.class)
+                        .stream()
+                        .collect(Collectors.toList()).get(0)
+        );
+
+    }
+
+    public static void addProductPromotion(String idP, String price, String startDay, String endDay) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("insert into promotionproduct(startDay, endDay, price, idP) " +
+                                "VALUES (?,?,?,?)")
+                        .bind(0, startDay)
+                        .bind(1, endDay)
+                        .bind(2, price)
+                        .bind(3, idP)
+                        .execute()
+        );
+    }
+
+    public static List<PromotionProduct> getPromotionProduct(int quantity) {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM promotionproduct ORDER BY id DESC LIMIT ?")
+                        .bind(0, quantity)
+                        .mapToBean(PromotionProduct.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public static List<PromotionProduct> getPromotion() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM promotionproduct ORDER BY id DESC")
+                        .mapToBean(PromotionProduct.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public static PromotionProduct getPricePromotion(String idP) {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT promotionproduct.price FROM `promotionproduct` INNER JOIN `product` ON promotionproduct.idP = product.idP WHERE product.idP = ?")
+                        .bind(0, idP)
+                        .mapToBean(PromotionProduct.class)
+                        .stream()
+                        .collect(Collectors.toList()).get(0)
+        );
+
+    }
+
+    public static void addProductNew(String idP, String countDay) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("insert into newproduct(countDay, idP) " +
+                                "VALUES (?,?)")
+                        .bind(0, countDay)
+                        .bind(1, idP)
+                        .execute()
+        );
+    }
+
+    public static List<NewProduct> getNewProduct(int quantity) {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM newproduct ORDER BY id DESC LIMIT ?")
+                        .bind(0, quantity)
+                        .mapToBean(NewProduct.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+
+    }
+
+    // lấy tt các các hình ảnh fs
+
+    public static Selling getSelling() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM selling")
+                        .mapToBean(Selling.class)
+                        .stream()
+                        .collect(Collectors.toList()).get(0)
+        );
+    }
+
+    public static void editSelling(String text, String text1, String text2, String text3, String idP) {
+        if (idP == null && text != null && text1 != null && text2 != null && text3 != null) {
+            JDBiConnector.me().withHandle(h ->
+                    h.createUpdate("update selling set text=?, text1 = ?, text2 =?,  text3= ?  where id = 1")
+                            .bind(0, text)
+                            .bind(1, text1)
+                            .bind(2, text2)
+                            .bind(3, text3)
+                            .execute()
+            );
+        }
+        if (idP != null && text == null && text1 == null && text2 == null && text3 == null) {
+            JDBiConnector.me().withHandle(h ->
+                    h.createUpdate("update selling set idP= ?  where id = 1")
+                            .bind(0, idP)
+                            .execute()
+            );
+        }
+    }
+
+    public static List<Product> getproductbyCata(String idC) {
+
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM product where idC = ?")
+                    .bind(0, idC)
+                    .mapToBean(Product.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+
+    public static void addFavoriteProduct(String idP, String idA) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("insert into favoriteproduct(idP, idA) " +
+                                "VALUES (?,?)")
+                        .bind(0, idP)
+                        .bind(1, idA)
+                        .execute()
+        );
+    }
+
+    public static List<Product> getFavoriteProductByIdA(int idA) {
+
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT `product`.* FROM `favoriteproduct` INNER JOIN `product` ON favoriteproduct.idP = product.idP WHERE favoriteproduct.idA = ?")
+                    .bind(0, idA)
+                    .mapToBean(Product.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+
+    public static Favorite getFavoriteProduct(String idP,String idA) {
+
+        List<Favorite> favoriteList = JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM favoriteproduct where idA = ? and idP = ?")
+                    .bind(0, idA)
+                    .bind(1, idP)
+                    .mapToBean(Favorite.class)
+                    .stream().collect(Collectors.toList());
+        });
+        if (favoriteList.size()==0) return null;
+        return favoriteList.get(0);
+    }
+
+    public static void deleteFavoriteProduct(String idP, String idA) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("delete from favoriteproduct where idA = ? and idP = ?")
+                        .bind(0, idA)
+                        .bind(1, idP)
+                        .execute()
+        );
+    }
+
     public static void main(String[] args) {
+        System.out.println(getProductSortDescendingByPrice());
     }
 }

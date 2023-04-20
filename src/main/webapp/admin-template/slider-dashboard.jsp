@@ -1,7 +1,7 @@
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<html class="no-js " lang="en">
+<html class="no-js" lang="en">
 
 
 <head>

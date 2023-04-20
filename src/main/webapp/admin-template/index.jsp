@@ -83,7 +83,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="card widget_2 big_icon email">
                         <div class="body">
-                            <% List<Subscibe> subscibeList = (List<Subscibe>) request.getAttribute("productList");%>
+                            <% List<Subscibe> subscibeList = (List<Subscibe>) request.getAttribute("subscibeList");%>
                             <h6>Email</h6>
                             <h2><%=subscibeList.size()%> <small class="info">email</small></h2>
                             <small>Tổng số email đăng kí</small>

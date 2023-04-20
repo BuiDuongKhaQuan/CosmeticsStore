@@ -1,8 +1,7 @@
 package qht.shopmypham.com.vn.service;
 
 import qht.shopmypham.com.vn.db.JDBiConnector;
-import qht.shopmypham.com.vn.model.BlogOffer;
-import qht.shopmypham.com.vn.model.BranchShop;
+import qht.shopmypham.com.vn.model.Home;
 import qht.shopmypham.com.vn.model.Offer;
 import qht.shopmypham.com.vn.model.Shop;
 
@@ -19,29 +18,28 @@ public class ShopService {
         );
     }
 
-    public static void editShop(String idS, String shopLogo, String shopName, String aboutShop, String address, String phone, String email,
+    public static void editShop(String idS, String shopName, String aboutShop, String address, String phone, String email,
                                 String designerBy, String textInHelp) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update shop set shopLogo=?,  shopName=?,  aboutShop=?,  " +
+                h.createUpdate("update shop set  shopName=?,  aboutShop=?,  " +
                                 "address=?,  phone=?,  email=?, designerBy=?,  textInHelp=? where idS = ?")
-                        .bind(0, shopLogo)
-                        .bind(1, shopName)
-                        .bind(2, aboutShop)
-                        .bind(3, address)
-                        .bind(4, phone)
-                        .bind(5, email)
-                        .bind(6, designerBy)
-                        .bind(7, textInHelp)
-                        .bind(8, idS)
+                        .bind(0, shopName)
+                        .bind(1, aboutShop)
+                        .bind(2, address)
+                        .bind(3, phone)
+                        .bind(4, email)
+                        .bind(5, designerBy)
+                        .bind(6, textInHelp)
+                        .bind(7, idS)
                         .execute()
         );
     }
 
 
-    public static List<BranchShop> getAllBranchShop() {
+    public static List<Home> getAllBranchShop() {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM branchshop")
-                        .mapToBean(BranchShop.class)
+                        .mapToBean(Home.class)
                         .stream()
                         .collect(Collectors.toList())
         );
@@ -67,11 +65,11 @@ public class ShopService {
         );
     }
 
-    public static BranchShop getBranchShopByIdB(String idB) {
+    public static Home getBranchShopByIdB(String idB) {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM branchshop where idB=?")
                         .bind(0, idB)
-                        .mapToBean(BranchShop.class)
+                        .mapToBean(Home.class)
                         .stream()
                         .collect(Collectors.toList()).get(0)
         );

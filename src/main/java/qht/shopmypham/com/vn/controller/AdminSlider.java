@@ -1,19 +1,15 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.model.Account;
-import qht.shopmypham.com.vn.model.Blog;
 import qht.shopmypham.com.vn.model.Slider;
-import qht.shopmypham.com.vn.service.BlogService;
 import qht.shopmypham.com.vn.service.SliderSerivce;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
-@WebServlet(name = "ListSliderController", value = "/admin-slider")
+@WebServlet(name = "AddBlogController", value = "/admin-slider")
 public class AdminSlider extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,8 +52,9 @@ public class AdminSlider extends HttpServlet {
         }
         if (command.equals("edit")) {
             String IdSl = request.getParameter("IdSl");
-            SliderSerivce.editSliderByIdAll(IdSl, img, topic,status);
+            SliderSerivce.editSliderByIdAll(IdSl, img, topic, status);
         }
         response.sendRedirect("admin-slider?command=list");
     }
+
 }

@@ -18,10 +18,10 @@ public class UserLogin extends HttpServlet {
         Account acc = LoginService.getAccout(userName, Encode.enCodeMD5(passWord));
         if (acc == null) {
             request.setAttribute("mess", "Sai user hoặc mật khẩu!");
-            request.getRequestDispatcher("/user-template/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         } else if (acc.getStatus()==0){
             request.setAttribute("mess", "Tài khoản của bạn đã bị khóa, vui lòng liên hệ với chúng tôi qua 'khaquan9a2.2016@gmail.com' !");
-            request.getRequestDispatcher("/user-template/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }else {
             HttpSession session = request.getSession();
             session.setAttribute("a", acc);

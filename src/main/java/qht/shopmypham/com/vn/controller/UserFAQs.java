@@ -13,8 +13,7 @@ import java.util.List;
 public class UserFAQs extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<FAQs> FAQsList = FAQsService.getAllFQAs();
-
+        List<FAQs> FAQsList = FAQsService.getAllFQAsBy1();
         request.setAttribute("FAQsList", FAQsList);
         request.getRequestDispatcher("/user-template/FAQs.jsp").forward(request, response);
     }

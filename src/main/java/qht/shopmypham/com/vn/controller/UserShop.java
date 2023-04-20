@@ -20,16 +20,6 @@ public class UserShop extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String idS = request.getParameter("idS");
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String logo = request.getParameter("logo");
-        String designer = request.getParameter("designer");
-        String help = request.getParameter("help");
-        String information = request.getParameter("information");
-        ShopService.editShop(idS, logo, name, information, address, phone, email, designer, help);
-        response.sendRedirect("admin-shop-infoShop");
+
     }
 }

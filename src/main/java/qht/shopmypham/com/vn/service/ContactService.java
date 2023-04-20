@@ -9,15 +9,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ContactService {
-    public static void addContact(String idA, String email, String topic, String content, String fullName) {
+    public static void addContact(String idA, String email, String content, String fullName) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("insert into contact(idA,email,topic,content,fullName,status) values (?,?,?,?,?,?)")
+                h.createUpdate("insert into contact(idA,email,content,fullName,status) values (?,?,?,?,?)")
                         .bind(0, idA)
                         .bind(1, email)
-                        .bind(2, topic)
-                        .bind(3, content)
-                        .bind(4, fullName)
-                        .bind(5, 0)
+                        .bind(2, content)
+                        .bind(3, fullName)
+                        .bind(4, 0)
                         .execute()
         );
     }
@@ -64,9 +63,5 @@ public class ContactService {
                         .collect(Collectors.toList())
         );
 
-    }
-
-    public static void main(String[] args) {
-        addContact(null, "khaquan@gmail.com", "Sản phẩm", "Vui lòng", "Quân");
     }
 }

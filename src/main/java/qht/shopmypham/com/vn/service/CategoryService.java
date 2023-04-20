@@ -73,11 +73,20 @@ public class CategoryService {
     public static List<Categories> getTop3() {
 
         return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("SELECT * FROM categories LIMIT 3").mapToBean(Categories.class)
+            return handle.createQuery("SELECT * FROM categories where idC =1 or idC = 2 or idC=3 LIMIT 3").mapToBean(Categories.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+    public static List<Categories> getTop3byId(String idC) {
+
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM categories where idC =? ")
+                    .bind(0,idC)
+                    .mapToBean(Categories.class)
                     .stream().collect(Collectors.toList());
         });
     }
     public static void main(String[] args) {
-
+        getTop3();
     }
 }

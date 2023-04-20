@@ -1,5 +1,7 @@
 ﻿<%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
+<%@ page import="qht.shopmypham.com.vn.model.Image" %>
+<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <!doctype html><%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html class="no-js " lang="en">
@@ -46,12 +48,13 @@
             <div class="row clearfix">
                 <% List<Product> productList = (List<Product>) request.getAttribute("productList");
                     for (Product product:productList){
+                        List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
                 %>
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                     <div class="card">
                         <div class="body product_item">
                             <span class="label onsale">-30%</span>
-                            <img src="<%=product.getImg1()%>" alt="Product" class="img-fluid cp_img" />
+                            <img src="<%=imageList.get(0).getImg()%>" alt="Product" class="img-fluid cp_img" />
                             <div class="product_details">
                                 <a href="ec-product-add.jsp"><%=product.getName()%></a>
                                 <ul class="product_price list-unstyled">

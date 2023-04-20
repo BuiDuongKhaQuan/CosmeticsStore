@@ -7,14 +7,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Page Loader -->
-<div class="page-loader-wrapper">
-    <div class="loader">
-        <div class="m-t-30"><img class="zmdi-hc-spin" src="admin-template/assets/images/loader.svg" width="48"
-                                 height="48" alt="Aero">
-        </div>
-        <p>Please wait...</p>
-    </div>
-</div>
+<%--<div class="page-loader-wrapper">--%>
+<%--    <div class="loader">--%>
+<%--        <div class="m-t-30"><img class="zmdi-hc-spin" src="admin-template/assets/images/loader.svg" width="48"--%>
+<%--                                 height="48" alt="Aero">--%>
+<%--        </div>--%>
+<%--        <p>Please wait...</p>--%>
+<%--    </div>--%>
+<%--</div>--%>
 
 <!-- Overlay For Sidebars -->
 <div class="overlay"></div>
@@ -257,7 +257,7 @@
                 class="zmdi zmdi-group-work"></i></a></li>
         <li><a href="javascript:void(0);" class="js-right-sidebar" title="Cài đặt"><i
                 class="zmdi zmdi-settings zmdi-hc-spin"></i></a></li>
-        <li><a href="sign-in.jsp" class="mega-menu" title="Đăng xuất"><i class="zmdi zmdi-power"></i></a></li>
+        <li><a href="profile?command=out" class="mega-menu" title="Đăng xuất"><i class="zmdi zmdi-power"></i></a></li>
     </ul>
 </div>
 
@@ -281,24 +281,7 @@
                 </div>
             </li>
             <li><a href="admin-home"><i class="zmdi zmdi-home"></i><span>Tổng quan</span></a></li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>Ứng
-                        dụng</span></a>
-                <ul class="ml-menu">
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/mail-inbox.jsp">Email</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/chat.jsp">Trò chuyện</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/events.jsp">Lịch</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/contact.jsp">Liên lạc</a></li>
-                </ul>
-            </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-folder"></i><span>Quản lí
-                        file</span></a>
-                <ul class="ml-menu">
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/file-dashboard.jsp">Tất cả các file</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/file-documents.jsp">Tài liệu</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/file-images.jsp">Hình ảnh</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/file-media.jsp">Phương tiện</a></li>
-                </ul>
-            </li>
+
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-blogger"></i><span>Blog</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-blog?command=dashboard">Tổng quan</a></li>
@@ -313,7 +296,7 @@
                     <li><a href="admin-slider?command=add">Thêm slider</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment"></i><span>Quản
+            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment-account"></i><span>Quản
                         lí tài khoản</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-account?command=dashboard1">Tổng quan</a></li>
@@ -339,109 +322,23 @@
                     <li><a href="admin-order?command=list">Danh sách đơn hàng</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-swap-alt"></i><span>Các thành
-                        phần của web</span></a>
+            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-widgets"></i><span>Quản lí chung</span></a>
                 <ul class="ml-menu">
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/ui_kit.jsp">Bộ kit giao diện người dùng</a>
-                    </li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/alerts.jsp">Cảnh báo</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/collapse.jsp">Thu gọn</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/colors.jsp">Màu sắc</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/dialogs.jsp">Dialogs</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/list-group.jsp">Nhóm danh sách</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/media-object.jsp">Đối tượng phương tiện</a>
-                    </li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/modals.jsp">Modals</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/notifications.jsp">Thông báo</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/progressbars.jsp">Thanh tiến trình</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/range-sliders.jsp">Thanh trượt phạm vi</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/sortable-nestable.jsp">Sắp xếp & Lồng nhau</a>
-                    </li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/tabs.jsp">Tabs</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/waves.jsp">Waves</a></li>
-                </ul>
-            </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-flower"></i><span>Biểu tượng &
-                        Phông chữ</span></a>
-                <ul class="ml-menu">
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/icons.jsp">Biểu tượng cơ bản</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/icons-themify.jsp">Biểu tượng Themify</a></li>
-                    <li><a href="/ShopMyPham_war_exploded/admin-template/icons-weather.jsp">Biểu tượng thời tiết</a>
-                    </li>
+                    <li><a href="admin-general?command=list">Danh sách liên hệ</a></li>
+                    <li><a href="admin-general?command=question">Danh sách câu hỏi</a></li>
+                    <li><a href="admin-general?command=addQ">Thêm câu hỏi</a></li>
                 </ul>
             </li>
             <li><a href="javascript:void(0);" class="menu-toggle"><i
-                    class="zmdi zmdi-assignment"></i><span>Các dạng form</span></a>
+                    class="zmdi zmdi-assignment"></i><span>Quản
+                        lí trang chủ</span></a>
                 <ul class="ml-menu">
-                    <li><a href="basic-form-elements.jsp">Form cơ bản</a></li>
-                    <li><a href="advanced-form-elements.jsp">Form nâng cao</a></li>
-                    <li><a href="form-examples.jsp">Các ví dụ</a></li>
-                    <li><a href="form-validation.jsp">Xác thực form</a></li>
-                    <li><a href="form-wizard.jsp">Form Wizard</a></li>
-                    <li><a href="form-editors.jsp">Editors</a></li>
-                    <li><a href="form-upload.jsp">Tải file lên</a></li>
-                    <li><a href="form-summernote.jsp">Summernote</a></li>
-                </ul>
-            </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i
-                    class="zmdi zmdi-grid"></i><span>Bảng</span></a>
-                <ul class="ml-menu">
-                    <li><a href="normal-tables.jsp">Bảng cơ bản</a></li>
-                    <li><a href="jquery-datatable.jsp">Bảng dữ liệu Jquery</a></li>
-                    <li><a href="editable-table.jsp">Bảng có thể chỉnh sửa</a></li>
-                    <li><a href="footable.jsp">Bảng Foo</a></li>
-                    <li><a href="table-color.jsp">Bảng màu</a></li>
-                </ul>
-            </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-chart"></i><span>Biểu
-                        đồ</span></a>
-                <ul class="ml-menu">
-                    <li><a href="c3.jsp">Biểu đồ</a></li>
-                    <li><a href="morris.jsp">Morris</a></li>
-                    <li><a href="flot.jsp">Flot</a></li>
-                    <li><a href="chartjs.jsp">ChartJS</a></li>
-                    <li><a href="sparkline.jsp">Biểu đồ thu nhỏ</a></li>
-                    <li><a href="jquery-knob.jsp">Jquery Knob</a></li>
-                </ul>
-            </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i
-                    class="zmdi zmdi-delicious"></i><span>Widgets</span></a>
-                <ul class="ml-menu">
-                    <li><a href="widgets-app.jsp">Ứng dụng Widgets</a></li>
-                    <li><a href="widgets-data.jsp">Tiện ích dữ liệu</a></li>
-                </ul>
-            </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-lock"></i><span>Xác
-                        thực</span></a>
-                <ul class="ml-menu">
-                    <li><a href="sign-in.jsp">Đăng nhập</a></li>
-                    <li><a href="sign-up.jsp">Đăng kí</a></li>
-                    <li><a href="forgot-password.jsp">Quên mật khẩu</a></li>
-                    <li><a href="404.jsp">Page 404</a></li>
-                    <li><a href="500.jsp">Page 500</a></li>
-                    <li><a href="page-offline.jsp">Trang ngoại tuyến</a></li>
-                    <li><a href="locked.jsp">Màn hình bị khóa</a></li>
-                </ul>
-            </li>
-            <li class="open_top"><a href="javascript:void(0);" class="menu-toggle"><i
-                    class="zmdi zmdi-copy"></i><span>Trang mẫu</span></a>
-                <ul class="ml-menu">
-                    <li><a href="blank.jsp">Trang trạng thái</a></li>
-                    <li><a href="image-gallery.jsp">Thư viện hình ảnh</a></li>
-                    <li><a href="profile.jsp">Hồ sơ</a></li>
-                    <li><a href="timeline.jsp">Mốc thời gian</a></li>
-                    <li><a href="pricing.jsp">Chi phí</a></li>
-                    <li><a href="invoices.jsp">Hóa đơn</a></li>
-                    <li><a href="invoices-list.jsp">Danh sách hóa đơn</a></li>
-                    <li><a href="search-results.jsp">Kết quả tìm kiếm</a></li>
-                </ul>
-            </li>
-            <li class="open_top"><a href="javascript:void(0);" class="menu-toggle"><i
-                    class="zmdi zmdi-map"></i><span>Bản đồ</span></a>
-                <ul class="ml-menu">
-                    <li><a href="google.jsp">Google Map</a></li>
-                    <li><a href="yandex.jsp">YandexMap</a></li>
-                    <li><a href="jvectormap.jsp">jVectorMap</a></li>
+                    <li><a href="AdminHomeAll?command=cate">Quản lí danh mục</a></li>
+                    <li><a href="AdminHomeAll?command=productHome">Số lượng sản phẩm,Fashion New Trends hiển thị</a></li>
+                    <li><a href="AdminHomeAll?command=selling">Ưu đãi trong tuần</a></li>
+                    <li><a href="AdminHomeAll?command=imageTrend">Ảnh Cosmetics Trends</a></li>
+                    <li><a href="AdminHomeAll?command=information">Thông tin cửa hàng</a></li>
+
                 </ul>
             </li>
             <li>

@@ -72,7 +72,18 @@ public class CheckOutService {
                         .execute()
         );
     }
-
+    public static void editCheckOut(String idCk, String idAdmin, String note, String phone, String address, String name) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("update checkout set idAdmin=?,note=?,phone=?,address = ?,name = ? where idCk = ?")
+                        .bind(0, idAdmin)
+                        .bind(1, note)
+                        .bind(2, phone)
+                        .bind(3, address)
+                        .bind(4, name)
+                        .bind(5, idCk)
+                        .execute()
+        );
+    }
     public static void confirmCheckOutByidCk(String idCk, String idAdmin, String confirmDate) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("update checkout set idStatus=?,idAdmin=?, confirmDate = ? where idCk = ?")

@@ -6,7 +6,6 @@ public class Contact implements Serializable {
     int idCt;
     int idA;
     String email;
-    String topic;
     String content;
     String fullName;
     int status;
@@ -14,11 +13,10 @@ public class Contact implements Serializable {
     public Contact() {
     }
 
-    public Contact(int idCt, int idA, String email, String topic, String content, String fullName, int status) {
+    public Contact(int idCt, int idA, String email, String content, String fullName, int status) {
         this.idCt = idCt;
         this.idA = idA;
         this.email = email;
-        this.topic = topic;
         this.content = content;
         this.fullName = fullName;
         this.status = status;
@@ -46,14 +44,6 @@ public class Contact implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
     }
 
     public String getContent() {

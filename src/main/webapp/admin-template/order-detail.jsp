@@ -1,10 +1,10 @@
-
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="qht.shopmypham.com.vn.model.CheckOut" %>
 <%@ page import="qht.shopmypham.com.vn.model.ListProductByCheckOut" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -77,12 +77,13 @@
                                                     for (ListProductByCheckOut productByCheckOut : productByCheckOutList) {
                                                         Product product = ProductService.getProductById(String.valueOf(productByCheckOut.getIdP()));
                                                         total1 += product.getPrice() * productByCheckOut.getQuantity();
+                                                        Image m = ProductService.getImages1(String.valueOf(product.getIdP()));
                                                 %>
                                                 <div class="card shadow-0 border mb-4">
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-md-2">
-                                                                <img src="<%=product.getImg1()%>"
+                                                                <img src="<%=m.getImg()%>"
                                                                      class="img-fluid" alt="Phone">
                                                             </div>
                                                             <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
@@ -96,12 +97,14 @@
                                                                 <p class="text-muted mb-0 small"></p>
                                                             </div>
 
-                                                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center" >
-                                                                <p class="text-muted mb-0 small" style="font-size: 14px"><%=productByCheckOut.getQuantity()%>
+                                                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                                <p class="text-muted mb-0 small"
+                                                                   style="font-size: 14px"><%=productByCheckOut.getQuantity()%>
                                                                 </p>
                                                             </div>
                                                             <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                                <p class="text-muted mb-0 small"style="font-size: 14px"><%=nf.format(product.getPrice() * productByCheckOut.getQuantity())%>
+                                                                <p class="text-muted mb-0 small"
+                                                                   style="font-size: 14px"><%=nf.format(product.getPrice() * productByCheckOut.getQuantity())%>
                                                                     đ</p>
                                                             </div>
                                                         </div>
@@ -176,8 +179,8 @@
                                             </div>
                                             <div class="card-footer border-0 px-4 py-5"
                                                  style="background-color: #fff;color: black; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                                                <h5 class="d-flex align-items-center justify-content-end  text-uppercase mb-0" >
-                                                    Tổng giá trị đơn hàng:  <span
+                                                <h5 class="d-flex align-items-center justify-content-end  text-uppercase mb-0">
+                                                    Tổng giá trị đơn hàng: <span
                                                         class="mb-0 ms-2"> <%= nf.format(total1 + 25000)%>đ</span></h5>
                                             </div>
                                         </div>

@@ -11,7 +11,7 @@ public class AccountService {
     public static void editProfileAcountById(String email,
                                              String phone, String fullName, String address, String id) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set email = ?,phone =?,img=null,fullName=?,address =? where idA = ?")
+                h.createUpdate("update account set email = ?,phone =?,fullName=?,address =? where idA = ?")
                         .bind(0, email)
                         .bind(1, phone)
                         .bind(2, fullName)
@@ -50,6 +50,7 @@ public class AccountService {
 
     }
 
+
     public static Account getAccountByUserAndEmail(String user, String email) {
         List<Account> accountList = JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM account where user =? and email = ?")
@@ -63,10 +64,10 @@ public class AccountService {
         return accountList.get(0);
     }
 
-    public static List<Account> getAllAccountByDeparment(String isAdmin) {
+    public static List<Account> getAllAccountByIdA(String idA) {
         return JDBiConnector.me().withHandle(h ->
-                h.createQuery("SELECT * FROM account WHERE isAdmin = ?")
-                        .bind(0, isAdmin)
+                h.createQuery("SELECT * FROM account WHERE idA = ?")
+                        .bind(0, idA)
                         .mapToBean(Account.class)
                         .stream()
                         .collect(Collectors.toList())
@@ -74,16 +75,11 @@ public class AccountService {
 
     }
 
-    public static void editAcountById(String fullName, String email, String address, String phone, String img, String idA) {
+    public static void updateImgAcountById(String img, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set fullName = ?,email =?, address=?,phone=? " +
-                                ",img = ? where idA= ?")
-                        .bind(0, fullName)
-                        .bind(1, email)
-                        .bind(2, address)
-                        .bind(3, phone)
-                        .bind(4, img)
-                        .bind(5, idA)
+                h.createUpdate("update account set img = ? where idA= ?")
+                        .bind(0, img)
+                        .bind(1, idA)
                         .execute()
         );
     }

@@ -20995,3 +20995,75 @@ section.content {
 .theme-dark .c3-legend-item text {
     fill: #8c8c8c
 }
+#promotion-show,#new-show , #show, .promotion {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.promotion-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 700px;
+    height: 400px;
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255, .5);
+    background: white;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(0,0,0,.5);
+    overflow: hidden;
+}
+.promotion-box .title {
+    margin-left: 20px;
+    font-size: 20px;
+    font-weight: 500;
+}
+.promotion-box .icon-close{
+    position: absolute;
+    top: 0 ;
+    right: 0;
+    width: 35px;
+    height: 35px;
+    background: #162938;
+    font-size: 22px;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 10px;
+    cursor: pointer;
+}
+.promotion-box button{
+    width: 100px;
+    margin: 0 auto;
+}
+.promotion-content{
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px 0 20px ;
+}
+.label-text{
+    flex: 1;
+}
+.form-group-date{
+    flex: 9;
+}
+.form-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center
+}
+/*.form-group input{*/
+/*    width: 5%;*/
+/*}*/
+.form-group label{
+    margin-top: 10px;
+}

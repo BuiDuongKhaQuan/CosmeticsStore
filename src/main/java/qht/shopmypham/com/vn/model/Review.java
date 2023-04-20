@@ -1,23 +1,23 @@
 package qht.shopmypham.com.vn.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Review implements Serializable {
     int idR, idP, idA;
-    String infomation, email;
+    String infomation,date;
     double star;
 
-    public Review(int idR, int idP, int idA, String infomation, double star) {
-        super();
+    public Review() {
+    }
+
+    public Review(int idR, int idP, int idA, String infomation, String date, double star) {
         this.idR = idR;
         this.idP = idP;
         this.idA = idA;
         this.infomation = infomation;
+        this.date = date;
         this.star = star;
-    }
-
-    public Review() {
-        super();
     }
 
     public int getIdR() {
@@ -52,12 +52,40 @@ public class Review implements Serializable {
         this.infomation = infomation;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public double getStar() {
         return star;
     }
 
     public void setStar(double star) {
         this.star = star;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "idR=" + idR +
+                ", idP=" + idP +
+                ", idA=" + idA +
+                ", infomation='" + infomation + '\'' +
+                ", date='" + date + '\'' +
+                ", star=" + star +
+                '}';
+    }
+    public double avgStart(List<Review> reviewList){
+        double avgStart = 0;
+        for (Review r:reviewList){
+            avgStart += r.getStar();
+        }
+
+        return  avgStart/ reviewList.size();
     }
 
 }

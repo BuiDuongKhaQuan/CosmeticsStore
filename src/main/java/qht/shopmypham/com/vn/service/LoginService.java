@@ -35,6 +35,7 @@ public class LoginService {
         List<Account> accounts = JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM account WHERE idGoogle =?")
                         .bind(0, idGoogle)
+
                         .mapToBean(Account.class)
                         .stream()
                         .collect(Collectors.toList())
@@ -64,12 +65,12 @@ public class LoginService {
         if (listAccount.size() == 0) return null;
         return listAccount.get(0);
     }
-    public static void signUp(String user, String pass) {
+    public static void signUp(String user, String pass, String email) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("INSERT INTO account(user,pass,fullName,email,address,phone,img," +
                                 "status,orderManage,infoCompanyManage,productManage,accountManage,blogManage,contactManage,subscibeManage,faqsManage)" +
-                                "VALUES (?,?,null,null,null,null,null,1,0,0,0,0,0,0,0,0)")
-                        .bind(0, user).bind(1, pass)
+                                "VALUES (?,?,null,?,null,null,null,1,0,0,0,0,0,0,0,0)")
+                        .bind(0, user).bind(1, pass).bind(2,email)
                         .execute()
         );
     }

@@ -13,12 +13,12 @@ public class Account implements Serializable {
     String img;
     String idFacebook;
     String idGoogle;
-    int orderManage, infoCompanyManage, productManage, accountManage, blogManage, contactManage, subscibeManage, status, faqsManage;
+    int orderManage, generalManage, productManage, accountManage, blogManage, status, homeManage;
 
     public Account() {
     }
 
-    public Account(int idA, String user, String pass, String fullName, String phone, String address, String email, String img, String idFacebook, String idGoogle, int orderManage, int infoCompanyManage, int productManage, int accountManage, int blogManage, int contactManage, int subscibeManage, int status, int faqsManage) {
+    public Account(int idA, String user, String pass, String fullName, String phone, String address, String email, String img, String idFacebook, String idGoogle, int orderManage, int generalManage, int productManage, int accountManage, int blogManage, int status, int homeManage) {
         this.idA = idA;
         this.user = user;
         this.pass = pass;
@@ -30,14 +30,35 @@ public class Account implements Serializable {
         this.idFacebook = idFacebook;
         this.idGoogle = idGoogle;
         this.orderManage = orderManage;
-        this.infoCompanyManage = infoCompanyManage;
+        this.generalManage = generalManage;
         this.productManage = productManage;
         this.accountManage = accountManage;
         this.blogManage = blogManage;
-        this.contactManage = contactManage;
-        this.subscibeManage = subscibeManage;
         this.status = status;
-        this.faqsManage = faqsManage;
+        this.homeManage = homeManage;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "idA=" + idA +
+                ", user='" + user + '\'' +
+                ", pass='" + pass + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", img='" + img + '\'' +
+                ", idFacebook='" + idFacebook + '\'' +
+                ", idGoogle='" + idGoogle + '\'' +
+                ", orderManage=" + orderManage +
+                ", generalManage=" + generalManage +
+                ", productManage=" + productManage +
+                ", accountManage=" + accountManage +
+                ", blogManage=" + blogManage +
+                ", status=" + status +
+                ", homeManage=" + homeManage +
+                '}';
     }
 
     public int getIdA() {
@@ -128,12 +149,12 @@ public class Account implements Serializable {
         this.orderManage = orderManage;
     }
 
-    public int getInfoCompanyManage() {
-        return infoCompanyManage;
+    public int getGeneralManage() {
+        return generalManage;
     }
 
-    public void setInfoCompanyManage(int infoCompanyManage) {
-        this.infoCompanyManage = infoCompanyManage;
+    public void setGeneralManage(int generalManage) {
+        this.generalManage = generalManage;
     }
 
     public int getProductManage() {
@@ -160,22 +181,6 @@ public class Account implements Serializable {
         this.blogManage = blogManage;
     }
 
-    public int getContactManage() {
-        return contactManage;
-    }
-
-    public void setContactManage(int contactManage) {
-        this.contactManage = contactManage;
-    }
-
-    public int getSubscibeManage() {
-        return subscibeManage;
-    }
-
-    public void setSubscibeManage(int subscibeManage) {
-        this.subscibeManage = subscibeManage;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -184,11 +189,11 @@ public class Account implements Serializable {
         this.status = status;
     }
 
-    public int getFaqsManage() {
-        return faqsManage;
+    public int getHomeManage() {
+        return homeManage;
     }
 
-    public void setFaqsManage(int faqsManage) {
-        this.faqsManage = faqsManage;
+    public void setHomeManage(int homeManage) {
+        this.homeManage = homeManage;
     }
 }

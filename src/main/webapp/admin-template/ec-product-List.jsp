@@ -1,5 +1,7 @@
 ﻿<%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="java.util.List" %>
+<%@ page import="qht.shopmypham.com.vn.model.Image" %>
+<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -66,11 +68,13 @@
                                 <tbody>
                                 <% List<Product> productList = (List<Product>) request.getAttribute("productList");
                                     for (Product product : productList) {
+                                        List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
                                 %>
                                 <tr>
-                                    <td><img src="<%=product.getImg1()%>" width="48" alt="Product img">
+                                    <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
                                     </td>
-                                    <td><h5><%=product.getName()%></h5>
+                                    <td><h5><%=product.getName()%>
+                                    </h5>
                                     </td>
                                     <td><%=product.getPrice()%>đ</td>
                                     <td><span class="col-green">In Stock</span></td>
@@ -88,20 +92,6 @@
                             </table>
                         </div>
                     </div>
-                    <%--                    <div class="card">--%>
-                    <%--                        <div class="body">--%>
-                    <%--                            <ul class="pagination pagination-primary m-b-0">--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);"><i--%>
-                    <%--                                        class="zmdi zmdi-arrow-left"></i></a></li>--%>
-                    <%--                                <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);">4</a></li>--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);"><i--%>
-                    <%--                                        class="zmdi zmdi-arrow-right"></i></a></li>--%>
-                    <%--                            </ul>--%>
-                    <%--                        </div>--%>
-                    <%--                    </div>--%>
                 </div>
             </div>
         </div>

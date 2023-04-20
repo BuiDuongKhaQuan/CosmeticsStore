@@ -14,10 +14,8 @@ import java.util.List;
 public class UserBlog extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Blog> blogList = BlogService.get4Blog();
-        List<Blog> blogList3 = BlogService.get3Blog();
+        List<Blog> blogList = BlogService.get8Blog();
 
-        request.setAttribute("blogList3", blogList3);
         request.setAttribute("activeBlog", "active");
         request.setAttribute("blogList", blogList);
         request.getRequestDispatcher("/user-template/blog.jsp").forward(request, response);

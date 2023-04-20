@@ -16,7 +16,14 @@ public class FAQsService {
                         .collect(Collectors.toList())
         );
     }
-
+    public static List<FAQs> getAllFQAsBy1() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM faqs where status = 1")
+                        .mapToBean(FAQs.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
     public static FAQs getFQAsById(String idF) {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM faqs where idF=?")
@@ -37,22 +44,22 @@ public class FAQsService {
         );
     }
 
-    public static void addFQAs(String question, String answer, String idA) {
+    public static void addFQAs(String question, String answer, String status) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("insert into faqs(idA,question,answer) values (?,?,?)")
-                        .bind(0, idA)
+                h.createUpdate("insert into faqs(status,question,answer) values (?,?,?)")
+                        .bind(0, status)
                         .bind(1, question)
                         .bind(2, answer)
                         .execute()
         );
     }
 
-    public static void editFQAsById(String idF, String question, String answer, String idA) {
+    public static void editFQAsById(String idF, String question, String answer, String status) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update faqs set idA=?,  question=?,  answer=? where idF = ?")
-                        .bind(0, idA)
-                        .bind(1, question)
-                        .bind(2, answer)
+                h.createUpdate("update faqs set question=?,  answer=?, status = ? where idF = ?")
+                        .bind(0, question)
+                        .bind(1, answer)
+                        .bind(2, status)
                         .bind(3, idF)
                         .execute()
         );
@@ -75,5 +82,9 @@ public class FAQsService {
                         .collect(Collectors.toList())
         );
 
+    }
+
+    public static void main(String[] args) {
+        addFQAs("1","1","0");
     }
 }
