@@ -112,27 +112,19 @@
                                         <div class="card">
                                             <div class="body">
                                                 <%
-                                                    String jsonString = (String) session.getAttribute("myJson");
-                                                    String base64Image = "";
-                                                    if (jsonString != null) {
-                                                        // Chuyển đổi chuỗi JSON thành đối tượng JSON
-                                                        JSONObject json = new JSONObject(jsonString);
-
-                                                        // Lấy giá trị base64 hình ảnh từ đối tượng JSON
-                                                        base64Image = json.getString("image");
-                                                    }
+                                                    String myavatar = (String) session.getAttribute("avatar");
                                                     String avatar = "";
-                                                    if (acc1.getImg() == null && jsonString == null) {
+                                                    if (acc1.getImg() == null && myavatar == null) {
                                                         avatar = "user-template/assets/images/avatar.png";
                                                     }
-                                                    if (acc1.getImg() == null && jsonString != null) {
-                                                        avatar = "data:image/jpeg;base64," + base64Image;
+                                                    if (acc1.getImg() == null && myavatar != null) {
+                                                        avatar = "data:image/jpeg;base64," + myavatar;
                                                     }
-                                                    if (acc1.getImg() != null && jsonString == null) {
+                                                    if (acc1.getImg() != null && myavatar == null) {
                                                         avatar = acc1.getImg();
                                                     }
-                                                    if (acc1.getImg() != null && jsonString != null) {
-                                                        avatar = "data:image/jpeg;base64," + base64Image;
+                                                    if (acc1.getImg() != null && myavatar != null) {
+                                                        avatar = "data:image/jpeg;base64," + myavatar;
                                                     }
                                                 %>
                                                 <img src="<%=avatar%>">
@@ -647,21 +639,15 @@
     </div>
 </div>
 
-<script type="text/javascript">
-</script>
 <!-- Footer Start -->
 <jsp:include page="footer.jsp"></jsp:include>
 <!-- Footer End -->
-
-<!-- Back to Top -->
-<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <script src="user-template/lib/easing/easing.min.js"></script>
 <script src="user-template/lib/owlcarousel/owl.carousel.min.js"></script>
-
 <!-- Contact Javascript File -->
 <script src="user-template/js/upload.js"></script>
 <script src="user-template/mail/jqBootstrapValidation.min.js"></script>
@@ -670,8 +656,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Template Javascript -->
-<%--<script src="user-template/js/profile.js"></script>--%>
-
 <script src="user-template/js/autoLoadCart.js"></script>
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
 
@@ -711,7 +695,6 @@
             + "&command=edit"
             + "&phone=" + encodeURIComponent(phone));
     }
-
 
 </script>
 
