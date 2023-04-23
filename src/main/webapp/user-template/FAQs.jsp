@@ -77,8 +77,6 @@
 <jsp:include page="footer.jsp"></jsp:include>
 <!-- Search Begin -->
 
-<!-- Search End -->
-
 <!-- Js Plugins -->
 <script src="user-template/js/jquery-3.3.1.min.js"></script>
 <script src="user-template/js/bootstrap.min.js"></script>
