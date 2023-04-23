@@ -5,6 +5,7 @@
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.service.ReviewService" %>
 <%@ page import="java.util.Collections" %>
+<%@ page import="qht.shopmypham.com.vn.service.TrademarkService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -112,13 +113,14 @@
                                 <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__brand">
+
                                             <ul>
-                                                <li><a href="#">L'Oreal</a></li>
-                                                <li><a href="#">Simple</a></li>
-                                                <li><a href="#">Laroche Posay</a></li>
-                                                <li><a href="#">Vichy</a></li>
-                                                <li><a href="#">Chanel</a></li>
-                                                <li><a href="#">Dior</a></li>
+                                                <%
+                                                    List<Trademark>list= TrademarkService.getTrademarkAll();
+                                                    for(Trademark t:list){
+                                                %>
+                                                <li><a href="trademark?idT=<%=t.getIdTrademark()%>"><%=t.getName()%></a></li>
+                                               <%}%>
                                             </ul>
                                         </div>
                                     </div>
@@ -132,56 +134,17 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
-                                                <li><a href="#">$0.00 - $50.00</a></li>
-                                                <li><a href="#">$50.00 - $100.00</a></li>
-                                                <li><a href="#">$100.00 - $150.00</a></li>
-                                                <li><a href="#">$150.00 - $200.00</a></li>
-                                                <li><a href="#">$200.00 - $250.00</a></li>
-                                                <li><a href="#">250.00+</a></li>
+                                                <li><a href="product?command=filterPrice&price1=0&price2=100000">0-100.000 đ</a></li>
+                                                <li><a href="product?command=filterPrice&price1=100000&price2=300000">100.000 - 300.000 đ</a></li>
+                                                <li><a href="product?command=filterPrice&price1=300000&price2=600000">300.000 - 600.000 đ</a></li>
+                                                <li><a href="product?command=filterPrice&price1=600000&price2=600000">600.000đ trở lên</a></li>
+
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="card">
-                                <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseFive">Colors</a>
-                                </div>
-                                <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="shop__sidebar__color">
-                                            <label class="c-1" for="sp-1">
-                                                <input type="radio" id="sp-1">
-                                            </label>
-                                            <label class="c-2" for="sp-2">
-                                                <input type="radio" id="sp-2">
-                                            </label>
-                                            <label class="c-3" for="sp-3">
-                                                <input type="radio" id="sp-3">
-                                            </label>
-                                            <label class="c-4" for="sp-4">
-                                                <input type="radio" id="sp-4">
-                                            </label>
-                                            <label class="c-5" for="sp-5">
-                                                <input type="radio" id="sp-5">
-                                            </label>
-                                            <label class="c-6" for="sp-6">
-                                                <input type="radio" id="sp-6">
-                                            </label>
-                                            <label class="c-7" for="sp-7">
-                                                <input type="radio" id="sp-7">
-                                            </label>
-                                            <label class="c-8" for="sp-8">
-                                                <input type="radio" id="sp-8">
-                                            </label>
-                                            <label class="c-9" for="sp-9">
-                                                <input type="radio" id="sp-9">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="card">
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
@@ -448,9 +411,6 @@
     </div>
 </section>
 <!-- Shop Section End -->
-<a href="#" class="btn btn-primary back-to-top cd-top text-replace js-cd-top">
-    <i class="fa fa-angle-double-up"></i>
-</a>
 
 <!-- Footer Section Begin -->
 <jsp:include page="footer.jsp"></jsp:include>
