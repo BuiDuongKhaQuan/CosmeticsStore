@@ -28,7 +28,7 @@
 
 
 <body class="theme-blush">
-<jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="../../../../../../ShopMyPham_v9.1.5/ShopMyPham_v9.1.5/src/main/webapp/admin-template/header.jsp"></jsp:include>
 
 
 <section class="content">
