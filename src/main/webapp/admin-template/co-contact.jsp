@@ -14,8 +14,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product list</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý liên hệ</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -93,8 +93,7 @@
                                                 <i class="zmdi zmdi-close icon-close"
                                                    onclick="closeNew<%=contact.getIdCt()%>()"></i>
                                                 <div class="promotion-content">
-                                                    <h6><i class="zmdi zmdi-account-circle"><%= contact.getFullName()%>
-                                                        :</i></h6>
+                                                    <h6><i class="zmdi zmdi-account-circle"><%= contact.getFullName()%></i></h6>
                                                     <p><%=contact.getContent()%>?</p>
 
                                                     <label for="reply<%=contact.getIdCt()%>">Trả lời:</label>
@@ -107,7 +106,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <a href="admin-contract?command=detele&id=<%=contact.getIdCt()%>"
+                                        <a href="admin-general?command=deleteContact&idCt=<%=contact.getIdCt()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>
@@ -142,11 +141,11 @@
     function edit<%=b%>(idCt) {
         var reply = document.getElementById("reply<%=contact.getIdCt()%>").value;
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "admin-contract", true);
+        xhr.open("POST", "admin-general?command=answer", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Trả lời thành công.");
+                showNotification('Đã gửi câu trả lời');
                 closeNew<%=contact.getIdCt()%>();
             }
         };
@@ -156,13 +155,19 @@
     }
 
     <%}%>
+    const notification = document.getElementById("notification");
+    function showNotification(txt) {
+        notification.innerHTML = txt;
+        notification.style.display = "block";
+        setTimeout(function () {
+            notification.style.display = "none";
+        }, 2000);
+    }
 </script>
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/bundles/footable.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/js/pages/tables/footable.js"></script><!-- Custom Js -->
 

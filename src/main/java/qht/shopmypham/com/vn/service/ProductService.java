@@ -25,6 +25,15 @@ public class ProductService {
         });
     }
 
+    public static List<Product> getTopProductPage(int item, int offset) {
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM product LIMIT ? OFFSET ?")
+                    .bind(0, item)
+                    .bind(1, offset)
+                    .mapToBean(Product.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
 
     public static List<Product> getTop12Product() {
 
@@ -48,6 +57,18 @@ public class ProductService {
                 h.createQuery("SELECT * FROM product WHERE idP = ?")
                         .bind(0, pid)
                         .mapToBean(Product.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+
+        return products.get(0);
+    }
+
+    public static WareHouse getProductById1(int pid) {
+        List<WareHouse> products = JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM warehouse WHERE idP = ?")
+                        .bind(0, pid)
+                        .mapToBean(WareHouse.class)
                         .stream()
                         .collect(Collectors.toList())
         );
@@ -164,32 +185,30 @@ public class ProductService {
     }
 
     public static void addProduct(String idP, String name, String trademark, String information,
-                                  String idC, String price, String quantity) {
+                                  String idC, String price) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("insert into product(idP,name,trademark,price,information, idC,quantity) values (?,?,?,?,?,?,?)")
+                h.createUpdate("insert into product(idP,name,idT,price,information, idC) values (?,?,?,?,?,?)")
                         .bind(0, idP)
                         .bind(1, name)
                         .bind(2, trademark)
                         .bind(3, price)
                         .bind(4, information)
                         .bind(5, idC)
-                        .bind(6, quantity)
                         .execute()
         );
     }
 
 
     public static void editProductById(String name, String trademark, String information,
-                                       String idC, String price, String quantity, String idP) {
+                                       String idC, String price, String idP) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update product set name = ?, trademark= ?,price= ?,information= ?, idC= ?,quantity= ? where idP = ?")
+                h.createUpdate("update product set name = ?, idT= ?,price= ?,information= ?, idC= ? where idP = ?")
                         .bind(0, name)
                         .bind(1, trademark)
                         .bind(2, price)
                         .bind(3, information)
                         .bind(4, idC)
-                        .bind(5, quantity)
-                        .bind(6, idP)
+                        .bind(5, idP)
                         .execute()
         );
     }
@@ -205,7 +224,7 @@ public class ProductService {
 
     public static void upQuantityProductById(String quantity, String idP) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update product set quantity= ? where idP = ?")
+                h.createUpdate("update warehouse set quantity= ? where idP = ?")
                         .bind(0, quantity)
                         .bind(1, idP)
                         .execute()
@@ -231,6 +250,22 @@ public class ProductService {
                         .execute()
         );
 
+    }
+
+    public static void deleteImgProductById(String idImg) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("delete from images where id = ?")
+                        .bind(0, idImg)
+                        .execute()
+        );
+    }
+
+    public static void deleteImgProduct(String idP) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("delete from images where idP = ?")
+                        .bind(0, idP)
+                        .execute()
+        );
     }
 
     // lấy tên theo id Sp
@@ -299,6 +334,14 @@ public class ProductService {
         );
     }
 
+    public static void deletePromotion(String id) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("delete from promotionproduct where id = ?")
+                        .bind(0, id)
+                        .execute()
+        );
+    }
+
     public static PromotionProduct getPricePromotion(String idP) {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT promotionproduct.price FROM `promotionproduct` INNER JOIN `product` ON promotionproduct.idP = product.idP WHERE product.idP = ?")
@@ -320,6 +363,16 @@ public class ProductService {
         );
     }
 
+    public static List<NewProduct> getAllNewProduct() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM newproduct")
+                        .mapToBean(NewProduct.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+
+    }
+
     public static List<NewProduct> getNewProduct(int quantity) {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM newproduct ORDER BY id DESC LIMIT ?")
@@ -331,6 +384,13 @@ public class ProductService {
 
     }
 
+    public static void deleteNew(String id) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("delete from newproduct where id = ?")
+                        .bind(0, id)
+                        .execute()
+        );
+    }
     // lấy tt các các hình ảnh fs
 
     public static Selling getSelling() {
@@ -372,6 +432,17 @@ public class ProductService {
         });
     }
 
+    // lay san pham theo idT
+    public static List<Product> getProductByIdT(String idT) {
+
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM product where idT = ?")
+                    .bind(0, idT)
+                    .mapToBean(Product.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+
     public static void addFavoriteProduct(String idP, String idA) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("insert into favoriteproduct(idP, idA) " +
@@ -392,7 +463,7 @@ public class ProductService {
         });
     }
 
-    public static Favorite getFavoriteProduct(String idP,String idA) {
+    public static Favorite getFavoriteProduct(String idP, String idA) {
 
         List<Favorite> favoriteList = JDBiConnector.me().withHandle(handle -> {
             return handle.createQuery("SELECT * FROM favoriteproduct where idA = ? and idP = ?")
@@ -401,7 +472,7 @@ public class ProductService {
                     .mapToBean(Favorite.class)
                     .stream().collect(Collectors.toList());
         });
-        if (favoriteList.size()==0) return null;
+        if (favoriteList.size() == 0) return null;
         return favoriteList.get(0);
     }
 
@@ -414,7 +485,26 @@ public class ProductService {
         );
     }
 
+    public static List<Product> getProductByPrice(int price1, int price2) {
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * from product where price > ? and price<= ?")
+                    .bind(0, price1)
+                    .bind(1, price2)
+                    .mapToBean(Product.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+
+    public static List<Product> getProductByPrice600(int price1) {
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * from product where price > ?")
+                    .bind(0, price1)
+                    .mapToBean(Product.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+
     public static void main(String[] args) {
-        System.out.println(getProductSortDescendingByPrice());
+        System.out.println(getTopProductPage(9,18));
     }
 }

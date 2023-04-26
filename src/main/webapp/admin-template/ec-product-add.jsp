@@ -1,10 +1,8 @@
 ﻿<%@ page import="qht.shopmypham.com.vn.model.Categories" %>
 <%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.Product" %>
-<%@ page import="org.json.JSONArray" %>
-<%@ page import="org.json.JSONObject" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="qht.shopmypham.com.vn.model.Trademark" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -16,8 +14,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý sản phẩm</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -123,12 +121,6 @@
                                                 alt=""/>
                                         </div>
                                     </div>
-                                    <ul class="preview thumbnail nav nav-tabs">
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab"
-                                                                href="#product_a"><img
-                                                src="https://fastcare.vn/core/img/default_image.png"
-                                                alt=""/></a></li>
-                                    </ul>
                                     <button class="btn-primary btn" onclick="show()">Tải ảnh lên</button>
                                     <div id="show" class="promotion">
                                         <div class="promotion-box">
@@ -156,14 +148,10 @@
                                         <input type="text" id="product_name" class="form-control"
                                                value="">
                                     </div>
-                                    <label for="product_image1">Ảnh sản phẩm</label>
-
-                                    <div class="form-group">
-                                        <input type="text" id="product_image1" class="form-control"
-                                               value=""
-                                               placeholder="Ảnh ">
-                                    </div>
-
+                                    <%
+                                        List<Categories> categoriesList = (List<Categories>) request.getAttribute("listCategories");
+                                        List<Trademark> trademarks = (List<Trademark>) request.getAttribute("trademarks");
+                                    %>
                                     <div class="row clearfix">
                                         <div class="col-sm-6">
                                             <label for="product_price">Giá sản phẩm</label>
@@ -173,17 +161,22 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <label for="product_quantity">Số lượng trong kho</label>
+                                            <label for="product_trademark">Thương hiệu</label>
                                             <div class="form-group">
-                                                <input type="number" id="product_quantity"
-                                                       value="" class="form-control"
-                                                       placeholder="Nhập số lượng sản phẩm">
+                                                <select id="product_trademark"
+                                                        class="form-control show-tick ms select2"
+                                                        data-placeholder="Select">
+                                                    <%
+                                                        for (Trademark trademark : trademarks) {
+
+                                                    %>
+                                                    <option value="<%=trademark.getId()%>"><%=trademark.getName()%>
+                                                    </option>
+                                                    <%}%>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <%
-                                        List<Categories> categoriesList = (List<Categories>) request.getAttribute("listCategories");
-                                    %>
                                     <div class="row clearfix">
                                         <div class="col-sm-6">
                                             <label for="product_category">Phân loại sản phẩm</label>
@@ -200,24 +193,6 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label for="trademark">Thương hiệu</label>
-                                            <div class="form-group">
-                                                <input type="text" id="trademark" class="form-control"
-                                                       name="productNew" value="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row clearfix">
-                                        <div class="col-sm-6">
-                                            <%--                                                                                            <button class="btn-primary btn" onclick="show('promotion')">Cài đặt--%>
-                                            <%--                                                                                                khuyến mãi--%>
-                                            <%--                                                                                            </button>--%>
-                                            <%--                                                                                            <button class="btn-primary btn" onclick="show('new')">Cài đặt sản phẩm--%>
-                                            <%--                                                                                                mới--%>
-                                            <%--                                                                                            </button>--%>
-                                        </div>
-                                        <div class="col-sm-6"></div>
                                     </div>
                                     <div id="new-show" class="promotion">
                                         <div class="promotion-box">
@@ -286,24 +261,17 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="body">
-                                <ul class="nav nav-tabs">
-                                    <li class="nav-item"><a class="nav-link active" data-toggle="tab"
-                                                            href="#description">Mô tả</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#review">Đánh
-                                        giá</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="body">
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="description">
                                         <div class="row clearfix">
+                                            <ul class="nav nav-tabs">
+                                                <li class="nav-item"><a class="nav-link active" data-toggle="tab"
+                                                                        href="#description">Mô tả</a></li>
+
+                                            </ul>
                                             <div class="col-sm-12">
                                                 <div class="form-group">
-                                                    <div class="form-line">
+                                                    <div class="form-line" style="width: 100%;">
                                                         <textarea rows="6" class="form-control no-resize"
                                                                   id="product_description"
                                                                   name="description"></textarea>
@@ -315,41 +283,6 @@
                                                 class="btn btn-raised btn-primary btn-round waves-effect">Lưu
                                         </button>
                                     </div>
-                                    <div class="tab-pane" id="review">
-                                        <p>Những đánh giá của sản phẩm</p>
-                                        <ul class="row list-unstyled c_review mt-4">
-                                            <li class="col-12">
-                                                <div class="avatar">
-                                                    <a href="javascript:void(0);"><img class="rounded"
-                                                                                       src="admin-template/assets/images/xs/avatar2.jpg"
-                                                                                       alt="user"
-                                                                                       width="60"></a>
-                                                </div>
-                                                <div class="comment-action">
-                                                    <h5 class="c_name">Hossein Shams</h5>
-                                                    <p class="c_msg mb-0">Cras sit amet nibh libero, in gravida
-                                                        nulla.
-                                                        Nulla vel metus scelerisque ante sollicitudin commodo. </p>
-                                                    <div class="badge badge-primary">iPhone 8</div>
-                                                    <span class="m-l-10">
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star col-amber"></i></a>
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star col-amber"></i></a>
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star col-amber"></i></a>
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star col-amber"></i></a>
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star-outline text-muted"></i></a>
-                                                    </span>
-                                                    <small class="comment-date float-sm-right">Dec 21, 2019</small>
-                                                </div>
-                                            </li>
-
-                                        </ul>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -365,6 +298,7 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     $('.dropify').dropify();
@@ -380,10 +314,7 @@
         xhr.open('POST', 'UpLoadImgPro', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log('File uploaded successfully.');
                 window.location.href = "admin-product?command=add";
-            } else {
-                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -392,40 +323,31 @@
     function saveProduct() {
         var product_name = document.getElementById("product_name").value;
         var product_price = document.getElementById("product_price").value;
-        var product_quantity = document.getElementById("product_quantity").value;
         var product_category = document.getElementById("product_category").value;
         var product_description = document.getElementById("product_description").value;
-        var product_trademark = document.getElementById("trademark").value;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "admin-product", true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Sản phẩm đã được cập nhật thành công.");
-            }
-        };
-        xhr.send("name=" + encodeURIComponent(product_name)
-            + "&price=" + encodeURIComponent(product_price)
-            + "&quantity=" + encodeURIComponent(product_quantity)
-            + "&description=" + encodeURIComponent(product_description)
-            + "&idC=" + encodeURIComponent(product_category)
-            + "&trademark=" + encodeURIComponent(product_trademark)
-            + "&command=add");
+        var product_trademark = document.getElementById("product_trademark").value;
+        if (product_name.trim() === '' || product_price.trim() === '' ||  product_category.trim() === ''
+            || product_description.trim() === '' || product_trademark.trim() === '') {
+            showAlert("Vui lòng nhập đủ thông tin!");
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "admin-product", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    showNotification("Sản phẩm đã được thêm thành công");
+                    window.location.href = "admin-product?command=list";
+                }
+            };
+            xhr.send("name=" + encodeURIComponent(product_name)
+                + "&price=" + encodeURIComponent(product_price)
+                + "&description=" + encodeURIComponent(product_description)
+                + "&idC=" + encodeURIComponent(product_category)
+                + "&trademark=" + encodeURIComponent(product_trademark)
+                + "&command=add");
+        }
     }
 
-
-    function show() {
-        var box = document.getElementById('show');
-        box.style.display = 'flex';
-    }
-
-    function closeNew() {
-
-        var box = document.getElementById('show');
-        box.style.display = 'none';
-
-    }
 </script><!-- Custom Js -->
 </body>
 

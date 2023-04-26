@@ -61,6 +61,16 @@ public class HomeService {
         });
     }
 
+    public static ImageTrend getImageTrendById(String idT) {
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("select * from imgtrends where id = ?")
+                    .bind(0, idT)
+                    .mapToBean(ImageTrend.class)
+                    .stream().collect(Collectors.toList()).get(0);
+        });
+    }
+
+
     public static void editImgTrends(String img, String id, String status) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("update imgtrends set img=? , status = ? where id = ?")
@@ -72,5 +82,9 @@ public class HomeService {
     }
 
     public static void main(String[] args) {
+        System.out.println(getHome().getQuantityProN());
+        System.out.println(getHome().getQuantityProP());
+        System.out.println(getHome().getQuantityBlog());
+        System.out.println(getHome().getQuantityProS());
     }
 }

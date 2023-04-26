@@ -3,14 +3,15 @@ package qht.shopmypham.com.vn.model;
 import java.io.Serializable;
 
 public class OTP implements Serializable {
-    String idOTP, idA, OTP;
+    String idOTP, idA, OTP, time;
     public OTP() {
     }
 
-    public OTP(String idOTP, String idA, String OTP) {
+    public OTP(String idOTP, String idA, String OTP, String time) {
         this.idOTP = idOTP;
         this.idA = idA;
         this.OTP = OTP;
+        this.time = time;
     }
 
     public String getIdOTP() {
@@ -35,5 +36,13 @@ public class OTP implements Serializable {
 
     public void setOTP(String OTP) {
         this.OTP = OTP;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

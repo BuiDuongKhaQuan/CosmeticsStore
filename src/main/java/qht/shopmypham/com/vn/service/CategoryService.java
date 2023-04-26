@@ -34,11 +34,11 @@ public class CategoryService {
         );
     }
 
-    public static void addCategory(String name, String img) {
+    public static void addCategory(String name, String imgC) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("insert into categories(nameC,imgC) VALUES (?,?)")
                         .bind(0, name)
-                        .bind(1, img)
+                        .bind(1, imgC)
                         .execute()
         );
     }
@@ -61,11 +61,11 @@ public class CategoryService {
         });
     }
 
-    public static void editCategoryById(String idC, String img, String name) {
+    public static void editCategoryById(String idC, String name, String img) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("update categories set nameC = ?, imgC = ? where idC =?")
                         .bind(0, name)
-                        .bind(1, img)
+                        .bind(1,img)
                         .bind(2, idC)
                         .execute()
         );

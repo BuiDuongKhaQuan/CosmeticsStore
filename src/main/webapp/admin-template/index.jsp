@@ -1,8 +1,8 @@
 ﻿<%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="qht.shopmypham.com.vn.model.Account" %>
-<%@ page import="qht.shopmypham.com.vn.model.Subscibe" %>
 <%@ page import="qht.shopmypham.com.vn.model.Review" %>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!doctype html>
@@ -14,8 +14,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
-    <title>:: Aero Bootstrap4 Admin :: Home</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+    <title>QST || Admin</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css"/>
     <link rel="stylesheet" href="admin-template/assets/plugins/charts-c3/plugin.css"/>
@@ -83,10 +83,13 @@
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="card widget_2 big_icon email">
                         <div class="body">
-                            <% List<Subscibe> subscibeList = (List<Subscibe>) request.getAttribute("subscibeList");%>
-                            <h6>Email</h6>
-                            <h2><%=subscibeList.size()%> <small class="info">email</small></h2>
-                            <small>Tổng số email đăng kí</small>
+                            <%
+                                NumberFormat nf = NumberFormat.getInstance();
+                                nf.setMinimumFractionDigits(0);
+                            %>
+                            <h6>Doanh thu</h6>
+                            <h2><%=nf.format(Product.revenue())%> <small class="info">vnd</small></h2>
+                            <small>Tổng số doanh thu</small>
                             <div class="progress">
                                 <div class="progress-bar l-purple" role="progressbar" aria-valuenow="39"
                                      aria-valuemin="0" aria-valuemax="100" style="width: 39%;"></div>

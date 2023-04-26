@@ -2,29 +2,44 @@ package qht.shopmypham.com.vn.tools;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class DateUtil {
-    public static String getDateNow(){
+    public static String getDateNow() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss a dd/MM/yyyy");
         Date currentDate = new Date();
         String formattedDate = dateFormat.format(currentDate);
         return formattedDate;
     }
-    public static String customDateTimeFormat (Date date){
+
+    public static String customDateTimeFormat(String date1) throws ParseException {
         String pattern = "hh:mm:ss a dd/MM/yyyy";
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-        String formattedDate = formatter.format(date);
-        System.out.println("Formatted Date: " + formattedDate);
-        return formattedDate;
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat(pattern);
+        Date date = inputDateFormat.parse(date1);
+        String outputDateString = outputDateFormat.format(date);
+        return  outputDateString;
     }
+
+    public static String between(String date) throws ParseException {
+        String pattern = "hh:mm:ss a dd/MM/yyyy";
+        LocalDateTime date1 = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(pattern));
+        LocalDateTime dateNow = LocalDateTime.parse(getDateNow(), DateTimeFormatter.ofPattern(pattern));
+        Duration duration = Duration.between(date1, dateNow);
+        long seconds = duration.getSeconds();
+        String time = "";
+        if (seconds < 60) return time = seconds + " giây";
+        if (seconds > 60 && seconds / 60 < 60) return time = seconds / 60 + " phút";
+        if (seconds / 60 > 60) return time = seconds / 3600 + " giờ " + (seconds / 60 - 60) + " phút";
+        return time;
+    }
+
 
     public static void main(String[] args) throws ParseException {
         String pattern = "hh:mm:ss a dd/MM/yyyy";
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-        Date date1 = formatter.parse("02:02:00 PM 07/03/2023");
-        Date date2 = formatter.parse("03:02:00 AM 08/03/2023");
-        System.out.println(date2.before(date1));
-
+        System.out.println(customDateTimeFormat("2023-04-23T23:59:59Z"));
     }
 }

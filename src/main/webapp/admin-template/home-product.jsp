@@ -1,8 +1,7 @@
-<%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
-<!doctype html><%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="qht.shopmypham.com.vn.service.HomeService" %>
+<!doctype html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html class="no-js " lang="en">
 
@@ -13,8 +12,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin ::</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý trang chủ</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -31,22 +30,24 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Số lượng sản phẩm, Fashion New Trends</h2>
+                    <h2>Số lượng sản phẩm hiển thị, Cosmetics New Trends</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
                         <li class="breadcrumb-item">Quản lí trang chủ</li>
-                        <li class="breadcrumb-item active">Số lượng sản phẩm, Fashion New Trends</li>
+                        <li class="breadcrumb-item active">Số lượng sản phẩm, Cosmetics New Trends</li>
                     </ul>
-                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
+                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
+                            class="zmdi zmdi-sort-amount-desc"></i></button>
                 </div>
                 <div class="col-lg-5 col-md-6 col-sm-12">
-                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i
+                            class="zmdi zmdi-arrow-right"></i></button>
                 </div>
             </div>
         </div>
         <div class="container-fluid">
             <div class="row clearfix">
-            <% Home home = (Home) request.getAttribute("home");%>
+                <% Home home = HomeService.getHome();%>
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="body">
@@ -55,22 +56,30 @@
 
                                     <label for="quantityProS">Sản phẩm bán chạy</label>
                                     <div class="form-group">
-                                        <input type="number" id="quantityProS" class="form-control"
+                                        <input type="number" id="quantityProS"
+                                               style="flex: 10"
+                                               class="form-control"
                                                value="<%=home.getQuantityProS()%>"> <label>sản phẩm</label>
                                     </div>
                                     <label for="quantityProN">Sản phẩm mới</label>
                                     <div class="form-group">
-                                        <input type="number" id="quantityProN" class="form-control"
+                                        <input type="number" id="quantityProN"
+                                               style="flex: 10"
+                                               class="form-control"
                                                value="<%=home.getQuantityProN()%>"> <label>sản phẩm</label>
                                     </div>
                                     <label for="quantityProP">Sản phẩm ưu đãi</label>
                                     <div class="form-group">
-                                        <input type="number" id="quantityProP" class="form-control"
+                                        <input type="number" id="quantityProP"
+                                               style="flex: 10"
+                                               class="form-control"
                                                value="<%=home.getQuantityProP()%>"> <label>sản phẩm</label>
                                     </div>
                                     <label for="quantityBlog">Fashion New Trends</label>
                                     <div class="form-group">
-                                        <input type="number" id="quantityBlog" class="form-control"
+                                        <input type="number" id="quantityBlog"
+                                               style="flex: 10"
+                                               class="form-control"
                                                value="<%=home.getQuantityBlog()%>"> <label>bài</label>
                                     </div>
                                     <button type="submit" onclick="save()"
@@ -89,7 +98,7 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script>
     function save() {
@@ -103,7 +112,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Cập nhật số lượng thành công.");
+                showNotification("Cập nhật số lượng thành công");
             }
         };
         xhr.send("quantityProS=" + encodeURIComponent(quantityProS)
