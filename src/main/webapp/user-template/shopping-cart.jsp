@@ -1,10 +1,9 @@
-<%@ page import="qht.shopmypham.com.vn.model.Account" %>
 <%@ page import="qht.shopmypham.com.vn.model.ListProductByCart" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -15,8 +14,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
-
+    <title>Mỹ Phẩm QST || Giỏ hàng</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
@@ -60,7 +59,6 @@
 <!-- Breadcrumb Section End -->
 
 <!-- Shopping Cart Section Begin -->
-<% Account acc = (Account) request.getSession().getAttribute("a");%>
 <section class="shopping-cart spad">
     <div class="container">
         <div class="row">
@@ -70,18 +68,16 @@
                         <thead>
                         <tr>
                             <th>SẢN PHẨM</th>
-                            <th>ĐƠN GIÁ</th>
-                            <th>SỐ LƯỢNG</th>
-                            <th>TỔNG GIÁ</th>
-                            <th></th>
+                            <th style="width: 17%">ĐƠN GIÁ</th>
+                            <th style="width: 17%">SỐ LƯỢNG</th>
+                            <th style="width: 17%">TỔNG GIÁ</th>
+                            <th style="width: 11%"></th>
                         </tr>
                         </thead>
                         <tbody id="quantity-product">
                         <%
                             List<ListProductByCart> list = (List<ListProductByCart>) request.getAttribute("list");
-                            NumberFormat nf = NumberFormat.getInstance();
-                            nf.setMinimumFractionDigits(0);
-                            double totalPrice = 0;
+                            int totalPrice = 0;
 
                             for (ListProductByCart l : list) {
                                 Product p = ProductService.getProductById(l.getIdP());
@@ -92,7 +88,7 @@
                         <tr>
                             <td class="product__cart__item">
                                 <div class="product__cart__item__pic"
-                                     style="width: 70px;height: 70px; margin-top: 30px;">
+                                     style="width: 70px;height: 70px; margin-top: 15px;">
                                     <img src="<%=imageList.get(0).getImg()%>" alt="">
                                 </div>
                                 <div class="product__cart__item__text" style="cursor: pointer">
@@ -101,7 +97,12 @@
                                     </h6>
                                 </div>
                             </td>
-                            <td class="cart__price" style="width: 340px;"><%=nf.format(p.getPrice())%>đ</td>
+                            <td class="cart__price" style="width: 340px;"
+                            ><%=Format.formatPrice(p.getPrice())%>đ <%if (p.isPromotion()) {%>
+                                <del style="color: #00000087;"
+                                ><%=Format.formatPrice(p.getPriceDefault())%>đ
+                                </del>
+                                <%}%></td>
                             <td class="quantity__item">
                                 <div class="quantity" style=" display: flex">
                                     <div class="input-group-btn" style="background-color:#111111; color: #FFFFFF">
@@ -123,10 +124,10 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="cart__price__total"><%=nf.format(p.getPrice() * l.getQuantity())%>đ</td>
+                            <td class="cart__price__total"><%=Format.formatPrice(p.getPrice() * l.getQuantity())%>đ</td>
                             <td class="cart__close">
                                 <input type="hidden" id="idP" value="<%=p.getIdP()%>">
-                                <button type="submit" style="background-color: rgba(38,255,0,0)"
+                                <button type="submit" style="background-color: rgba(38,255,0,0); cursor: pointer"
                                         onclick="upDateQuantity(<%=p.getIdP()%>,'deleteItem')">
                                     <i class="fa fa-close"
                                        style="margin-left: 10px"></i>
@@ -140,12 +141,11 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="product">Tiếp tục mua hàng</a>
+                            <a href="product?command=product">Tiếp tục mua hàng</a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
-                            <%--                            <a href="#"><i class="fa fa-spinner"></i> Cập nhật giỏ hàng</a>--%>
                         </div>
                     </div>
                 </div>
@@ -153,31 +153,33 @@
             <div class="col-lg-4">
                 <div class="cart__discount">
                     <h6>MÃ GIẢM GIÁ</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Nhập mã giảm giá">
-                        <button type="submit">Áp dụng</button>
+                    <form>
+                        <input type="text" id="code" placeholder="Nhập mã giảm giá">
+                        <button type="button" onclick="getVoucher()">Áp dụng</button>
                     </form>
+                    <div id="mess" style="margin-top: 3px"></div>
                 </div>
                 <div class="cart__total">
                     <h6>Tổng đơn hàng</h6>
-                    <% if (list.size() != 0) {%>
+                    <%
+                        if (list.size() != 0) {%>
                     <div id="total-product">
                         <ul>
-                            <li>Đơn giá <span><%=nf.format(totalPrice)%>đ</span></li>
-                            <li>Phí vận chuyển <span>25.000đ</span></li>
-                            <li>Tổng cộng <span><%=nf.format(totalPrice + 25000)%>đ</span></li>
+                            <li>Đơn giá <span><%=Format.formatPrice(totalPrice)%>đ</span></li>
+                            <li>Phí vận chuyển <span>Chưa có thông tin</span></li>
+                            <li>Giảm giá <span id="voucher">- 0đ</span></li>
+                            <li>Tổng cộng <span id="total"><%=Format.formatPrice(totalPrice)%>đ</span></li>
                         </ul>
-                        <a href="checkout" class="primary-btn">THANH TOÁN</a>
+                        <a href="checkout?command=checkout" class="primary-btn">THANH TOÁN</a>
                     </div>
                     <%} else {%>
                     <div id="total-product">
                         <ul>
                             <li><span>Giỏ hàng trống mời bạn tiếp tục mua sắm</span></li>
                         </ul>
-                        <a href="product" class="primary-btn">Tếp tục mua hàng</a>
+                        <a href="product?command=product" class="primary-btn">Tếp tục mua hàng</a>
                     </div>
                     <%}%>
-
                 </div>
             </div>
         </div>
@@ -188,17 +190,6 @@
 <!-- Footer Section Begin -->
 <jsp:include page="footer.jsp"></jsp:include>
 <!-- Footer Section End -->
-
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
 
 <!-- Js Plugins -->
 <script src="user-template/js/jquery-3.3.1.min.js"></script>
@@ -211,8 +202,37 @@
 <script src="user-template/js/mixitup.min.js"></script>
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
-<script src="user-template/js/autoLoadCart.js"></script>
+<script src="user-template/js/product.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
+
 <script>
+    function getVoucher() {
+        const code = document.getElementById("code").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "voucher?command=voucher&code=" + encodeURIComponent(code) + "&total=<%=totalPrice%>", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                document.getElementById("total-product").innerHTML = this.responseText;
+                mess();
+            }
+        };
+        xhr.send();
+    }
+
+    function mess() {
+        const code = document.getElementById("code").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "voucher?command=mess&code=" + encodeURIComponent(code), true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                document.getElementById("mess").innerHTML = this.responseText;
+            }
+        };
+        xhr.send();
+    }
+
     function upDateQuantity(idP, command) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "product", true);
@@ -252,11 +272,7 @@
     function detailProduct(idP) {
         window.location.href = "detail?pid=" + idP;
     }
-
-
 </script>
-
-
 </body>
 
 </html>

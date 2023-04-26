@@ -2,8 +2,6 @@ package qht.shopmypham.com.vn.service;
 
 import qht.shopmypham.com.vn.db.JDBiConnector;
 import qht.shopmypham.com.vn.model.Blog;
-import qht.shopmypham.com.vn.model.BlogOffer;
-import qht.shopmypham.com.vn.model.Product;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,15 +43,6 @@ public class BlogService {
         );
     }
 
-    public static List<BlogOffer> get6BlogOffer() {
-        return JDBiConnector.me().withHandle(h ->
-                h.createQuery("SELECT * FROM blogoffer LIMIT 6")
-                        .mapToBean(BlogOffer.class)
-                        .stream()
-                        .collect(Collectors.toList())
-        );
-    }
-
     public static void editBlogByIdBl(String idBl, String img, String linkBlog, String idA, String topic, String shortContent) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("update blog set idA=?,  img=?,  topic=?, shortContent=?, linkBlog=? where idBl = ?")
@@ -89,15 +78,6 @@ public class BlogService {
         );
     }
 
-    public static BlogOffer getBlogOfferByIdBl(String idBv) {
-        return JDBiConnector.me().withHandle(h ->
-                h.createQuery("SELECT * FROM blogoffer where idBv=?")
-                        .bind(0, idBv)
-                        .mapToBean(BlogOffer.class)
-                        .stream()
-                        .collect(Collectors.toList()).get(0)
-        );
-    }
 
     public static void editBlogOfferByIdBl(String idBv, String img, String link, String idA, String topic) {
         JDBiConnector.me().withHandle(h ->
@@ -130,16 +110,6 @@ public class BlogService {
         );
     }
 
-    public static List<BlogOffer> getBlogOfferByTopic(String topic) {
-        return JDBiConnector.me().withHandle(h ->
-                h.createQuery("SELECT * FROM blogoffer WHERE topic LIKE ? ")
-                        .bind(0, "%" + topic + "%")
-                        .mapToBean(BlogOffer.class)
-                        .stream()
-                        .collect(Collectors.toList())
-        );
-
-    }
 
     public static List<Blog> getBlogByTopic(String topic) {
         return JDBiConnector.me().withHandle(h ->

@@ -1,6 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -12,8 +10,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
-
+    <title>Mỹ Phẩm QST || FAQs</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
@@ -44,7 +42,7 @@
                 <div class="breadcrumb__text">
                     <h4>Câu hỏi thường gặp</h4>
                     <div class="breadcrumb__links">
-                        <a href="./home">Trang chủ</a>
+                        <a href="home">Trang chủ</a>
                         <span>Câu hỏi thường gặp</span>
                     </div>
                 </div>
@@ -88,7 +86,6 @@
 <script src="user-template/js/mixitup.min.js"></script>
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
-<script src="user-template/js/autoLoadCart.js"></script>
 
 </body>
 
