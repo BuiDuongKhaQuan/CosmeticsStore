@@ -11,8 +11,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý đơn slider</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin ::</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/summernote/dist/summernote.css"/>
@@ -116,8 +116,9 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+
 <script src="admin-template/assets/plugins/dropzone/dropzone.js"></script> <!-- Dropzone Plugin Js -->
-<script src="admin-template/assets/js/notification.js"></script>
+
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/summernote/dist/summernote.js"></script>
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
@@ -136,7 +137,10 @@
         xhr.open('POST', 'UploadImgSlider', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
+                console.log('File uploaded successfully.');
                 window.location.href = "admin-slider?command=add";
+            } else {
+                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -152,8 +156,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification("Bài đã được đăng thành công");
-                window.location.href = "admin-slider?command=list";
+                alert("Bài đã được đăng thành công.");
             }
         };
         xhr.send("text=" + encodeURIComponent(slider_topic)
@@ -162,6 +165,17 @@
             + "&command=add");
     }
 
+    function show() {
+        var box = document.getElementById('show');
+        box.style.display = 'flex';
+    }
+
+    function closeNew() {
+
+        var box = document.getElementById('show');
+        box.style.display = 'none';
+
+    }
 
 </script><!-- Custom Js -->
 </body>

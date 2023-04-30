@@ -2,6 +2,7 @@ package qht.shopmypham.com.vn.service;
 
 import qht.shopmypham.com.vn.db.JDBiConnector;
 import qht.shopmypham.com.vn.model.FAQs;
+import qht.shopmypham.com.vn.model.Subscibe;
 
 import java.util.List;
 import java.util.stream.Collectors;

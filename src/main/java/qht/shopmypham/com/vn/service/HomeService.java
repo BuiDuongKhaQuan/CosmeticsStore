@@ -82,9 +82,5 @@ public class HomeService {
     }
 
     public static void main(String[] args) {
-        System.out.println(getHome().getQuantityProN());
-        System.out.println(getHome().getQuantityProP());
-        System.out.println(getHome().getQuantityBlog());
-        System.out.println(getHome().getQuantityProS());
     }
 }

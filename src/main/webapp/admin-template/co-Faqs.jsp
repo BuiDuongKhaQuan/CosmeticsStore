@@ -124,7 +124,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <a href="admin-contract?command=detele&id=<%=faQs.getIdF()%>"
+                                        <a href="admin-general?command=deleteFQAs&idF=<%=faQs.getIdF()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>
@@ -159,11 +159,11 @@
         var answer = document.getElementById("answer<%=faQs.getIdF()%>").value;
         var status = document.getElementById("status<%=faQs.getIdF()%>").value;
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "admin-contract", true);
+        xhr.open("POST", "admin-general", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                window.location.href = "admin-contract?command=question";
+                alert("Chỉnh sửa thành công!")
             }
         };
         xhr.send("question=" + encodeURIComponent(question)

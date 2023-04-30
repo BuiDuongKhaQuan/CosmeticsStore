@@ -1,5 +1,3 @@
-<%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.Account" %>
 <!doctype html><%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html class="no-js " lang="en">
@@ -11,9 +9,9 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý tài khoản</title>
+    <title>:: Aero Bootstrap4 Admin :: eCommerce</title>
     <!-- Favicon-->
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.css"/>
     <link rel="stylesheet" href="admin-template/assets/plugins/morrisjs/morris.css" />
@@ -50,22 +48,16 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-6 text-center">
                     <div class="card">
                         <div class="body">
-                            <%
-                                List<Account>listA = (List<Account>) request.getAttribute("accountList1");
-                                List<Account>allAccount = (List<Account>) request.getAttribute("accountList");
-                                List<Account>noChecout = (List<Account>) request.getAttribute("accountsNocheckout");
-                                List<Account>accessList = (List<Account>) request.getAttribute("accesMonth");
-                            %>
-                            <input type="text" class="knob" value="<%=allAccount.size()%>" data-linecap="round" data-width="100" data-height="100" data-thickness="0.08" data-fgColor="#00adef" readonly>
-                            <p>Tổng số khách hàng </p>
+                            <input type="text" class="knob" value="42" data-linecap="round" data-width="100" data-height="100" data-thickness="0.08" data-fgColor="#00adef" readonly>
+                            <p>Khách hàng </p>
                             <div class="d-flex bd-highlight text-center mt-4">
                                 <div class="flex-fill bd-highlight">
-                                    <small class="text-muted">Đã mua hàng </small>
-                                    <h5 class="mb-0"><%=listA.size()%></h5>
+                                    <small class="text-muted">Trực tiếp </small>
+                                    <h5 class="mb-0">254</h5>
                                 </div>
                                 <div class="flex-fill bd-highlight">
-                                    <small class="text-muted">Chưa mua</small>
-                                    <h5 class="mb-0"><%=noChecout.size()%></h5>
+                                    <small class="text-muted">Khám phá</small>
+                                    <h5 class="mb-0">254</h5>
                                 </div>
                             </div>
                         </div>
@@ -74,17 +66,17 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-6 text-center">
                     <div class="card">
                         <div class="body">
-                            <input type="text" class="knob" value="<%=accessList.size()%>" data-linecap="round" data-width="100" data-height="100" data-thickness="0.08" data-fgColor="#ee2558" readonly>
-                            <p>Số tài khoản truy cập web </p>
+                            <input type="text" class="knob" value="81" data-linecap="round" data-width="100" data-height="100" data-thickness="0.08" data-fgColor="#ee2558" readonly>
+                            <p>Tổng số tài khoản</p>
                             <div class="d-flex bd-highlight text-center mt-4">
                                 <div class="flex-fill bd-highlight">
-                                    <small class="text-muted">Trong tháng </small>
-                                    <h5 class="mb-0">4</h5>
+                                    <small class="text-muted">Ngoài nước</small>
+                                    <h5 class="mb-0">34GB</h5>
                                 </div>
-                                <%--                                <div class="flex-fill bd-highlight">--%>
-                                <%--                                    <small class="text-muted">Trong nước</small>--%>
-                                <%--                                    <h5 class="mb-0">531GB</h5>--%>
-                                <%--                                </div>--%>
+                                <div class="flex-fill bd-highlight">
+                                    <small class="text-muted">Trong nước</small>
+                                    <h5 class="mb-0">531GB</h5>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,20 +84,17 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-6 text-center">
                     <div class="card">
                         <div class="body">
-                            <%
-                                List<Account>listLoyer = (List<Account>) request.getAttribute("listAccoutLoyal");
-                            %>
-                            <input type="text" class="knob" value="<%=listLoyer.size()%>>" data-linecap="round" data-width="100" data-height="100" data-thickness="0.08" data-fgColor="#8f78db" readonly>
-                            <p>Khách hàng thân thiết</p>
+                            <input type="text" class="knob" value="62" data-linecap="round" data-width="100" data-height="100" data-thickness="0.08" data-fgColor="#8f78db" readonly>
+                            <p>Đầu tư</p>
                             <div class="d-flex bd-highlight text-center mt-4">
                                 <div class="flex-fill bd-highlight">
-                                    <small class="text-muted">Trong năm </small>
-                                    <h5 class="mb-0">2023<small></small></h5>
+                                    <small class="text-muted">Ngoài nước</small>
+                                    <h5 class="mb-0">25<small>(-23%)</small></h5>
                                 </div>
-                                <%--                                <div class="flex-fill bd-highlight">--%>
-                                <%--                                    <small class="text-muted">Trong nước</small>--%>
-                                <%--                                    <h5 class="mb-0">12<small>(+150%)</small></h5>--%>
-                                <%--                                </div>--%>
+                                <div class="flex-fill bd-highlight">
+                                    <small class="text-muted">Trong nước</small>
+                                    <h5 class="mb-0">12<small>(+150%)</small></h5>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -114,16 +103,16 @@
                     <div class="card">
                         <div class="body">
                             <input type="text" class="knob" value="38" data-linecap="round" data-width="100" data-height="100" data-thickness="0.08" data-fgColor="#f67a82" readonly>
-                            <p>Khách hàng mới</p>
+                            <p>Doanh thu</p>
                             <div class="d-flex bd-highlight text-center mt-4">
                                 <div class="flex-fill bd-highlight">
                                     <small class="text-muted">Khách trong nước</small>
                                     <h5 class="mb-0">15K</h5>
                                 </div>
-                                <%--                                <div class="flex-fill bd-highlight">--%>
-                                <%--                                    <small class="text-muted">Khách nước ngoài</small>--%>
-                                <%--                                    <h5 class="mb-0">2K</h5>--%>
-                                <%--                                </div>--%>
+                                <div class="flex-fill bd-highlight">
+                                    <small class="text-muted">Khách nước ngoài</small>
+                                    <h5 class="mb-0">2K</h5>
+                                </div>
                             </div>
                         </div>
                     </div>

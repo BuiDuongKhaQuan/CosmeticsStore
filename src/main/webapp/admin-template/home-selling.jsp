@@ -3,7 +3,6 @@
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.model.Selling" %>
-<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -16,8 +15,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý trang chủ</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product list</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -63,7 +62,7 @@
                                     <th>Hình ảnh</th>
                                     <th>Tên sản phẩm</th>
                                     <th data-breakpoints="xs">Giá</th>
-                                    <th data-breakpoints="xs md">Trang thái</th>
+                                    <th data-breakpoints="xs md">Trang thái kho</th>
                                     <th data-breakpoints="sm xs md">Hành động</th>
                                 </tr>
                                 </thead>
@@ -71,11 +70,6 @@
                                 <% List<Product> productList = (List<Product>) request.getAttribute("promotionProducts");
                                     for (Product product : productList) {
                                         List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
-                                        Selling selling = ProductService.getSelling();
-                                        String status = "";
-                                        if (product.getIdP() == selling.getIdP()) {
-                                            status = "Đang được chọn";
-                                        } else {status = "Không được chọn";}
                                 %>
                                 <tr>
                                     <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
@@ -83,8 +77,8 @@
                                     <td><h5><%=product.getName()%>
                                     </h5>
                                     </td>
-                                    <td><%=Format.formatPrice(product.getPrice())%>đ</td>
-                                    <td><span class="col-green"><%=status%></span></td>
+                                    <td><%=product.getPrice()%>đ</td>
+                                    <td><span class="col-green">In Stock</span></td>
                                     <td>
                                         <a onclick="selected(<%=product.getIdP()%>)"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
@@ -152,8 +146,9 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+
 <script src="admin-template/assets/bundles/footable.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-<script src="admin-template/assets/js/notification.js"></script>
+
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/js/pages/tables/footable.js"></script><!-- Custom Js -->
 <script>
@@ -163,8 +158,8 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification("Chọn sản phẩm thành công, vui lòng cập nhật câu giới thiệu!");
-                showQ();
+                alert("Chọn sản phẩm thành công, vui lòng cập nhật câu giới thiệu!");
+                show();
             }
         };
         xhr.send("idP=" + idP
@@ -182,8 +177,8 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification("Cập nhật câu quảng cáo thành công!");
-                closePromotion();
+                alert("Cập nhật câu quảng cáo thành công!");
+                closePromotion()
             }
         };
         xhr.send("text1=" + encodeURIComponent(text1)
@@ -193,7 +188,7 @@
             + "&command=selling");
     }
 
-    function showQ() {
+    function show() {
         var box = document.getElementById('promotion-show');
         box.style.display = 'flex';
     }

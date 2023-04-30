@@ -1,14 +1,9 @@
 package qht.shopmypham.com.vn.model;
 
-import qht.shopmypham.com.vn.service.AccountService;
-import qht.shopmypham.com.vn.service.CartService;
-import qht.shopmypham.com.vn.service.ProductService;
-
 import java.io.Serializable;
-import java.util.List;
 
 public class Account implements Serializable {
-    int id;
+    int idA;
     String user;
     String pass;
     String fullName;
@@ -18,21 +13,13 @@ public class Account implements Serializable {
     String img;
     String idFacebook;
     String idGoogle;
-    int status;
+    int orderManage, generalManage, productManage, accountManage, blogManage, status, homeManage;
 
     public Account() {
     }
 
-    public Account(int id, String user, String pass, String fullName, int status) {
-        this.id = id;
-        this.user = user;
-        this.pass = pass;
-        this.fullName = fullName;
-        this.status = status;
-    }
-
-    public Account(int id, String user, String pass, String fullName, String phone, String address, String email, String img, String idFacebook, String idGoogle, int status) {
-        this.id = id;
+    public Account(int idA, String user, String pass, String fullName, String phone, String address, String email, String img, String idFacebook, String idGoogle, int orderManage, int generalManage, int productManage, int accountManage, int blogManage, int status, int homeManage) {
+        this.idA = idA;
         this.user = user;
         this.pass = pass;
         this.fullName = fullName;
@@ -42,15 +29,44 @@ public class Account implements Serializable {
         this.img = img;
         this.idFacebook = idFacebook;
         this.idGoogle = idGoogle;
+        this.orderManage = orderManage;
+        this.generalManage = generalManage;
+        this.productManage = productManage;
+        this.accountManage = accountManage;
+        this.blogManage = blogManage;
         this.status = status;
+        this.homeManage = homeManage;
     }
 
-    public int getId() {
-        return id;
+    @Override
+    public String toString() {
+        return "Account{" +
+                "idA=" + idA +
+                ", user='" + user + '\'' +
+                ", pass='" + pass + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", img='" + img + '\'' +
+                ", idFacebook='" + idFacebook + '\'' +
+                ", idGoogle='" + idGoogle + '\'' +
+                ", orderManage=" + orderManage +
+                ", generalManage=" + generalManage +
+                ", productManage=" + productManage +
+                ", accountManage=" + accountManage +
+                ", blogManage=" + blogManage +
+                ", status=" + status +
+                ", homeManage=" + homeManage +
+                '}';
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getIdA() {
+        return idA;
+    }
+
+    public void setIdA(int idA) {
+        this.idA = idA;
     }
 
     public String getUser() {
@@ -125,6 +141,46 @@ public class Account implements Serializable {
         this.idGoogle = idGoogle;
     }
 
+    public int getOrderManage() {
+        return orderManage;
+    }
+
+    public void setOrderManage(int orderManage) {
+        this.orderManage = orderManage;
+    }
+
+    public int getGeneralManage() {
+        return generalManage;
+    }
+
+    public void setGeneralManage(int generalManage) {
+        this.generalManage = generalManage;
+    }
+
+    public int getProductManage() {
+        return productManage;
+    }
+
+    public void setProductManage(int productManage) {
+        this.productManage = productManage;
+    }
+
+    public int getAccountManage() {
+        return accountManage;
+    }
+
+    public void setAccountManage(int accountManage) {
+        this.accountManage = accountManage;
+    }
+
+    public int getBlogManage() {
+        return blogManage;
+    }
+
+    public void setBlogManage(int blogManage) {
+        this.blogManage = blogManage;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -133,75 +189,11 @@ public class Account implements Serializable {
         this.status = status;
     }
 
-    public Power powerAccount() {
-        return AccountService.getPowerAccount(this.getId());
+    public int getHomeManage() {
+        return homeManage;
     }
 
-    public String getName() {
-        String name = "";
-        if (this.getIdGoogle() != null) {
-            name = this.getEmail();
-        }
-        if (this.getIdGoogle() == null) {
-            name = this.getFullName();
-        }
-        if (this.getFullName() == null && this.getIdGoogle() == null) {
-            name = this.getUser();
-        }
-        return name;
+    public void setHomeManage(int homeManage) {
+        this.homeManage = homeManage;
     }
-
-    public boolean maxPower() {
-        return AccountService.getPowerAccount(this.getId()).getAccountManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getSliderManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getBlogManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getGeneralManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getHomeManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getOrderManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getProductManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getVoucherManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getWarehouseManage() == 1;
-    }
-
-    public boolean mediumPower() {
-        return AccountService.getPowerAccount(this.getId()).getAccountManage() == 1
-                || AccountService.getPowerAccount(this.getId()).getSliderManage() == 1
-                || AccountService.getPowerAccount(this.getId()).getBlogManage() == 1
-                || AccountService.getPowerAccount(this.getId()).getGeneralManage() == 1
-                || AccountService.getPowerAccount(this.getId()).getHomeManage() == 1
-                || AccountService.getPowerAccount(this.getId()).getOrderManage() == 1
-                || AccountService.getPowerAccount(this.getId()).getProductManage() == 1
-                || AccountService.getPowerAccount(this.getId()).getVoucherManage() == 1
-                || AccountService.getPowerAccount(this.getId()).getWarehouseManage() == 1;
-    }
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", user='" + user + '\'' +
-                ", pass='" + pass + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", img='" + img + '\'' +
-                ", idFacebook='" + idFacebook + '\'' +
-                ", idGoogle='" + idGoogle + '\'' +
-                ", status=" + status +
-                '}';
-    }
-
-    public List<ListProductByCart> getProductCart() {
-        return CartService.getAllByIda(this.getId());
-    }
-
-    public List<Product> getFavoriteProduct() {
-        return ProductService.getFavoriteProductByIdA(this.getId());
-    }
-
-    public Account getAccount() {
-        return AccountService.getAccountById(this.getId());
-    }
-
-
 }

@@ -14,8 +14,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý liên hệ</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product list</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -145,7 +145,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification('Đã gửi câu trả lời');
+                alert("Trả lời thành công.");
                 closeNew<%=contact.getIdCt()%>();
             }
         };
@@ -155,19 +155,13 @@
     }
 
     <%}%>
-    const notification = document.getElementById("notification");
-    function showNotification(txt) {
-        notification.innerHTML = txt;
-        notification.style.display = "block";
-        setTimeout(function () {
-            notification.style.display = "none";
-        }, 2000);
-    }
 </script>
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+
 <script src="admin-template/assets/bundles/footable.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/js/pages/tables/footable.js"></script><!-- Custom Js -->
 

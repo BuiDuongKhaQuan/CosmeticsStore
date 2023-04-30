@@ -111,7 +111,7 @@
         var answer = document.getElementById("answer").value;
         var status = document.getElementById("status").value;
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "admin-contract", true);
+        xhr.open("POST", "admin-general", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {

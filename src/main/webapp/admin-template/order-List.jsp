@@ -14,8 +14,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý đơn hàng</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product list</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -63,7 +63,10 @@
                                     <th>Mã đơn hàng</th>
                                     <th>Trạng thái</th>
                                     <th data-breakpoints="xs">Người đặt</th>
+                                    <th data-breakpoints="xs md">Địa chỉ</th>
                                     <th data-breakpoints="xs md">Ngày đặt</th>
+                                    <th data-breakpoints="xs md">Ngày xác nhận</th>
+                                    <th data-breakpoints="xs md">Ngày hoàn thành</th>
                                     <th data-breakpoints="xs md"></th>
                                     <th data-breakpoints="xs md">Hành động</th>
                                 </tr>
@@ -96,12 +99,42 @@
                                     </a>
                                     </td>
                                     <td><h5>
+                                        <%
+                                            if (co.getIdStatus() == 0) {
+                                        %>
                                         <%=status%>
+                                        <%}%>
+                                        <%
+                                            if (co.getIdStatus() == 2 || co.getIdStatus() == 3) {
+                                        %>
+                                        <%=status%>
+                                        <%}%>
+                                        <%
+                                            if (co.getIdStatus() == 4 || co.getIdStatus() == 5) {
+                                        %>
+                                        <%=status%>
+                                        <%}%>
                                     </h5></td>
                                     <td><%=co.getName()%>
                                     </td>
+                                    <td><span class="col-green"><%=co.getAddress()%></span></td>
                                     <td><span class="col-green"><%=co.getOrderDate()%></span></td>
+                                    <td><span class="col-green">
+                                        <%
+                                            if (co.getConfirmDate() != null) {
+                                        %>
+                                        <%=co.getConfirmDate()%>
+                                        <%}%>
 
+                                    </span></td>
+                                    <td><span class="col-green">
+                                        <%
+                                            if (co.getReceivedDate() != null) {
+                                        %>
+                                        <%=co.getReceivedDate()%>
+                                        <%}%>
+
+                                    </span></td>
                                     <% if (co.getIdStatus() == 0) {%>
                                     <td><a href="admin-order?command=ok&idCk=<%=co.getIdCk()%>"
                                            class="btn btn-primary"
@@ -136,8 +169,6 @@
                                         <a href="admin-order?command=delete&IdCk=<%=co.getIdCk()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
-                                        <a href="admin-order?command=bill&IdCk=<%=co.getIdCk()%>"
-                                           class="btn btn-default waves-effect waves-float btn-sm waves-red">Xuất hóa đơn</a>
                                     </td>
                                 </tr>
                                 <%}%>
