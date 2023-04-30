@@ -1,8 +1,11 @@
 package qht.shopmypham.com.vn.service;
 
 import qht.shopmypham.com.vn.db.JDBiConnector;
+import qht.shopmypham.com.vn.model.Home;
+import qht.shopmypham.com.vn.model.Offer;
 import qht.shopmypham.com.vn.model.Shop;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ShopService {
@@ -15,22 +18,20 @@ public class ShopService {
         );
     }
 
-    public static void editShop(String idS, String shopName, String logo_header, String aboutShop, String phone, String email,
-                                String designerBy, String textInHelp, String provinceID, String districtID, String wardID) {
+    public static void editShop(String idS, String shopName, String logo_header, String aboutShop, String address, String phone, String email,
+                                String designerBy, String textInHelp) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("update shop set  shopName=?,  aboutShop=?, logo_header=? ," +
-                                " phone=?,  email=?, designerBy=?,  textInHelp=?, provinceID=?, districtID=?, wardID=? where idS = ?")
+                                "address=?,  phone=?,  email=?, designerBy=?,  textInHelp=? where idS = ?")
                         .bind(0, shopName)
                         .bind(1, aboutShop)
                         .bind(2, logo_header)
-                        .bind(3, phone)
-                        .bind(4, email)
-                        .bind(5, designerBy)
-                        .bind(6, textInHelp)
-                        .bind(7, provinceID)
-                        .bind(8, districtID)
-                        .bind(9, wardID)
-                        .bind(10, idS)
+                        .bind(3, address)
+                        .bind(4, phone)
+                        .bind(5, email)
+                        .bind(6, designerBy)
+                        .bind(7, textInHelp)
+                        .bind(8, idS)
                         .execute()
         );
     }

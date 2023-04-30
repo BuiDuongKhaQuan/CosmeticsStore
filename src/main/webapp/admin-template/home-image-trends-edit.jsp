@@ -1,3 +1,4 @@
+<%@ page import="qht.shopmypham.com.vn.model.Categories" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="qht.shopmypham.com.vn.model.ImageTrend" %>
 <!doctype html>
@@ -11,8 +12,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý trang chủ</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -158,7 +159,6 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
-<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     $('.dropify').dropify();
@@ -174,7 +174,10 @@
         xhr.open('POST', 'UploadImgTrends', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
+                console.log('File uploaded successfully.');
                 window.location.href = "AdminHomeAll?command=editTrend&idT=<%=imageTrend.getId()%>";
+            } else {
+                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -189,7 +192,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification("Cập nhật hình ảnh thành công.");
+                alert("Cập nhật thành công.");
                 window.location.href = "AdminHomeAll?command=imageTrend";
             }
         };
@@ -200,6 +203,17 @@
     }
 
 
+    function show() {
+        var box = document.getElementById('show');
+        box.style.display = 'flex';
+    }
+
+    function closeNew() {
+
+        var box = document.getElementById('show');
+        box.style.display = 'none';
+
+    }
 </script><!-- Custom Js -->
 </body>
 

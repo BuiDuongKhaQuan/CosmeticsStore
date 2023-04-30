@@ -30,11 +30,11 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Danh sách slider </h2>
+                    <h2>Ưu đãi</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
                         <li class="breadcrumb-item">Quản lí trang chủ</li>
-                        <li class="breadcrumb-item active">Ưu đãi trong tuần</li>
+                        <li class="breadcrumb-item active">Ưu đãi</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -48,14 +48,14 @@
         <div class="container">
             <div class="row">
                 <% Selling selling = (Selling) request.getAttribute("dealweek");
-                    Image img = ProductService.getImages1(String.valueOf(selling.getIdP()));
+                    List<Image> img = ProductService.getImages(String.valueOf(selling.getIdP()));
                     Product p = ProductService.getName(String.valueOf(selling.getIdP()));
                     %>
                 <div class="col-lg-6 col-md-12">
                     <div class="card">
                         <div class="blogitem mb-5">
                             <div class="blogitem-image">
-                                <a href="blog-details.jsp"><img src="<%=img.getImg()%>" style="height: 450px"
+                                <a href="blog-details.jsp"><img src="<%=img.get(0).getImg()%>" style="height: 450px"
                                                                 alt="blog image"></a>
                             </div>
                             <div class="blogitem-content">

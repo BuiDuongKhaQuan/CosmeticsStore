@@ -1,3 +1,4 @@
+<%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Account" %>
 <!doctype html>
@@ -12,8 +13,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý tài khoản</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product list</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -76,10 +77,10 @@
                                     <td><%=account.getEmail()%></td>
                                     <td><span class="col-green">Đang hoạt động</span></td>
                                     <td>
-                                        <a href="admin-account?command=edit&IdA=<%=account.getId()%>"
+                                        <a href="admin-account?command=edit&IdA=<%=account.getIdA()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
                                                 class="zmdi zmdi-edit"></i></a>
-                                        <a href="admin-account?command=delete&IdA=<%=account.getId()%>"
+                                        <a href="admin-account?command=delete&IdA=<%=account.getIdA()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>

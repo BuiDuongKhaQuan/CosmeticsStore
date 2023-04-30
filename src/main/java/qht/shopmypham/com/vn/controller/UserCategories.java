@@ -17,7 +17,6 @@ public class UserCategories extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String cid = request.getParameter("cid");
         List<Product> productListByIdC = ProductService.getproductbyCata(cid);
-        List<Product> productList = ProductService.getProductByIdC(cid);
         Categories categories = CategoryService.getCategoriesById(cid);
         request.setAttribute("cid", cid);
         request.setAttribute("activeProduct", "active");

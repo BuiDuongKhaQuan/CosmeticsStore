@@ -16,7 +16,7 @@ public class CartService {
         );
     }
 
-    public static List<ListProductByCart> getAllByIda(int ida) {
+    public static List<ListProductByCart> getAllByIda(String ida) {
 
         return JDBiConnector.me().withHandle(handle -> {
             return handle.createQuery("select * from listproductbycart where idA = ?")

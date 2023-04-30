@@ -1,17 +1,22 @@
+<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Collections" %>
+<%@ page import="qht.shopmypham.com.vn.service.CheckOutService" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="qht.shopmypham.com.vn.service.ProductCheckoutService" %>
+<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
-<%@ page import="qht.shopmypham.com.vn.service.*" %>
-<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
-<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
 <html lang="en">
 
 <head>
+
     <meta charset="utf-8"/>
-    <title>Mỹ Phẩm QST || Chi tiết đơn hàng</title>
-    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>QST | Trang cá nhân</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="Free HTML Templates" name="keywords"/>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -38,6 +43,7 @@
 <jsp:include page="header.jsp"></jsp:include>
 <%
     Account acc = (Account) request.getSession().getAttribute("a");
+    Account acc1 = AccountService.getAccountById(String.valueOf(acc.getIdA()));
 %>
 <!-- Page Header Start -->
 <section class="breadcrumb-option">
@@ -63,14 +69,10 @@
             <div class="tab-content">
                 <%
                     int total1 = 0;
+                    NumberFormat nf = NumberFormat.getInstance();
+                    nf.setMinimumFractionDigits(0);
                     CheckOut checkOut = (CheckOut) request.getAttribute("checkOut");
-                    TransportS transport = (TransportS) request.getAttribute("transport");
-                    Province province = api.getProvinceById(checkOut.getIdProvince());
-                    District district = api.getDistrictById(checkOut.getIdProvince(), Integer.parseInt(transport.getToDistrictId()));
-                    Ward ward = api.getWardById(Integer.parseInt(transport.getToDistrictId()), Integer.parseInt(transport.getToWardId()));
-                    Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
                     List<ListProductByCheckOut> productByCheckOutList = (List<ListProductByCheckOut>) request.getAttribute("listProductByCheckOuts");
-                    String address = ward.getWardName() + ", " + district.getDistrictName() + ", " + province.getProvinceName();
                     String status = "";
                     if (checkOut.getIdStatus() == 0) {
                         status = "Chờ xác nhận";
@@ -98,13 +100,13 @@
                             <div class="d-flex text-muted mb-0 container-a">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="small mb-0 mb-01">
-                                        <a href="#">Mã đơn :
-                                            <%=checkOut.getIdCk()%>
+                                        <a href="profile?command=order-detail&idCk=<%=checkOut.getIdCk()%>">Mã đơn :
+                                            #<%=checkOut.getIdCk()%>
                                         </a>
                                     </div>
                                     <div class="small mb-0 mb-02">
                                         <i class="fa-light fa-car-side"></i>
-                                        <a href="#"
+                                        <a href="profile?command=order-detail&idCk=<%=checkOut.getIdCk()%>"
                                            style="color: green"><%=status%>
                                         </a>
                                     </div>
@@ -121,10 +123,11 @@
                                 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
                                     <div class="d-flex flex-wrap-1">
                                         <div>
-                                            ĐỊA CHỈ NHẬN HÀNG
+                                            Địa Chỉ Nhận Hàng
                                         </div>
                                         <div>
-                                            THEO DÕI ĐƠN HÀNG TẠI ĐÂY
+                                            Shopee Xpress
+                                            SPXVN039519983431
                                         </div>
                                     </div>
                                     <div class="d-flex status-container">
@@ -132,23 +135,20 @@
                                             <h6><%=checkOut.getName()%>
                                             </h6>
                                             <p><%=checkOut.getPhone()%>
-                                                <%=address%>
-                                            </p>
-                                            <h6>Địa chỉ chi tiết
-                                            </h6>
-                                            <p><%=checkOut.getDetailAddress()%>
+                                                <%=checkOut.getAddress()%>
                                             </p>
                                         </div>
                                         <div class="status-list list-status">
-                                            <div style="display: flex;padding-bottom: 17px;flex-direction: column;">
+                                            <div>
                                                 <div class="status-item">
                                                     <div class="si1">
                                                     </div>
                                                     <div class="si2">
-                                                        <div>Ngày giao dự kiến</div>
+                                                        <div></div>
+                                                        <div></div>
                                                         <div>
-                                                            <p style="margin-left: 15px"><%=DateUtil.customDateTimeFormat(api.leadTime(transport.getToDistrictId(), transport.getToWardId()).get(0).getFormattedDate())%>
-                                                            </p>
+                                                            <p></p>
+                                                            <p></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -156,10 +156,11 @@
                                                     <div class="si1">
                                                     </div>
                                                     <div class="si2">
-                                                        <div>Cập nhật thời gian</div>
+                                                        <div></div>
+                                                        <div></div>
                                                         <div>
-                                                            <p  style="margin-left: 15px"><%=transport.getUpdated_at()%>
-                                                            </p>
+                                                            <p></p>
+                                                            <p></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -167,24 +168,48 @@
                                                     <div class="si1">
                                                     </div>
                                                     <div class="si2">
-                                                        <div>Ngày tạo đơn</div>
+                                                        <div></div>
+                                                        <div></div>
                                                         <div>
-                                                            <p  style="margin-left: 15px"><%=transport.getCreated_at()%>
-                                                            </p>
+                                                            <p></p>
+                                                            <p></p>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                                 <div class="status-item">
                                                     <div class="si1">
                                                     </div>
                                                     <div class="si2">
-                                                        <div>Mã vận đơn</div>
+                                                        <div></div>
+                                                        <div></div>
                                                         <div>
-                                                            <p  style="margin-left: 15px"><%=transport.getId()%>
-                                                            </p>
+                                                            <p></p>
+                                                            <p></p>
                                                         </div>
-
+                                                    </div>
+                                                </div>
+                                                <div class="status-item">
+                                                    <div class="si1">
+                                                    </div>
+                                                    <div class="si2">
+                                                        <div></div>
+                                                        <div></div>
+                                                        <div>
+                                                            <p></p>
+                                                            <p></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="status-item">
+                                                    <div class="si1">
+                                                    </div>
+                                                    <div class="si2">
+                                                        <div></div>
+                                                        <div></div>
+                                                        <div>
+                                                            <p></p>
+                                                            <p></p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -193,10 +218,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card card-table" style="width: 100%;">
-                            <div class="card-body p-4" style="width: 100%;">
+                        <div class="card card-table">
+                            <div class="card-body p-4">
 
-                                <table style="width: 100%;">
+                                <table>
                                     <thead>
                                     <tr>
                                         <th style="width: 85%;"></th>
@@ -216,15 +241,15 @@
                                             style="display: flex; align-items: center; padding: 15px 0px;">
                                             <img src="<%=m.get(0).getImg()%>" alt="" style="max-width: 12%;">
                                             <div style="display: flex; flex-direction: column; padding: 0 30px">
-                                                <h6  onclick="detailProduct(<%=product.getIdP()%>)"
-                                                    style="padding: 17px 0; cursor: pointer"
+                                                <h6 onclick="detailOrder(<%=checkOut.getIdCk()%>)"
+                                                    style="padding: 17px 0"
                                                 ><%=product.getName()%>
                                                 </h6>
                                                 <h6>x<%=productByCheckOut.getQuantity()%>
                                                 </h6>
                                             </div>
                                         </td>
-                                        <td class="cart__price__total"><%=Format.formatPrice(product.getPrice() * productByCheckOut.getQuantity())%>
+                                        <td class="cart__price__total"><%=nf.format(product.getPrice() * productByCheckOut.getQuantity())%>
                                             đ
                                         </td>
                                     </tr>
@@ -235,45 +260,35 @@
                             </div>
                         </div>
                         <div class="total">
-                            <% int reduction = 0;
-                                if (voucher != null) {
-                                    reduction = total1 * voucher.getPrice() / 100;
-                                }
-                                int priceLast = total1 - reduction;%>
                             <div class="inf">
                                 <div class="inf-text">Tổng tiền hàng</div>
                                 <div class="inf-m">
-                                    <div><%=Format.formatPrice(total1)%>đ</div>
+                                    <div><%=nf.format(total1)%>đ</div>
                                 </div>
                             </div>
                             <div class="inf">
                                 <div class="inf-text">Phí vận chuyển</div>
                                 <div class="inf-m">
-                                    <div><%=Format.formatPrice(transport.getFee())%>đ</div>
+                                    <div>25.000đ</div>
                                 </div>
                             </div>
                             <div class="inf">
                                 <div class="inf-text">Giảm giá voucher</div>
                                 <div class="inf-m">
-                                    <div>- <%=Format.formatPrice(reduction)%>đ</div>
+                                    <div>-35.000đ</div>
                                 </div>
                             </div>
                             <div class="inf">
                                 <div class="inf-text">Thành tiền</div>
                                 <div class="inf-m">
-                                    <div><%=Format.formatPrice(priceLast + transport.getFee())%>đ
-                                    </div>
+                                    <div><%=nf.format(total1)%></div>
                                 </div>
                             </div>
                             <div class="inf">
                                 <i class="fa-light fa-money-check-dollar"></i>
                                 <div class="inf-text">Phương thức thanh toán</div>
                                 <div class="inf-m">
-                                    <% if (checkOut.getIdPm() == 1) {%>
-                                    <div>Thanh toán khi nhận hàng</div>
-                                    <%} else {%>
-                                    <div>Paypal</div>
-                                    <%}%>
+                                    <div>Tiền mặc</div>
                                 </div>
                             </div>
                         </div>
@@ -300,7 +315,6 @@
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
 <!-- Template Javascript -->
-<script src="user-template/js/product.js"></script>
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
 
 <script>

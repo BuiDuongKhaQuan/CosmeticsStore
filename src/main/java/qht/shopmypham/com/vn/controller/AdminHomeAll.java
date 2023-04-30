@@ -8,7 +8,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -21,22 +20,14 @@ public class AdminHomeAll extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
-        request.setAttribute("home", "toggled");
-        String ipAddress = request.getRemoteAddr();
-        String url = request.getRequestURI();
-        int level = 1;
-        int action = 4;
-        String dateNow = DateUtil.getDateNow();
-        String content = "";
-        int idA = 0;
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
-            if (acc.powerAccount().getHomeManage() == 1) {
-                idA = acc.getId();
+            if (acc.getHomeManage() == 1) {
                 if (command.equals("productHome")) {
+                    Home home = HomeService.getHome();
+                    request.setAttribute("home", home);
                     request.getRequestDispatcher("/admin-template/home-product.jsp").forward(request, response);
-                    content = "Truy cập trang quản lí sản phẩm trên trang chủ";
                 }
                 if (command.equals("cate")) {
                     Home home = HomeService.getHome();
@@ -48,7 +39,6 @@ public class AdminHomeAll extends HttpServlet {
                     request.setAttribute("categoriesList", categoriesList);
                     request.setAttribute("categoriesHome", categoriesHome);
                     request.getRequestDispatcher("/admin-template/home-catagory.jsp").forward(request, response);
-                    content = "Truy cập trang quản lí danh mục của trang chủ";
                 }
                 if (command.equals("selling")) {
                     List<Product> promotionProducts = new ArrayList<>();
@@ -60,8 +50,8 @@ public class AdminHomeAll extends HttpServlet {
                         try {
                             Date date1 = formatter.parse(pp.getStartDay());
                             Date date2 = formatter.parse(pp.getEndDay());
-                            Date dateNow1 = formatter.parse(DateUtil.getDateNow());
-                            if (dateNow1.after(date1) && dateNow1.before(date2)) {
+                            Date dateNow = formatter.parse(DateUtil.getDateNow());
+                            if (dateNow.after(date1) && dateNow.before(date2)) {
                                 promotionProducts.add(ProductService.getProductById(pp.getIdP()));
                             }
                         } catch (ParseException e) {
@@ -71,38 +61,33 @@ public class AdminHomeAll extends HttpServlet {
                     request.setAttribute("selling", selling);
                     request.setAttribute("promotionProducts", promotionProducts);
                     request.getRequestDispatcher("/admin-template/home-selling.jsp").forward(request, response);
-                    content = "Truy cập trang quản lí sản phẩm ưu đãi";
                 }
                 if (command.equals("imageTrend")) {
-                    List<String> content1 = new ArrayList<>();
+                    List<String> content = new ArrayList<>();
                     List<String> img = new ArrayList<>();
                     List<ImageTrend> imageTrendList = HomeService.getImageFs();
                     for (int i = 0; i < 3; i++) {
-                        content1.add(imageTrendList.get(i).getImg());
+                        content.add(imageTrendList.get(i).getImg());
                     }
                     for (int i = 3; i < imageTrendList.size(); i++) {
                         img.add(imageTrendList.get(i).getImg());
                     }
-                    request.setAttribute("contentTrends", content1);
+                    request.setAttribute("contentTrends", content);
                     request.setAttribute("imgTrends", img);
                     request.setAttribute("imageTrendList", imageTrendList);
                     request.getRequestDispatcher("/admin-template/home-image-trends.jsp").forward(request, response);
-                    content = "Truy cập trang quản lí hình ảnh trend trong trang chủ";
                 }
                 if (command.equals("information")) {
                     Shop shop = ShopService.getShop();
                     request.setAttribute("shop", shop);
                     request.getRequestDispatcher("/admin-template/home-information.jsp").forward(request, response);
-                    content = "Truy cập trang quản lí thông tin trên trang chủ";
                 }
                 if (command.equals("editTrend")) {
                     String idT = request.getParameter("idT");
                     ImageTrend imageTrend = HomeService.getImageTrendById(idT);
                     request.setAttribute("imgTrend", imageTrend);
                     request.getRequestDispatcher("/admin-template/home-image-trends-edit.jsp").forward(request, response);
-                    content = "Truy cập trang quản lí chỉnh sửa hình ảnh trend";
                 }
-                LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
             } else {
                 response.sendRedirect(error404);
             }
@@ -113,46 +98,29 @@ public class AdminHomeAll extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
-        String ipAddress = request.getRemoteAddr();
-        String url = request.getRequestURI();
-        int level = 1;
-        int action = 4;
-        String dateNow = DateUtil.getDateNow();
-        String content = "";
-        int idA = 0;
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
-            if (acc.powerAccount().getHomeManage() == 1) {
-                idA = acc.getId();
+            if (acc.getHomeManage() == 1) {
                 if (command.equals("information")) {
                     String idS = request.getParameter("idS");
                     String phone = request.getParameter("phone");
+                    String address = request.getParameter("address");
                     String slogan = request.getParameter("slogan");
                     String contact = request.getParameter("contact");
                     String email = request.getParameter("email");
                     String name = request.getParameter("name");
                     String desginer = request.getParameter("desginer");
                     String logo_header = request.getParameter("logo_header");
-                    String provinceID = request.getParameter("provinceID");
-                    String districtID = request.getParameter("districtID");
-                    String wardID = request.getParameter("wardID");
-
-                    ShopService.editShop(idS, name, logo_header, slogan, phone, email, desginer, contact, provinceID, districtID, wardID);
+                    ShopService.editShop(idS, name, logo_header, slogan, address, phone, email, desginer, contact);
                     HttpSession session = request.getSession();
                     session.removeAttribute("logo");
-                    level = 2;
-                    action = 2;
-                    content = "Chỉnh sửa thông tin trên trang chủ " + idS;
                 }
                 if (command.equals("category")) {
                     String idC1 = request.getParameter("idC1");
                     String idC2 = request.getParameter("idC2");
                     String idC3 = request.getParameter("idC3");
                     HomeService.edit(idC1, idC2, idC3);
-                    level = 2;
-                    action = 2;
-                    content = "Chỉnh sửa danh mục trên trang chủ " + idC1 + idC2 + idC3;
                 }
                 if (command.equals("quantity")) {
                     String quantityProS = request.getParameter("quantityProS");
@@ -160,9 +128,6 @@ public class AdminHomeAll extends HttpServlet {
                     String quantityProP = request.getParameter("quantityProP");
                     String quantityBlog = request.getParameter("quantityBlog");
                     HomeService.editQuantity(quantityProP, quantityProN, quantityProS, quantityBlog);
-                    level = 2;
-                    action = 2;
-                    content = "Chỉnh sửa sản phẩm khuyến mãi trên trang chủ";
                 }
                 if (command.equals("selling")) {
                     String idP = request.getParameter("idP");
@@ -171,34 +136,24 @@ public class AdminHomeAll extends HttpServlet {
                     String text2 = request.getParameter("text2");
                     String text3 = request.getParameter("text3");
                     ProductService.editSelling(text, text1, text2, text3, idP);
-                    level = 2;
-                    action = 2;
-                    content = "Chỉnh sửa sản phẩm ưu đãi  trên trang chủ";
                 }
                 if (command.equals("imgtrend")) {
-                    String action1 = request.getParameter("action");
-                    if (action1.equals("text")) {
+                    String action = request.getParameter("action");
+                    if (action.equals("text")) {
                         String id = request.getParameter("id");
                         String topic = request.getParameter("topic");
                         String status = request.getParameter("status");
                         HomeService.editImgTrends(topic, id, status);
-                        level = 2;
-                        action = 2;
-                        content = "Chỉnh sửa hình ảnh trend trong trang chủ";
                     }
-                    if (action1.equals("trend")) {
+                    if (action.equals("trend")) {
                         String idT = request.getParameter("idT");
                         String imgT = request.getParameter("imgT");
                         String status = request.getParameter("status");
                         HomeService.editImgTrends(imgT, idT, status);
                         HttpSession session = request.getSession();
                         session.removeAttribute("imgsTrends");
-                        level = 2;
-                        action = 2;
-                        content = "Chỉnh sửa sản phẩm khuyến mãi trên trang chủ";
                     }
                 }
-                LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
             } else {
                 response.sendRedirect(error404);
             }

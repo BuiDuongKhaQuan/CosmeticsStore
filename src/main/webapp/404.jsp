@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: khaqu
+  Date: 4/2/2023
+  Time: 5:43 PM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -6,14 +13,18 @@
 <head>
 
     <meta charset='UTF-8'>
-    <title>Mỹ Phẩm QST || Đăng nhập</title>
-    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
+    <title>CodePen Demo</title>
 
     <meta name="robots" content="noindex">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
     <link rel="mask-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg" color="#111">
     <link rel="canonical" href="https://codepen.io/yexx/pen/XPZpoK">
+
     <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+
     <style id="INLINE_PEN_STYLESHEET_ID">
         html,
         body {

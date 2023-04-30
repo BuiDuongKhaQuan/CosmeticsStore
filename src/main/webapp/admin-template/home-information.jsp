@@ -1,10 +1,14 @@
-<%@ page import="java.util.Map" %>
-<%@ page import="qht.shopmypham.com.vn.model.Shop" %>
-<%@ page import="qht.shopmypham.com.vn.model.Province" %>
+<%@ page import="qht.shopmypham.com.vn.model.Product" %>
+<%@ page import="qht.shopmypham.com.vn.model.Categories" %>
 <%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.api" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="qht.shopmypham.com.vn.model.Image" %>
+<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="qht.shopmypham.com.vn.model.Shop" %>
 <!doctype html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html class="no-js " lang="en">
 
@@ -14,25 +18,19 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý trang chủ</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
     <link rel="stylesheet" href="admin-template/assets/css/style.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/dropify/css/dropify.min.css" type="text/css">
     <style>
-        .form-group label {
+        .form-group label{
             flex: 2;
         }
-
-        .form-group input {
+        .form-group input{
             flex: 10;
-        }
-
-        .address {
-            width: 33%;
-            margin-right: 10px;
         }
     </style>
 </head>
@@ -116,8 +114,7 @@
                                     <% if (map != null) {%>
                                     <input value="<%=path%>" type="hidden" name="logo_header" id="logo_header">
                                     <%} else {%>
-                                    <input value="<%=shop.getLogo_header()%>" type="hidden" name="logo_header"
-                                           id="logo_header">
+                                    <input value="<%=shop.getLogo_header()%>" type="hidden" name="logo_header" id="logo_header">
                                     <%}%>
                                     <div class="form-group">
                                         <label for="name">TÊN CỬA HÀNG</label>
@@ -134,41 +131,13 @@
                                     <div class="form-group">
                                         <label for="phone">SỐ ĐIỆN THOẠI</label>
                                         <input type="text" id="phone"
-                                               value="<%=shop.getPhone()%>" class="form-control">
+                                               value="<%=shop.getPhone()%>" class="form-control" >
                                     </div>
                                     <hr>
                                     <div class="form-group">
-                                        <label for="provinceID">Địa chỉ</label>
-                                        <div class="form-group" style="width: 84%;">
-                                            <div class="address">
-                                                <select id="provinceID"
-                                                        class="form-control show-tick ms select2"
-                                                        data-placeholder="Select"
-                                                        onchange="getDistricts()">
-                                                    <option value="">--Chọn Tỉnh/Thành phố--</option>
-                                                    <% List<Province> provinces = api.getProvince();
-                                                        for (Province province : provinces) {%>
-                                                    <option value="<%=province.getProvinceID()%>"><%=province.getProvinceName()%>
-                                                    </option>
-                                                    <%}%>
-                                                </select>
-                                            </div>
-                                            <div class="address" id="district">
-                                                <select id="districtID"
-                                                        class="form-control show-tick ms select2"
-                                                        data-placeholder="Select"
-                                                        onchange="getWards()">
-                                                    <option value="">--Chọn Huyện--</option>
-                                                </select>
-                                            </div>
-                                            <div class="address" id="ward" style="margin: 0">
-                                                <select class="form-control show-tick ms select2"
-                                                        data-placeholder="Select"
-                                                        id="wardID">
-                                                    <option value="">--Chọn Xã/Ấp--</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                        <label for="address">ĐỊA CHỈ</label>
+                                        <input type="text" id="address"
+                                               value="<%=shop.getAddress()%>" class="form-control">
                                     </div>
                                     <hr>
                                     <div class="form-group">
@@ -179,16 +148,16 @@
                                     <hr>
                                     <div class="form-group">
                                         <label for="slogan">CÂU SLOGAN</label>
-                                        <textarea rows="6" class="form-control no-resize" style="flex: 10"
-                                                  id="slogan"
-                                                  name="contact"><%=shop.getAboutShop()%></textarea>
+                                        <textarea rows="6" class="form-control no-resize"  style="flex: 10"
+                                                   id="slogan"
+                                                   name="contact"><%=shop.getAboutShop()%></textarea>
                                     </div>
                                     <hr>
                                     <div class="form-group" style="width: 100%;">
                                         <label for="contact">CÂU LIÊN HỆ</label>
                                         <textarea rows="6" class="form-control no-resize" style="flex: 10"
-                                                  id="contact"
-                                                  name="contact"><%=shop.getTextInHelp()%></textarea>
+                                                   id="contact"
+                                                   name="contact"><%=shop.getTextInHelp()%></textarea>
                                     </div>
 
                                     <button type="submit" onclick="save(<%=shop.getIdS()%>)"
@@ -209,7 +178,6 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
-<script src="admin-template/assets/js/notification.js"></script>
 
 <%----%>
 <script>
@@ -227,7 +195,11 @@
         xhr.open('POST', 'UploadLogoHeader', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
-                window.location.href = "AdminHomeAll?command=information";
+                console.log('File uploaded successfully.');
+                window.location.href ="AdminHomeAll?command=information";
+
+            } else {
+                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -235,80 +207,66 @@
 
     function save(idS) {
         var phone = document.getElementById("phone").value;
+        var address = document.getElementById("address").value;
         var slogan = document.getElementById("slogan").value;
         var contact = document.getElementById("contact").value;
         var email = document.getElementById("email").value;
         var name = document.getElementById("name").value;
         var desginer = document.getElementById("desginer").value;
         var logo_header = document.getElementById("logo_header").value;
-        var provinceID = document.getElementById("provinceID").value;
-        var districtID = document.getElementById("districtID").value;
-        var wardID = document.getElementById("wardID").value;
 
-        if (phone.trim() === '' ||  slogan.trim() === '' || contact.trim() === ''
-            || email.trim() === '' || name.trim() === '' || desginer.trim() === '') {
-            showAlert("Vui lòng nhập đủ thông tin!");
+        if (phone.trim() === '' && address.trim() === '' && slogan.trim() === '' && contact.trim() === ''
+            && email.trim() === '' && name.trim() === '' && desginer.trim() === '') {
+            alert("Vui lòng nhập đủ thông tin!");
         } else {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "AdminHomeAll", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    showNotification("Thông tin đã được cập nhật thành công.");
+                    alert("Sản phẩm đã được cập nhật thành công.");
                 }
             };
             xhr.send("phone=" + encodeURIComponent(phone)
+                + "&address=" + encodeURIComponent(address)
                 + "&slogan=" + encodeURIComponent(slogan)
                 + "&contact=" + encodeURIComponent(contact)
                 + "&email=" + encodeURIComponent(email)
                 + "&name=" + encodeURIComponent(name)
                 + "&desginer=" + encodeURIComponent(desginer)
                 + "&logo_header=" + encodeURIComponent(logo_header)
-                + "&provinceID=" + encodeURIComponent(provinceID)
-                + "&districtID=" + encodeURIComponent(districtID)
-                + "&wardID=" + encodeURIComponent(wardID)
                 + "&idS=" + idS
                 + "&command=information");
         }
     }
 
+    function show() {
+        var box = document.getElementById('show');
+        box.style.display = 'flex';
+    }
+
+    function closeNew() {
+
+        var box = document.getElementById('show');
+        box.style.display = 'none';
+
+    }
+
+    function show1() {
+        var box = document.getElementById('show1');
+        box.style.display = 'flex';
+    }
+
+    function closeNew1() {
+
+        var box = document.getElementById('show1');
+        box.style.display = 'none';
+
+    }
+
+
 </script><!-- Custom Js -->
-<script>
-    function getDistricts() {
-        // Lấy giá trị của tùy chọn được chọn trong danh sách tỉnh/thành phố
-        var provinceID = document.getElementById("provinceID").value;
-        var districtSelect = document.getElementById("district");
 
-        // Tạo yêu cầu AJAX để lấy danh sách quận/huyện tương ứng từ servlet
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "Address?command=provincei&provinceID=" + provinceID, true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                districtSelect.innerHTML = this.responseText;
-            }
-        };
-        xhr.send();
-
-    }
-
-    function getWards() {
-        // Lấy giá trị của tùy chọn được chọn trong danh sách tỉnh/thành phố
-        var districtID = document.getElementById("districtID").value;
-        var wardSelect = document.getElementById("ward");
-
-        // Tạo yêu cầu AJAX để lấy danh sách quận/huyện tương ứng từ servlet
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "Address?command=wardi&wardID=" + districtID, true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                wardSelect.innerHTML = this.responseText;
-            }
-        };
-        xhr.send();
-    }
-</script>
 </body>
 
 </html>

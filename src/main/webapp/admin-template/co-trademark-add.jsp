@@ -1,4 +1,8 @@
+<%@ page import="qht.shopmypham.com.vn.model.Categories" %>
 <%@ page import="java.util.List" %>
+<%@ page import="qht.shopmypham.com.vn.model.Product" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
 <!doctype html>
@@ -12,8 +16,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý thương hiệu</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -131,7 +135,7 @@
                                     </div>
 
                                     <div class="row clearfix">
-                                        <% if (map != null) {%>
+                                        <% if (map!=null){%>
                                         <input type="hidden" id="logo" value="<%=img1%>">
                                         <%}%>
 
@@ -188,7 +192,6 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
-<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     $('.dropify').dropify();
@@ -204,7 +207,10 @@
         xhr.open('POST', 'UploadLogoTrademark', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
+                console.log('File uploaded successfully.');
                 window.location.href = "admin-general?command=addTrademark";
+            } else {
+                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -216,27 +222,36 @@
         var address = document.getElementById("address").value;
         var status = document.getElementById("status").value;
         var logo = document.getElementById("logo").value;
-        if (trademark_name.trim() === '' || phone.trim() === '' || address.trim() === '' || status.trim() === '' || logo.trim() === '') {
-            showAlert('Vui lòng nhập đầy đủ thông tin!');
-        } else {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "admin-general", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    showNotification('Thêm thương hiệu thành công')
-                    window.location.href = "admin-general?command=trademark";
-                }
-            };
-            xhr.send("name=" + encodeURIComponent(trademark_name)
-                + "&phone=" + encodeURIComponent(phone)
-                + "&address=" + encodeURIComponent(address)
-                + "&status=" + encodeURIComponent(status)
-                + "&logo=" + encodeURIComponent(logo)
-                + "&command=addTrademark");
-        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "admin-general", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                alert("Sản phẩm đã được thêm thành công.");
+                window.location.href = "admin-general?command=trademark";
+            }
+        };
+        xhr.send("name=" + encodeURIComponent(trademark_name)
+            + "&phone=" + encodeURIComponent(phone)
+            + "&address=" + encodeURIComponent(address)
+            + "&status=" + encodeURIComponent(status)
+            + "&logo=" + encodeURIComponent(logo)
+            + "&command=addTrademark");
     }
 
+
+    function show() {
+        var box = document.getElementById('show');
+        box.style.display = 'flex';
+    }
+
+    function closeNew() {
+
+        var box = document.getElementById('show');
+        box.style.display = 'none';
+
+    }
 </script><!-- Custom Js -->
 </body>
 

@@ -1,7 +1,8 @@
+<%@ page import="java.util.List" %>
+<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
-<%@ page import="qht.shopmypham.com.vn.service.HomeService" %>
-<!doctype html>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html><%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html class="no-js " lang="en">
 
@@ -12,8 +13,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý trang chủ</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin ::</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -36,18 +37,16 @@
                         <li class="breadcrumb-item">Quản lí trang chủ</li>
                         <li class="breadcrumb-item active">Số lượng sản phẩm, Cosmetics New Trends</li>
                     </ul>
-                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
-                            class="zmdi zmdi-sort-amount-desc"></i></button>
+                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
                 </div>
                 <div class="col-lg-5 col-md-6 col-sm-12">
-                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i
-                            class="zmdi zmdi-arrow-right"></i></button>
+                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
                 </div>
             </div>
         </div>
         <div class="container-fluid">
             <div class="row clearfix">
-                <% Home home = HomeService.getHome();%>
+            <% Home home = (Home) request.getAttribute("home");%>
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="body">
@@ -98,7 +97,7 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-<script src="admin-template/assets/js/notification.js"></script>
+
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script>
     function save() {
@@ -112,7 +111,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification("Cập nhật số lượng thành công");
+                alert("Cập nhật số lượng thành công.");
             }
         };
         xhr.send("quantityProS=" + encodeURIComponent(quantityProS)

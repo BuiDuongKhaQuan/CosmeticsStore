@@ -5,58 +5,37 @@ import java.io.Serializable;
 public class CheckOut implements Serializable {
     int idCk;
     String phone;
-    String idTransport;
-    String idVoucher;
+    String address;
     int idPm;
     int idA;
     int idStatus;
-    int idAdmin,idProvince;
-    String orderDate , detailAddress;
+    int idAdmin;
+    String orderDate;
     String confirmDate;
     String receivedDate;
     String name;
     String note;
 
-    public CheckOut() {
-    }
-
-    public CheckOut(int idCk, String phone, String idTransport, String idVoucher, int idPm, int idA, int idStatus, int idAdmin, int idProvince, String orderDate, String detailAddress, String confirmDate, String receivedDate, String name, String note) {
+    public CheckOut(int idCk, String phone, String address, int idPm, int idA, int idStatus, int idAdmin,
+                    String orderDate, String confirmDate, String receivedDate, String name, String note) {
+        super();
         this.idCk = idCk;
         this.phone = phone;
-        this.idTransport = idTransport;
-        this.idVoucher = idVoucher;
+        this.address = address;
         this.idPm = idPm;
         this.idA = idA;
         this.idStatus = idStatus;
         this.idAdmin = idAdmin;
-        this.idProvince = idProvince;
         this.orderDate = orderDate;
-        this.detailAddress = detailAddress;
         this.confirmDate = confirmDate;
         this.receivedDate = receivedDate;
         this.name = name;
         this.note = note;
+
     }
 
-    @Override
-    public String toString() {
-        return "CheckOut{" +
-                "idCk=" + idCk +
-                ", phone='" + phone + '\'' +
-                ", idTransport='" + idTransport + '\'' +
-                ", idVoucher='" + idVoucher + '\'' +
-                ", idPm=" + idPm +
-                ", idA=" + idA +
-                ", idStatus=" + idStatus +
-                ", idAdmin=" + idAdmin +
-                ", idProvince=" + idProvince +
-                ", orderDate='" + orderDate + '\'' +
-                ", detailAddress='" + detailAddress + '\'' +
-                ", confirmDate='" + confirmDate + '\'' +
-                ", receivedDate='" + receivedDate + '\'' +
-                ", name='" + name + '\'' +
-                ", note='" + note + '\'' +
-                '}';
+    public CheckOut() {
+        super();
     }
 
     public int getIdCk() {
@@ -75,20 +54,12 @@ public class CheckOut implements Serializable {
         this.phone = phone;
     }
 
-    public String getIdTransport() {
-        return idTransport;
+    public String getAddress() {
+        return address;
     }
 
-    public void setIdTransport(String idTransport) {
-        this.idTransport = idTransport;
-    }
-
-    public String getIdVoucher() {
-        return idVoucher;
-    }
-
-    public void setIdVoucher(String idVoucher) {
-        this.idVoucher = idVoucher;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public int getIdPm() {
@@ -123,28 +94,12 @@ public class CheckOut implements Serializable {
         this.idAdmin = idAdmin;
     }
 
-    public int getIdProvince() {
-        return idProvince;
-    }
-
-    public void setIdProvince(int idProvince) {
-        this.idProvince = idProvince;
-    }
-
     public String getOrderDate() {
         return orderDate;
     }
 
     public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public String getDetailAddress() {
-        return detailAddress;
-    }
-
-    public void setDetailAddress(String detailAddress) {
-        this.detailAddress = detailAddress;
     }
 
     public String getConfirmDate() {
@@ -178,4 +133,5 @@ public class CheckOut implements Serializable {
     public void setNote(String note) {
         this.note = note;
     }
+
 }

@@ -28,28 +28,6 @@ public class ReviewService {
                         .collect(Collectors.toList())
         );
     }
-    public static Review getReviewByIdA(String idA) {
-         List<Review> reviewList = JDBiConnector.me().withHandle(h ->
-                h.createQuery("select * from review where idA = ? ")
-                        .bind(0, idA)
-                        .mapToBean(Review.class)
-                        .stream()
-                        .collect(Collectors.toList())
-        );
-        if (reviewList.size() ==0) return null;
-        return reviewList.get(0);
-    }
-    public static void updateReview(String idP, String information, String star, String date, String idR) {
-        JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update review set idP = ?,infomation = ?,star = ?, date = ? where idR = ?")
-                        .bind(0, idP)
-                        .bind(1, information)
-                        .bind(2, star)
-                        .bind(3, date)
-                        .bind(4, idR)
-                        .execute()
-        );
-    }
     public static List<Review> getAllReview() {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("select * from review")
@@ -67,12 +45,6 @@ public class ReviewService {
                         .collect(Collectors.toList())
         );
     }
-    public static void deleteReview(String id) {
-        JDBiConnector.me().withHandle(h ->
-                h.createUpdate("delete from review where idR = ?")
-                        .bind(0, id)
-                        .execute()
-        );
-    }
+
 
 }

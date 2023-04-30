@@ -1,3 +1,6 @@
+<%@ page import="qht.shopmypham.com.vn.model.Product" %>
+<%@ page import="qht.shopmypham.com.vn.model.Categories" %>
+<%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Account" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -10,8 +13,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý tài khoản</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -59,21 +62,65 @@
                                                     src="<%=ac.getImg()%>" class="img-fluid" alt="avatar"
                                                     style="min-width: 210px; min-height: 210px; border: 1px solid #ccc"/>
                                             </div>
+                                            <div class="authorties" style="padding-top: 5px">
+                                                <h4>Phân quyền</h4>
+
+                                                <input type="checkbox" id="blogMana"
+                                                    <%if(ac.getBlogManage()==1){%>
+                                                       checked<%}%>>
+                                                <label for="blogMana"> Quản lí blog</label><br>
+
+
+                                                <input type="checkbox" id="acountMana"
+                                                    <%if(ac.getAccountManage()==1){%>
+                                                       checked<%}%>
+                                                >
+                                                <label for="acountMana"> Quản lí tài khoản</label><br>
+
+
+                                                <input type="checkbox" id="productMana"
+                                                    <%if(ac.getProductManage()==1){%>
+                                                       checked<%}%>
+                                                >
+                                                <label for="productMana"> Quản lí sản phẩm</label><br>
+
+
+                                                <input type="checkbox" id="orderMana"
+                                                    <%if(ac.getOrderManage()==1){%>
+                                                       checked<%}%>
+                                                >
+                                                <label for="orderMana"> Quản lí đơn hàng</label><br>
+
+
+                                                <input type="checkbox" id="genaralMana"
+                                                    <%if(ac.getGeneralManage()==1){%>
+                                                       checked<%}%>
+                                                >
+                                                <label for="genaralMana"> Quản lí chung</label><br>
+
+
+                                                <input type="checkbox" id="homeMana"
+                                                    <%if(ac.getHomeManage()==1){%>
+                                                       checked<%}%>
+                                                >
+                                                <label for="homeMana"> Quản lí thông trang chủ</label><br>
+                                                <button type="submit" onclick="saveAuthur(<%=ac.getIdA()%>)"
+                                                        class="btn btn-raised btn-primary btn-round waves-effect">Lưu
+                                                </button>
+                                            </div>
+
                                         </div>
                                     </div>
                                     <div class="col-xl-9 col-lg-8 col-md-12">
                                         <div class="product details">
                                             <label for="fullName">Tên đầy đủ</label>
                                             <div class="form-group">
-                                                <input type="text" id="fullName"
-                                                       placeholder="Nhập tên đầy đủ của bạn"
-                                                       class="form-control"
+                                                <input type="text" id="fullName" class="form-control"
                                                        name="fullName" value="<%=ac.getFullName()%>">
                                             </div>
                                             <label for="email">Email</label>
                                             <div class="form-group">
                                                 <input type="email" id="email" class="form-control"
-                                                       placeholder="Nhập E-mail của bạn"
                                                        name="email" value="<%=ac.getEmail()%>">
                                             </div>
                                             <label for="phone">Số điện thoại</label>
@@ -89,100 +136,15 @@
                                                        value="<%=ac.getAddress()%>"
                                                        name="address" placeholder="Nhập địa chỉ">
                                             </div>
-                                            <button onclick="show()"
-                                                    class="btn btn-raised btn-primary btn-round waves-effect">Cấp quyền
-                                            </button>
-                                            <button type="submit" onclick="resetPass(<%=ac.getId()%>)"
+                                            <button type="submit"
                                                     class="btn btn-raised btn-primary btn-round waves-effect">Đặt lại
                                                 mật khẩu
                                             </button>
-                                            <button type="submit" onclick="saveAccount(<%=ac.getId()%>)"
+                                            <button type="submit" onclick="saveAccount(<%=ac.getIdA()%>)"
                                                     class="btn btn-raised btn-primary btn-round waves-effect">Lưu
                                             </button>
-                                            <div id="show" class="promotion">
-                                                <div class="promotion-box">
-                                                    <label class="title" style="text-align: center">Cấp quyền</label>
-                                                    <i class="zmdi zmdi-close icon-close"
-                                                       onclick="closeNew()"></i>
-                                                    <div style="display: flex; justify-content: center;
-                                                                                flex-direction: column;
-                                                                                padding: 20px 60px 20px 100px;">
-                                                        <div class="row clearfix">
-                                                            <div class="col-sm-6">
-                                                                <input type="checkbox" id="blogMana"
-                                                                    <%if(ac.powerAccount().getBlogManage()==1){%>
-                                                                       checked<%}%>>
-                                                                <label for="blogMana"> Quản lí blog</label><br>
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <input type="checkbox" id="acountMana"
-                                                                    <%if(ac.powerAccount().getAccountManage()==1){%>
-                                                                       checked<%}%>
-                                                                >
-                                                                <label for="acountMana"> Quản lí tài
-                                                                    khoản</label><br>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row clearfix">
-                                                            <div class="col-sm-6">
-                                                                <input type="checkbox" id="productMana"
-                                                                    <%if(ac.powerAccount().getProductManage()==1){%>
-                                                                       checked<%}%>
-                                                                >
-                                                                <label for="productMana"> Quản lí sản
-                                                                    phẩm</label><br>
-                                                            </div>
-                                                            <div class="col-sm-6">
+                                            <div id="alert-div">
 
-                                                                <input type="checkbox" id="orderMana"
-                                                                    <%if(ac.powerAccount().getOrderManage()==1){%>
-                                                                       checked<%}%>
-                                                                >
-                                                                <label for="orderMana"> Quản lí đơn hàng</label><br>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row clearfix">
-                                                            <div class="col-sm-6">
-                                                                <input type="checkbox" id="genaralMana"
-                                                                    <%if(ac.powerAccount().getGeneralManage()==1){%>
-                                                                       checked<%}%>
-                                                                >
-                                                                <label for="genaralMana"> Quản lí chung</label><br>
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <input type="checkbox" id="homeMana"
-                                                                    <%if(ac.powerAccount().getHomeManage()==1){%>
-                                                                       checked<%}%>
-                                                                >
-                                                                <label for="homeMana"> Quản lí thông trang
-                                                                    chủ</label><br>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row clearfix">
-                                                            <div class="col-sm-6">
-                                                                <input type="checkbox" id="sliderlMana"
-                                                                    <%if(ac.powerAccount().getSliderManage()==1){%>
-                                                                       checked<%}%>
-                                                                >
-                                                                <label for="sliderlMana"> Quản lí slider</label><br>
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <input type="checkbox" id="voucherMana"
-                                                                    <%if(ac.powerAccount().getVoucherManage()==1){%>
-                                                                       checked<%}%>
-                                                                >
-                                                                <label for="voucherMana"> Quản lí mã giảm
-                                                                    giá</label><br>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row clearfix">
-                                                        <button type="submit" onclick="saveAuthur(<%=ac.getId()%>)"
-                                                                class="btn btn-raised btn-primary btn-round waves-effect">
-                                                            Lưu
-                                                        </button>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -190,6 +152,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </form>
         </div>
@@ -199,7 +162,7 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-<script src="admin-template/assets/js/notification.js"></script>
+
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 
 <%----%>
@@ -215,7 +178,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification('Lưu thông tin thành công');
+                showAlert();
             }
         };
         xhr.send("fullName=" + encodeURIComponent(fullName)
@@ -226,18 +189,6 @@
             + "&command=edit");
     }
 
-    function resetPass(id) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "admin-account?command=resetPass&id=" + id, true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification('Đặt lại mật khẩu thành công');
-            }
-        };
-        xhr.send();
-    }
-
     function saveAuthur(idA) {
         var acountMana = document.getElementById("acountMana").checked;
         var productMana = document.getElementById("productMana").checked;
@@ -245,8 +196,6 @@
         var blogMana = document.getElementById("blogMana").checked;
         var genaralMana = document.getElementById("genaralMana").checked;
         var homeMana = document.getElementById("homeMana").checked;
-        var sliderlMana = document.getElementById("sliderlMana").checked;
-        var voucherMana = document.getElementById("voucherMana").checked;
 
 
         var xhr = new XMLHttpRequest();
@@ -254,7 +203,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotificationBox("Đã cập nhật quyền thành công");
+                showAlert();
             }
         };
         xhr.send("acountMana=" + encodeURIComponent(acountMana)
@@ -263,11 +212,28 @@
             + "&blogMana=" + encodeURIComponent(blogMana)
             + "&genaralMana=" + encodeURIComponent(genaralMana)
             + "&homeMana=" + encodeURIComponent(homeMana)
-            + "&sliderlMana=" + encodeURIComponent(sliderlMana)
-            + "&voucherMana=" + encodeURIComponent(voucherMana)
             + "&idA=" + idA
             + "&command=editAuthur");
     }
+
+    function showAlert() {
+        const alertMessage1 = "This is an alert message!";
+        const alertDiv = document.getElementById("alert-div");
+        const closeButton = document.createElement("button");
+
+        alertDiv.innerHTML = `Chỉnh sửa thành công`;
+        closeButton.innerText = "OK";
+        closeButton.addEventListener("click", hideAlert);
+        alertDiv.appendChild(closeButton);
+
+        alertDiv.style.display = "block";
+    }
+
+    function hideAlert() {
+        const alertDiv = document.getElementById("alert-div");
+        alertDiv.style.display = "none";
+    }
+
 
 </script><!-- Custom Js -->
 

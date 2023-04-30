@@ -137,6 +137,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="card">
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
@@ -231,16 +233,16 @@
                             <div class="product__item__text">
                                 <h6 onclick="detailProduct(<%=p.getIdP()%>)" style="cursor: pointer"><%=p.getName()%>
                                 </h6>
-                                <div class="rating" >
+                                <div class="rating">
                                     <%
                                         List<Review> reviewList = ReviewService.getAllReviewByIdP(String.valueOf(p.getIdP()));
                                         double avgStart = 0;
                                         double sum = 0;
-                                        for(Review r : reviewList){
+                                        for (Review r : reviewList) {
                                             sum += r.getStar();
 
                                         }
-                                        avgStart = sum/reviewList.size();
+                                        avgStart = sum / reviewList.size();
                                         String start1 = "";
                                         String s = "style=\"margin-right: 0;\"";
                                         String q = "style=\"margin-right: 0;\"";
@@ -329,7 +331,7 @@
                                                     "<i class=\"fa fa-star\"" + s + "></i>" +
                                                     "<i class=\"fa fa-star\"" + s + "></i>";
                                         }
-                                        if (reviewList.size()==0){
+                                        if (reviewList.size() == 0) {
                                             start1 = "Chưa có đánh giá";
                                         }
                                     %>
@@ -358,10 +360,11 @@
                             <div class="pagination" style="justify-content: center">
                                 <ul class="pagination1">
                                     <%
-                                        String ca = String.valueOf(request.getAttribute("cid"));
+                                        String ca = String.valueOf(request.getAttribute("idT"));
                                     %>
                                     <li class="page-item previous-page <%=(start==0)?"disabled":""%>"><a
-                                            href="categorie?cid=<%=ca%>&start=<%=start - 6%>&end=<%=end - 6%>" aria-label="Previous"
+                                            href="trademark?idT=<%=ca%>&start=<%=start - 6%>&end=<%=end - 6%>"
+                                            aria-label="Previous"
                                             style="width: 34.2px; height: 37.6px; line-height: 20px; line-height: 40px"><i
                                             class="fa fa-chevron-left"></i></a></li>
                                     <%
@@ -379,11 +382,12 @@
                                     %>
                                     <li class="page-item current-page <%=(start==a)?"active":""%> "
                                         style="min-height: 43px; min-width: 37px"><a class="page-link"
-                                                                                     href="categorie?cid=<%=ca%>&start=<%=a%>&end=<%=b%>"><%=i%>
+                                                                                     href="trademark?idT=<%=ca%>&start=<%=a%>&end=<%=b%>"><%=i%>
                                     </a></li>
                                     <%}%>
                                     <li class="page-item next-page <%=(start+limit>=end)?"":""%>"><a
-                                            href="categorie?cid=<%=ca%>&start=<%=start + 6%>&end=<%=end + 6%>" aria-label="Next"
+                                            href="trademark?idT=<%=ca%>&start=<%=start + 6%>&end=<%=end + 6%>"
+                                            aria-label="Next"
                                             style="width: 34.2px; height: 37.6px; line-height: 20px; line-height: 40px"><i
                                             class="fa fa-chevron-right"></i></a></li>
                                 </ul>
@@ -421,6 +425,7 @@
             }
         }
     }
+
     function detailProduct(idP) {
         window.location.href = "detail?pid=" + idP;
     }

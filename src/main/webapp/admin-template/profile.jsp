@@ -10,8 +10,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Trang cá nhân</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -127,7 +127,7 @@
                                                        placeholder="Cập nhật địa chỉ">
                                             </div>
                                         </div>
-                                        <button type="submit" onclick="saveAcc(<%=acc.getId()%>)"
+                                        <button type="submit" onclick="saveAcc(<%=acc.getIdA()%>)"
                                                 class="btn btn-raised btn-primary btn-round waves-effect">Lưu
                                         </button>
                                     </div>
@@ -146,7 +146,6 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
-<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     $('.dropify').dropify();
@@ -162,7 +161,10 @@
         xhr.open('POST', 'UploadFileServlet', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
+                console.log('File uploaded successfully.');
                 window.location.href = "admin-account?command=profile";
+            } else {
+                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -179,7 +181,8 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification("Thông tin tài khoản đã được cập nhật thành công!");
+                alert("Thông tin tài khoản đã được cập nhật thành công!");
+                window.location.href = "admin-account?command=profile";
             }
         };
         xhr.send("fullName=" + encodeURIComponent(fullName)
@@ -190,6 +193,18 @@
             + "&command=edit");
     }
 
+
+    function show() {
+        var box = document.getElementById('show');
+        box.style.display = 'flex';
+    }
+
+    function closeNew() {
+
+        var box = document.getElementById('show');
+        box.style.display = 'none';
+
+    }
 </script><!-- Custom Js -->
 </body>
 

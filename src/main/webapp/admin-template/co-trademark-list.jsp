@@ -12,8 +12,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>QST || Quản lý thương hiệu</title>
-    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
+    <title>:: Aero Bootstrap4 Admin :: Product list</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -75,7 +75,7 @@
                                         }
                                 %>
                                 <tr>
-                                    <td><h5># <%=trademark.getId()%>
+                                    <td><h5># <%=trademark.getIdTrademark()%>
                                     </h5>
                                     </td>
                                     <td><img src="<%=trademark.getLogo()%>" style="width: 60px;">
@@ -85,10 +85,10 @@
                                     <td><span class="col-green"><%=status%></span></td>
                                     <td>
                                         <a class="btn btn-default waves-effect waves-float btn-sm waves-green"
-                                                href="admin-general?command=editTrademark&idT=<%=trademark.getId()%>"><i
+                                                href="admin-general?command=editTrademark&idT=<%=trademark.getIdTrademark()%>"><i
                                                 class="zmdi zmdi-edit"></i>
                                         </a>
-                                        <a href="admin-general?command=deleteTrademark&idT=<%=trademark.getId()%>"
+                                        <a href="admin-general?command=deleteTrademark&idT=<%=trademark.getIdTrademark()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>
