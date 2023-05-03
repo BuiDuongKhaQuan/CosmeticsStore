@@ -21,7 +21,7 @@
 
 <body class="theme-blush">
 
-<jsp:include page="../../../../../../ShopMyPham_v9.1.5/ShopMyPham_v9.1.5/src/main/webapp/admin-template/header.jsp"></jsp:include>
+<jsp:include page="header.jsp"></jsp:include>
 
 <section class="content">
         <div class="body_scroll">
@@ -30,7 +30,7 @@
                     <div class="col-lg-7 col-md-6 col-sm-12">
                         <h2>Quản lí Blog</h2>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="../../../../../../ShopMyPham_v9.1.5/ShopMyPham_v9.1.5/src/main/webapp/admin-template/index.jsp"><i class="zmdi zmdi-home"></i> Admin</a>
+                            <li class="breadcrumb-item"><a href="index.jsp"><i class="zmdi zmdi-home"></i> Admin</a>
                             </li>
                             <li class="breadcrumb-item"><a href="blog-dashboard.jsp">Blog</a></li>
                             <li class="breadcrumb-item active">Tổng quan</li>
