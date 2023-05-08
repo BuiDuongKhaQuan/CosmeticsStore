@@ -1,5 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
+import qht.shopmypham.com.vn.been.Log;
+import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 
@@ -7,6 +9,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.List;
 
 @WebServlet(name = "AdminHome", value = "/admin-home")
@@ -15,6 +18,8 @@ public class AdminHome extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
+        InetAddress ip = InetAddress.getLocalHost();
+        String ipAddress = ip.getHostAddress();
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
@@ -29,7 +34,11 @@ public class AdminHome extends HttpServlet {
                 request.setAttribute("productList", productList);
                 request.setAttribute("subscibeList", subscibeList);
                 request.setAttribute("reviewList", reviewList);
+
+
                 request.getRequestDispatcher("/admin-template/index.jsp").forward(request, response);
+                DB.me().insert(new Log(Log.INFO,acc,"admin-home","Truy cập trang tổng quan admin",0,ipAddress));
+
             } else {
                 response.sendRedirect(error404);            }
         }

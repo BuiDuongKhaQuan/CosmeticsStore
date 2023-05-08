@@ -1,6 +1,8 @@
 package qht.shopmypham.com.vn.controller;
 
 import org.apache.http.client.utils.DateUtils;
+import qht.shopmypham.com.vn.been.Log;
+import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.service.CartService;
@@ -12,6 +14,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -25,6 +28,8 @@ public class UserReview extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        InetAddress ip = InetAddress.getLocalHost();
+        String ipAddress = ip.getHostAddress();
         String information = request.getParameter("mess");
         String idP = request.getParameter("idP");
         String command = request.getParameter("command");
@@ -35,6 +40,7 @@ public class UserReview extends HttpServlet {
                 rating = "0";
             }
             ReviewService.addReview(idP, String.valueOf(acc.getIdA()), information, rating, DateUtil.getDateNow());
+            DB.me().insert(new Log(Log.ALERT,acc,"profile","Thêm đánh giá sản phẩm",0,ipAddress));
         }
         Product product = ProductService.getProductById(Integer.parseInt(idP));
         List<Review> reviewList = ReviewService.getAllReviewByIdP(idP);

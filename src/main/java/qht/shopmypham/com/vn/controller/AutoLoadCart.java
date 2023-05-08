@@ -1,5 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
+import qht.shopmypham.com.vn.been.Log;
+import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.Image;
 import qht.shopmypham.com.vn.model.ListProductByCart;
@@ -11,6 +13,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.text.NumberFormat;
 import java.util.List;
 
@@ -20,14 +23,26 @@ public class AutoLoadCart extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
+        InetAddress ip = InetAddress.getLocalHost();
+        String ipAddress = ip.getHostAddress();
         List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
+        List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());
         if (command.equals("show")) {
             request.setAttribute("activePage", "active");
             request.setAttribute("list", list);
             request.getRequestDispatcher("/user-template/shopping-cart.jsp").forward(request, response);
+            DB.me().insert(new Log(Log.INFO,acc,"auto-load/show","Truy cập trang giỏ hàng",0,ipAddress));
         }
         if (command.equals("load_quantity")) {
             String cartQuantity = String.valueOf(list.size());
+            if (acc != null) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(cartQuantity);
+            }
+        }
+        if (command.equals("load_quantity_favorite")) {
+            String cartQuantity = String.valueOf(productList.size());
             if (acc != null) {
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");

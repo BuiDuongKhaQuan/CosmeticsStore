@@ -14,11 +14,13 @@ public class Product implements Serializable {
 
     int idC;
 
+    int status;
+
 
     public Product() {
     }
 
-    public Product(int idP, String name, int price, String trademark, int quantity, String information, int idC) {
+    public Product(int idP, String name, int price, String trademark, int quantity, String information, int idC,int status) {
         this.idP = idP;
         this.name = name;
         this.price = price;
@@ -26,6 +28,7 @@ public class Product implements Serializable {
         this.quantity = quantity;
         this.information = information;
         this.idC = idC;
+        this.status = status;
     }
 
     public int getIdP() {
@@ -84,6 +87,14 @@ public class Product implements Serializable {
         this.idC = idC;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -94,8 +105,10 @@ public class Product implements Serializable {
                 ", quantity=" + quantity +
                 ", information='" + information + '\'' +
                 ", idC=" + idC +
+                ", status=" + status +
                 '}';
     }
+
 
     public static List<Product> getListByPage(List<Product> list, int start, int end) {
         LinkedList<Product> lists;

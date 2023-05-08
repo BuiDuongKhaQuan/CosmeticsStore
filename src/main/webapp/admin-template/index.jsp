@@ -37,9 +37,16 @@
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
                     <h2>Dashboard</h2>
+                    <% String active1 = (String) request.getAttribute("active1");
+                        String activeProduct = (String) request.getAttribute("activeProduct");
+                        String activePage = (String) request.getAttribute("activePage");
+                        String activeBlog = (String) request.getAttribute("activeBlog");
+                        String activeContact = (String) request.getAttribute("activeContact");
+                    %>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
-                        <li class="breadcrumb-item active">Tổng quan</li>
+                        <li class="<%=active1%>"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
+
+                        <li class="<%=active1%>"><a href="./admin-home"> Tổng quan</a></li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
