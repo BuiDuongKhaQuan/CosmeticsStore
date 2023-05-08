@@ -1,5 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
+import qht.shopmypham.com.vn.been.Log;
+import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.service.AccountService;
 
@@ -8,6 +10,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.servlet.ServletException;
@@ -17,14 +20,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
 @WebServlet("/UploadFileServlet")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 50, // 50MB
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class UploadAvatar extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        InetAddress ip = InetAddress.getLocalHost();
+        String ipAddress = ip.getHostAddress();
         String nameImg = "";
         for (Part part : request.getParts()) {
             String fileName = extractFileName(part);
@@ -40,12 +46,15 @@ public class UploadAvatar extends HttpServlet {
         // Mã hóa hình ảnh thành định dạng base64
         String base64Image = javax.xml.bind.DatatypeConverter.printBase64Binary(imageData);
         HttpSession session = request.getSession();
-        session.setAttribute("avatar",base64Image);
+        session.setAttribute("avatar", base64Image);
 
         Account acc = (Account) request.getSession().getAttribute("a");
         AccountService.updateImgAcountById(parthImg, String.valueOf(acc.getIdA()));
         response.sendRedirect("profile?command=profile");
+        DB.me().insert(new Log(Log.INFO,acc,"UploadFileServlet","Upload avatar",0,ipAddress));
+
     }
+
     /**
      * Extracts file name from HTTP header content-disposition
      */
@@ -59,6 +68,7 @@ public class UploadAvatar extends HttpServlet {
         }
         return "";
     }
+
     public File getFolderUpload() {
         String avatarPath = "/user-template/img/avatar"; // đường dẫn tương đối của tài nguyên
         ServletContext context = getServletContext();

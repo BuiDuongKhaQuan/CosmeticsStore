@@ -23,8 +23,8 @@ import javax.servlet.http.Part;
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class UploadCategory extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         String nameImg = "";
         for (Part part : request.getParts()) {
             String fileName = extractFileName(part);

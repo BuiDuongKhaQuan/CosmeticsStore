@@ -7,6 +7,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import qht.shopmypham.com.vn.been.Log;
+import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
@@ -16,6 +18,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +33,7 @@ public class UserHome extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Home home = HomeService.getHome();
+        Account acc = (Account) request.getSession().getAttribute("a");
         Selling selling = ProductService.getSelling();
         Product productSelling = ProductService.getProductById(selling.getIdP());
         List<Slider> listSlider = SliderSerivce.getListSlider();
@@ -38,7 +42,8 @@ public class UserHome extends HttpServlet {
         categoriesHome.add(CategoryService.getCategoriesById(String.valueOf(home.getIdC1())));
         categoriesHome.add(CategoryService.getCategoriesById(String.valueOf(home.getIdC2())));
         categoriesHome.add(CategoryService.getCategoriesById(String.valueOf(home.getIdC3())));
-
+        InetAddress ip = InetAddress.getLocalHost();
+        String ipAddress = ip.getHostAddress();
         List<Product> promotionProducts = new ArrayList<>();
         List<Product> newProducts = new ArrayList<>();
         List<NewProduct> newProductList = ProductService.getNewProduct(home.getQuantityProN());
@@ -92,6 +97,8 @@ public class UserHome extends HttpServlet {
 
 
         request.getRequestDispatcher("/user-template/home.jsp").forward(request, response);
+        DB.me().insert(new Log(Log.INFO,acc,"home","truy cập home",0,ipAddress));
+
     }
 
     @Override
