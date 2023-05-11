@@ -1,5 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
+import qht.shopmypham.com.vn.been.Log;
+import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.Blog;
 import qht.shopmypham.com.vn.service.BlogService;
@@ -9,6 +11,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +21,8 @@ public class AdmintBlog extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
+        InetAddress ip = InetAddress.getLocalHost();
+        String ipAddress = ip.getHostAddress();
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
@@ -27,24 +32,30 @@ public class AdmintBlog extends HttpServlet {
 
                 if (command.equals("dashboard")) {
                     request.getRequestDispatcher("/admin-template/blog-dashboard.jsp").forward(request, response);
+                    DB.me().insert(new Log(Log.INFO,acc,"admin-blog","Truy cập trang quản lí tổng quan blog",0,ipAddress));
                 }
                 if (command.equals("list")) {
                     request.setAttribute("blogList", blogList);
                     request.getRequestDispatcher("/admin-template/blog-list.jsp").forward(request, response);
+                    DB.me().insert(new Log(Log.INFO,acc,"admin-blog/list","Truy cập trang quản lí danh sách blog",0,ipAddress));
+
                 }
                 if (command.equals("add")) {
                     request.getRequestDispatcher("/admin-template/blog-post.jsp").forward(request, response);
+                    DB.me().insert(new Log(Log.INFO,acc,"admin-blog/add","Truy cập trang quản lí thêm blog",0,ipAddress));
                 }
                 if (command.equals("edit")) {
                     String IdBl = request.getParameter("IdBl");
                     Blog blog = BlogService.getBlogByIdBl(IdBl);
                     request.setAttribute("blog", blog);
                     request.getRequestDispatcher("/admin-template/blog-edit.jsp").forward(request, response);
+                    DB.me().insert(new Log(Log.INFO,acc,"admin-blog/edit","Truy cập trang quản lí chỉnh sửa blog",0,ipAddress));
                 }
                 if (command.equals("delete")) {
                     String IdBl = request.getParameter("IdBl");
                     BlogService.deleteBlogByIdBl(IdBl);
                     response.sendRedirect("admin-blog?command=list");
+                    DB.me().insert(new Log(Log.WARNING,acc,"admin-blog/delete","Xóa blog",0,ipAddress));
                 }
             } else {
                 response.sendRedirect(error404);
@@ -55,6 +66,8 @@ public class AdmintBlog extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
+        InetAddress ip = InetAddress.getLocalHost();
+        String ipAddress = ip.getHostAddress();
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
@@ -71,11 +84,13 @@ public class AdmintBlog extends HttpServlet {
                 if (command.equals("add")) {
                     BlogService.addBlogByIdBl(img, link, date, String.valueOf(account.getIdA()), topic, content);
                     session.removeAttribute("imgBlog");
+                    DB.me().insert(new Log(Log.WARNING,acc,"admin-blog/add","Thêm blog",0,ipAddress));
                 }
                 if (command.equals("edit")) {
                     String IdBl = request.getParameter("IdBl");
                     BlogService.editBlogByIdBl(IdBl, img, link, String.valueOf(account.getIdA()), topic, content);
                     session.removeAttribute("imgBlog");
+                    DB.me().insert(new Log(Log.WARNING,acc,"admin-blog/edit","Chỉnh sửa blog",0,ipAddress));
                 }
             } else {
                 response.sendRedirect(error404);

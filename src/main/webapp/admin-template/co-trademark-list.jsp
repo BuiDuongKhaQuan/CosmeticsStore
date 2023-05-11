@@ -75,7 +75,7 @@
                                         }
                                 %>
                                 <tr>
-                                    <td><h5># <%=trademark.getIdTrademark()%>
+                                    <td><h5># <%=trademark.getId()%>
                                     </h5>
                                     </td>
                                     <td><img src="<%=trademark.getLogo()%>" style="width: 60px;">
@@ -85,10 +85,10 @@
                                     <td><span class="col-green"><%=status%></span></td>
                                     <td>
                                         <a class="btn btn-default waves-effect waves-float btn-sm waves-green"
-                                                href="admin-general?command=editTrademark&idT=<%=trademark.getIdTrademark()%>"><i
+                                                href="admin-general?command=editTrademark&idT=<%=trademark.getId()%>"><i
                                                 class="zmdi zmdi-edit"></i>
                                         </a>
-                                        <a href="admin-general?command=deleteTrademark&idT=<%=trademark.getIdTrademark()%>"
+                                        <a href="admin-general?command=deleteTrademark&idT=<%=trademark.getId()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>

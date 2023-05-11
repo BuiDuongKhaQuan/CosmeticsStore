@@ -1,12 +1,9 @@
-<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Collections" %>
-<%@ page import="qht.shopmypham.com.vn.service.CheckOutService" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductCheckoutService" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
+<%@ page import="qht.shopmypham.com.vn.service.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
@@ -260,8 +257,6 @@
                 <%
                     List<CheckOut> checkOutList = CheckOutService.getCheckOutByIdA(String.valueOf(acc1.getIdA()));
                     Collections.reverse(checkOutList);
-                    int total1 = 0;
-                    int total2 = 0;
                     NumberFormat nf = NumberFormat.getInstance();
                     nf.setMinimumFractionDigits(0);
                     List<CheckOut> checkOutList1 = new ArrayList<>();
@@ -280,6 +275,8 @@
                         <%
                             for (CheckOut checkOut : checkOutList1) {
                                 List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
+                                Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
+                                int total1 = 0;
                                 String status = "";
                                 if (checkOut.getIdStatus() == 0) {
                                     status = "Chờ xác nhận";
@@ -300,7 +297,110 @@
                                     status = "Đã hủy";
                                 }
                         %>
-                        <div class="card" style="border-radius: 6px;">
+                        <div class="card" style="border-radius: 6px;width: 100%;">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-4"
+                                     style="font-size: 1.3em; color: green">
+                                    <div class="small mb-0">
+                                        <a href="profile?command=order-detail&idCk=<%=checkOut.getIdCk()%>">Mã đơn :
+                                            #<%=checkOut.getIdCk()%>
+                                        </a>
+                                    </div>
+                                    <div class="small mb-0">
+                                        <i class="fa-light fa-car-side"></i>
+                                        <a href="profile?command=order-detail&idCk=<%=checkOut.getIdCk()%>"
+                                           style="color: green"><%=status%>
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 85%;"></th>
+                                        <th style="width: 15%;"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <%
+                                        for (ListProductByCheckOut productByCheckOut : productByCheckOutList) {
+                                            Product product = ProductService.getProductById(productByCheckOut.getIdP());
+                                            total1 += product.getPrice() * productByCheckOut.getQuantity();
+                                            List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
+
+                                    %>
+                                    <tr style="border-bottom: 1px solid #00000017">
+                                        <td class="product__cart__item"
+                                            style="display: flex; align-items: center; padding: 15px 0px;">
+                                            <img src="<%=imageList.get(0).getImg()%>" alt="" style="max-width: 13%;">
+                                            <div style="display: flex; flex-direction: column; padding: 0 30px">
+                                                <h6 onclick="detailOrder(<%=checkOut.getIdCk()%>)"
+                                                    style="padding: 17px 0"
+                                                ><%=product.getName()%>
+                                                </h6>
+                                                <h6>x<%=productByCheckOut.getQuantity()%>
+                                                </h6>
+                                            </div>
+                                        </td>
+
+                                        <td class="cart__price__total"><%=nf.format(product.getPrice() * productByCheckOut.getQuantity())%>
+                                            đ
+                                        </td>
+                                    </tr>
+                                    <%}%>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div style="width: 100%;
+                        padding: 30px 20px;
+                        border: 1px solid #00000017;
+                        background:#fcff370a;
+                        margin-bottom: 30px;
+                        border-radius: 6px;">
+                            <div class="d-flex text-muted mb-0" style="float: right;align-items: center;">
+                                <i class="fa-light fa-money-check-dollar"
+                                   style="color: #ff4d00; font-size: 23px; margin-right: 8px"></i>
+                                <span class="fw-bold me-4"> Thành tiền</span>
+                                <% int reduction = 0;
+                                    if (voucher != null) {
+                                        reduction = total1 * voucher.getPrice() / 100;
+                                    }
+                                    int priceLast = total1 - reduction;%>
+                                <h3 style="color: #ff4d00; margin-left: 10px"><%=nf.format(priceLast)%>đ</h3>
+                            </div>
+                        </div>
+                        <%}%>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-pane-3">
+                    <div class="row" style="justify-content: center;">
+                        <%
+                            for (CheckOut checkOut : checkOutList2) {
+                                List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
+                                Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
+                                int total2 = 0;
+                                String status = "";
+                                if (checkOut.getIdStatus() == 0) {
+                                    status = "Chờ xác nhận";
+                                }
+                                if (checkOut.getIdStatus() == 1) {
+                                    status = "Đang vận chuyển";
+                                }
+                                if (checkOut.getIdStatus() == 2) {
+                                    status = "Hoàn thành";
+                                }
+                                if (checkOut.getIdStatus() == 3) {
+                                    status = "Đã hoàn thành";
+                                }
+                                if (checkOut.getIdStatus() == 4) {
+                                    status = "Chờ xác nhận hủy";
+                                }
+                                if (checkOut.getIdStatus() == 5) {
+                                    status = "Đã hủy";
+                                }
+                        %>
+                        <div class="card" style="border-radius: 6px;width: 100%;">
                             <div class="card-body p-4">
                                 <div class="d-flex justify-content-between align-items-center mb-4"
                                      style="font-size: 1.3em; color: green">
@@ -328,7 +428,7 @@
                                     <%
                                         for (ListProductByCheckOut productByCheckOut : productByCheckOutList) {
                                             Product product = ProductService.getProductById(productByCheckOut.getIdP());
-                                            total1 += product.getPrice() * productByCheckOut.getQuantity();
+                                            total2 += product.getPrice() * productByCheckOut.getQuantity();
                                             List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
 
                                     %>
@@ -350,7 +450,6 @@
                                             đ
                                         </td>
                                     </tr>
-
                                     <%}%>
                                     </tbody>
                                 </table>
@@ -366,112 +465,15 @@
                                 <i class="fa-light fa-money-check-dollar"
                                    style="color: #ff4d00; font-size: 23px; margin-right: 8px"></i>
                                 <span class="fw-bold me-4"> Thành tiền</span>
-                                <h3 style="color: #ff4d00; margin-left: 10px"><%=nf.format(total1)%>đ</h3>
+                                <% int reduction = 0;
+                                    if (voucher != null) {
+                                        reduction = total2 * voucher.getPrice() / 100;
+                                    }
+                                    int priceLast = total2 - reduction;%>
+                                <h3 style="color: #ff4d00; margin-left: 10px"><%=nf.format(priceLast)%>đ</h3>
                             </div>
                         </div>
                         <%}%>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="tab-pane-3">
-                    <div class="row" style="justify-content: center;">
-                        <section class="h-100 gradient-custom">
-                            <div class="container py-5 h-100">
-                                <div class="row d-flex justify-content-center align-items-center h-100">
-                                    <div class="col-lg-10 col-xl-80">
-                                        <div class="card" style="border-radius: 10px;">
-                                            <div class="card-header px-4 py-5">
-                                                <h5 class="text-muted mb-0"></h5>
-                                            </div>
-                                            <%
-                                                for (CheckOut checkOut : checkOutList2) {
-                                                    List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
-
-                                            %>
-                                            <div class="card-body p-4">
-                                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                                    <p class="lead fw-normal mb-0" style="color: #a8729a;">Sản phẩm</p>
-                                                    <p class="small text-muted mb-0">
-                                                        <a href="detailOrder?idCk=<%=checkOut.getIdCk()%>">Mã đơn :
-                                                            #<%=checkOut.getIdCk()%>
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                                <%
-                                                    for (ListProductByCheckOut productByCheckOut : productByCheckOutList) {
-                                                        Product product = ProductService.getProductById(productByCheckOut.getIdP());
-                                                        total2 += product.getPrice() * productByCheckOut.getQuantity();
-                                                        List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
-                                                %>
-                                                <div class="card shadow-0 border mb-4">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-md-2">
-                                                                <img src="<%=imageList.get(0).getImg()%>"
-                                                                     class="img-fluid" alt="Phone">
-                                                            </div>
-                                                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                                <p class="text-muted mb-0"><%=product.getName()%>
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                                <p class="text-muted mb-0 small"></p>
-                                                            </div>
-                                                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                                <p class="text-muted mb-0 small"></p>
-                                                            </div>
-
-                                                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                                <p class="text-muted mb-0 small"><%=productByCheckOut.getQuantity()%>
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                                <p class="text-muted mb-0 small"><%=nf.format(product.getPrice() * productByCheckOut.getQuantity())%>
-                                                                    đ</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <%}%>
-                                                <div class="d-flex justify-content-between pt-2">
-                                                    <p class="fw-bold mb-0">Tổng giá trị sản phẩm</p>
-                                                    <p class="text-muted mb-0"><span class="fw-bold me-4"></span>
-                                                        <%=nf.format(total2)%>đ</p>
-                                                </div>
-
-                                                <div class="d-flex justify-content-between pt-2">
-                                                    <p class="fw-bold mb-0">Phí vận chuyển</p>
-                                                    <p class="text-muted mb-0"><span
-                                                            class="fw-bold me-4"></span>25,000đ</p>
-                                                </div>
-                                                <div class="d-flex justify-content-between pt-2">
-                                                    <p class="fw-bold mb-0">Trạng thái</p>
-                                                    <p class="text-muted mb-0"><span
-                                                            class="fw-bold me-4"></span>
-                                                        <%if (checkOut.getIdStatus() == 3) {%>
-                                                        Đã hoàn thành
-                                                        <%
-                                                            }
-                                                            if (checkOut.getIdStatus() == 5) {
-                                                        %>
-                                                        Đã hủy
-                                                        <%}%>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <%}%>
-                                            <div class="card-footer border-0 px-4 py-5"
-                                                 style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                                                <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
-                                                    Tổng giá trị đơn hàng: <span
-                                                        class="h2 mb-0 ms-2"> <%=nf.format(total2 + 25000)%>đ</span>
-                                                </h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
                     </div>
                 </div>
             </div>

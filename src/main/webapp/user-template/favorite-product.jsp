@@ -139,7 +139,7 @@
                                     %>
                                     <tr>
                                         <th>
-                                        Không có sản phẩm yêu thích!
+                                            Không có sản phẩm yêu thích!
                                         </th>
                                     </tr>
                                     <%}%>
@@ -171,28 +171,9 @@
 <script src="user-template/js/mixitup.min.js"></script>
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
-<script src="user-template/js/autoLoadCart.js"></script>
+<script src="user-template/js/product.js"></script>
+
 <script>
-
-    function getCartCount() {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("quantity-product").innerHTML = this.responseText;
-                console.log(xhr)
-            }
-        };
-        xhr.open("GET", "auto-load-quantity", true);
-        xhr.send();
-    }
-
-    function detailProduct(idP) {
-        window.location.href = "detail?pid=" + idP;
-    }
-
-    function category(idC) {
-        window.location.href = "categorie?cid=" + idC;
-    }
 
     function insertItem(IdP) {
         var div = document.getElementById("notification");

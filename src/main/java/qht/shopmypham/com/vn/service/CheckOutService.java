@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CheckOutService {
-    public static void addCheckOutByIdA(String phone, String address, String idPm, String name, String note, String idA, String orderDate) {
+    public static void addCheckOutByIdA(String phone, String address, String idPm, String name, String note, String idA, String voucher, String orderDate) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("INSERT INTO checkout(phone,address,idPm,idA,idStatus,idAdmin,orderDate" +
-                                ", confirmDate, receivedDate,name,note) " +
-                                "VALUES (?,?,?,?,0,null,?,null,null,?,?)")
+                                ", confirmDate, receivedDate,name,note,idVoucher) " +
+                                "VALUES (?,?,?,?,0,null,?,null,null,?,?,?)")
                         .bind(0, phone)
                         .bind(1, address)
                         .bind(2, idPm)
@@ -20,6 +20,7 @@ public class CheckOutService {
                         .bind(4, orderDate)
                         .bind(5, name)
                         .bind(6, note)
+                        .bind(7, voucher)
                         .execute()
 
         );
@@ -34,6 +35,7 @@ public class CheckOutService {
                     .stream().collect(Collectors.toList());
         });
     }
+
     public static CheckOut getCheckOutByIdCk(String idCk) {
 
         return JDBiConnector.me().withHandle(handle -> {
@@ -43,6 +45,7 @@ public class CheckOutService {
                     .stream().collect(Collectors.toList()).get(0);
         });
     }
+
     public static List<CheckOut> getCheckOutByStatus(String status) {
 
         return JDBiConnector.me().withHandle(handle -> {
@@ -52,6 +55,7 @@ public class CheckOutService {
                     .stream().collect(Collectors.toList());
         });
     }
+
     public static List<CheckOut> getAllCheckOut() {
 
         return JDBiConnector.me().withHandle(handle -> {
@@ -72,6 +76,7 @@ public class CheckOutService {
                         .execute()
         );
     }
+
     public static void editCheckOut(String idCk, String idAdmin, String note, String phone, String address, String name) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("update checkout set idAdmin=?,note=?,phone=?,address = ?,name = ? where idCk = ?")
@@ -84,6 +89,7 @@ public class CheckOutService {
                         .execute()
         );
     }
+
     public static void confirmCheckOutByidCk(String idCk, String idAdmin, String confirmDate) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("update checkout set idStatus=?,idAdmin=?, confirmDate = ? where idCk = ?")

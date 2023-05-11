@@ -3,6 +3,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
+<%@ page import="qht.shopmypham.com.vn.model.Account" %>
+<%@ page import="qht.shopmypham.com.vn.model.Voucher" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -142,7 +144,8 @@
                             <h4 class="order__title">Tổng đơn hàng</h4>
                             <%
                                 List<ListProductByCart> list = (List<ListProductByCart>) request.getAttribute("list");
-                                double totalPrice = 0;
+                                Voucher voucher = (Voucher) request.getSession().getAttribute("voucher");
+                                int totalPrice = 0;
                                 for (ListProductByCart l : list) {
                                     Product p = ProductService.getProductById(l.getIdP());
                                     totalPrice += (p.getPrice() * l.getQuantity());
@@ -156,7 +159,14 @@
                             <ul class="checkout__total__all">
                                 <li>Tổng tiền hàng <span><%=nf.format(totalPrice)%>đ</span></li>
                                 <li>Phí vận chuyển <span>25,000đ</span></li>
-                                <li>Tổng thanh toán <span><%=nf.format(totalPrice + 25000)%></span></li>
+                                <% int reduction = 0;
+                                    if (voucher!=null) {
+                                     reduction = totalPrice * voucher.getPrice() / 100;
+                                }
+                                    int priceLast = totalPrice - reduction;
+                                %>
+                                <li>Giảm giá <span>- <%=nf.format(reduction)%>đ</span></li>
+                                <li>Tổng thanh toán <span><%=nf.format(priceLast + 25000)%></span></li>
                             </ul>
                             <div class="checkout__input__checkbox">
                             </div>
@@ -204,7 +214,7 @@
 <script src="user-template/js/mixitup.min.js"></script>
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
-<script src="user-template/js/autoLoadCart.js"></script>
+<script src="user-template/js/product.js"></script>
 
 </body>
 

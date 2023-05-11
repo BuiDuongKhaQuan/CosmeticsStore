@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/admin-template/ec-product-add.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin-template" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/admin-template/ec-product-edit.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin-template" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/forgot-password.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/test.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/user-template/header.jsp" value="file://$PROJECT_DIR$/src/main/webapp/user-template" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/user-template/product.jsp" value="file://$PROJECT_DIR$/src/main/webapp/user-template" />

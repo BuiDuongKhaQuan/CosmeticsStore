@@ -88,7 +88,6 @@
 <script src="user-template/js/mixitup.min.js"></script>
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
-<script src="user-template/js/autoLoadCart.js"></script>
 
 </body>
 

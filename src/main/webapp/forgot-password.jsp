@@ -3,8 +3,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>Mỹ Phẩm QST || Quên mật khẩu</title>
-    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">    <link rel="stylesheet" href="user-template/css/login.css"/>
+    <title>QST | Quên mật khẩu</title>
+    <link rel="stylesheet" href="user-template/css/login.css"/>
     <link
             href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
             rel="stylesheet"

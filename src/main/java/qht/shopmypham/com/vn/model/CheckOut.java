@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class CheckOut implements Serializable {
     int idCk;
     String phone;
-    String address;
+    String address , idVoucher;
     int idPm;
     int idA;
     int idStatus;
@@ -16,12 +16,14 @@ public class CheckOut implements Serializable {
     String name;
     String note;
 
-    public CheckOut(int idCk, String phone, String address, int idPm, int idA, int idStatus, int idAdmin,
-                    String orderDate, String confirmDate, String receivedDate, String name, String note) {
-        super();
+    public CheckOut() {
+    }
+
+    public CheckOut(int idCk, String phone, String address, String idVoucher, int idPm, int idA, int idStatus, int idAdmin, String orderDate, String confirmDate, String receivedDate, String name, String note) {
         this.idCk = idCk;
         this.phone = phone;
         this.address = address;
+        this.idVoucher = idVoucher;
         this.idPm = idPm;
         this.idA = idA;
         this.idStatus = idStatus;
@@ -31,11 +33,6 @@ public class CheckOut implements Serializable {
         this.receivedDate = receivedDate;
         this.name = name;
         this.note = note;
-
-    }
-
-    public CheckOut() {
-        super();
     }
 
     public int getIdCk() {
@@ -60,6 +57,14 @@ public class CheckOut implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getIdVoucher() {
+        return idVoucher;
+    }
+
+    public void setIdVoucher(String idVoucher) {
+        this.idVoucher = idVoucher;
     }
 
     public int getIdPm() {
@@ -133,5 +138,4 @@ public class CheckOut implements Serializable {
     public void setNote(String note) {
         this.note = note;
     }
-
 }

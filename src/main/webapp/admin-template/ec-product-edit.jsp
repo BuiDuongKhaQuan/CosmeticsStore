@@ -6,6 +6,7 @@
 <%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="qht.shopmypham.com.vn.model.Trademark" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -225,7 +226,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <%List<Categories> categoriesList = (List<Categories>) request.getAttribute("listCategories");%>
+                                    <%List<Categories> categoriesList = (List<Categories>) request.getAttribute("listCategories");
+                                        List<Trademark> trademarks = (List<Trademark>) request.getAttribute("trademarks");
+                                    %>
                                     <div class="row clearfix">
                                         <div class="col-sm-6">
                                             <label for="product_category">Phân loại sản phẩm</label>
@@ -247,10 +250,22 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <label for="trademark">Thương hiệu</label>
+                                            <label for="product_trademark">Thương hiệu</label>
                                             <div class="form-group">
-                                                <input type="text" id="trademark" class="form-control"
-                                                       name="productNew" value="<%=product.getTrademark()%>">
+                                                <select id="product_trademark"
+                                                        class="form-control show-tick ms select2"
+                                                        data-placeholder="Select">
+                                                    <%
+                                                        for (Trademark trademark : trademarks) {
+                                                            String selected = "";
+                                                            if (trademark.getId() == product.getIdT()) {
+                                                                selected = "selected";
+                                                            }
+                                                    %>
+                                                    <option value="<%=trademark.getId()%>" <%=selected%>><%=trademark.getName()%>
+                                                    </option>
+                                                    <%}%>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -446,7 +461,7 @@
         var product_quantity = document.getElementById("product_quantity").value;
         var product_category = document.getElementById("product_category").value;
         var product_description = document.getElementById("product_description").value;
-        var product_trademark = document.getElementById("trademark").value;
+        var product_trademark = document.getElementById("product_trademark").value;
         if (product_name.trim() === '' && product_price.trim() === '' && product_quantity.trim() === '' && product_category.trim() === ''
             && product_description.trim() === '' && product_trademark.trim() === '') {
             alert("Vui lòng nhập đủ thông tin!");

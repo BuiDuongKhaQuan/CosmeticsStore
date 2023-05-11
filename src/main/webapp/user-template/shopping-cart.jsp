@@ -60,7 +60,6 @@
 <!-- Breadcrumb Section End -->
 
 <!-- Shopping Cart Section Begin -->
-<% Account acc = (Account) request.getSession().getAttribute("a");%>
 <section class="shopping-cart spad">
     <div class="container">
         <div class="row">
@@ -81,7 +80,7 @@
                             List<ListProductByCart> list = (List<ListProductByCart>) request.getAttribute("list");
                             NumberFormat nf = NumberFormat.getInstance();
                             nf.setMinimumFractionDigits(0);
-                            double totalPrice = 0;
+                            int totalPrice = 0;
 
                             for (ListProductByCart l : list) {
                                 Product p = ProductService.getProductById(l.getIdP());
@@ -153,19 +152,22 @@
             <div class="col-lg-4">
                 <div class="cart__discount">
                     <h6>MÃ GIẢM GIÁ</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Nhập mã giảm giá">
-                        <button type="submit">Áp dụng</button>
+                    <form>
+                        <input type="text" id="code" placeholder="Nhập mã giảm giá">
+                        <button type="button" onclick="getVoucher()">Áp dụng</button>
                     </form>
+                    <div id="mess" style="margin-top: 3px"></div>
                 </div>
                 <div class="cart__total">
                     <h6>Tổng đơn hàng</h6>
-                    <% if (list.size() != 0) {%>
+                    <%
+                        if (list.size() != 0) {%>
                     <div id="total-product">
                         <ul>
                             <li>Đơn giá <span><%=nf.format(totalPrice)%>đ</span></li>
                             <li>Phí vận chuyển <span>25.000đ</span></li>
-                            <li>Tổng cộng <span><%=nf.format(totalPrice + 25000)%>đ</span></li>
+                            <li>Giảm giá <span id="voucher">0đ</span></li>
+                            <li>Tổng cộng <span id="total"><%=nf.format(totalPrice + 25000)%>đ</span></li>
                         </ul>
                         <a href="checkout" class="primary-btn">THANH TOÁN</a>
                     </div>
@@ -174,10 +176,9 @@
                         <ul>
                             <li><span>Giỏ hàng trống mời bạn tiếp tục mua sắm</span></li>
                         </ul>
-                        <a href="product" class="primary-btn">Tếp tục mua hàng</a>
+                        <a href="product?command=product" class="primary-btn">Tếp tục mua hàng</a>
                     </div>
                     <%}%>
-
                 </div>
             </div>
         </div>
@@ -200,8 +201,34 @@
 <script src="user-template/js/mixitup.min.js"></script>
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
-<script src="user-template/js/autoLoadCart.js"></script>
+<script src="user-template/js/product.js"></script>
+
 <script>
+    function getVoucher() {
+        const code = document.getElementById("code").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "voucher?command=voucher&code=" + encodeURIComponent(code) + "&total=<%=totalPrice%>", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    document.getElementById("total-product").innerHTML = this.responseText;
+                    mess();
+            }
+        };
+        xhr.send();
+    }
+    function mess() {
+        const code = document.getElementById("code").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "voucher?command=mess&code=" + encodeURIComponent(code), true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    document.getElementById("mess").innerHTML = this.responseText;
+            }
+        };
+        xhr.send();
+    }
     function upDateQuantity(idP, command) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "product", true);
@@ -241,11 +268,7 @@
     function detailProduct(idP) {
         window.location.href = "detail?pid=" + idP;
     }
-
-
 </script>
-
-
 </body>
 
 </html>

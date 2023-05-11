@@ -99,5 +99,5 @@
 ></a>
 
 <% if (acc != null) {%>
-<script src="user-template/js/autoLoadCart.js"></script>
+<script src="user-template/js/auto-load-cart.js"></script>
 <%}%>

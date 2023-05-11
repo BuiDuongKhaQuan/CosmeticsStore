@@ -41,16 +41,19 @@
                 <i class="bx bx-error-circle"></i>
                 <label>Tài khoản hoặc mật khẩu không đúng!</label>
             </div>
-            <%}
-                if (mess1!=null){%>
-            <div class="mess">
-                <i class="bx bx-error-circle"></i>
-                <label>Tài khoản của bạn đã bị khóa, vui lòng liên hệ với chúng tôi qua 'khaquan9a2.2016@gmail.com' !</label>
+            <%
+                }
+                if (mess1 != null) {
+            %>
+            <div class="remember-forgot"
+                 style="justify-content: flex-start; color: #ff0000; font-size: 0.96em; margin-right: 4px;">
+                <i class="bx bx-error-circle" style="margin-right: 2px;"></i>
+                <label>Tài khoản của bạn đã bị khóa! <a href="contact">Trợ giúp</a></label>
             </div>
             <%}%>
             <div class="remember-forgot">
                 <label><input type="checkbox"/>Nhớ mật khẩu</label>
-                <a href="#">Quên mật khẩu?</a>
+                <a href="forgot-password.jsp">Quên mật khẩu?</a>
             </div>
             <button type="submit" class="btn">Đăng nhập</button>
             <div class="login-register">
