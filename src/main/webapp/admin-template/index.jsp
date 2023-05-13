@@ -1,7 +1,6 @@
 ﻿<%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="qht.shopmypham.com.vn.model.Account" %>
-<%@ page import="qht.shopmypham.com.vn.model.Subscibe" %>
 <%@ page import="qht.shopmypham.com.vn.model.Review" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -37,16 +36,9 @@
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
                     <h2>Dashboard</h2>
-                    <% String active1 = (String) request.getAttribute("active1");
-                        String activeProduct = (String) request.getAttribute("activeProduct");
-                        String activePage = (String) request.getAttribute("activePage");
-                        String activeBlog = (String) request.getAttribute("activeBlog");
-                        String activeContact = (String) request.getAttribute("activeContact");
-                    %>
                     <ul class="breadcrumb">
-                        <li class="<%=active1%>"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
-
-                        <li class="<%=active1%>"><a href="./admin-home"> Tổng quan</a></li>
+                        <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
+                        <li class="breadcrumb-item active">Tổng quan</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -90,14 +82,14 @@
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="card widget_2 big_icon email">
                         <div class="body">
-                            <% List<Subscibe> subscibeList = (List<Subscibe>) request.getAttribute("subscibeList");%>
-                            <h6>Email</h6>
-                            <h2><%=subscibeList.size()%> <small class="info">email</small></h2>
-                            <small>Tổng số email đăng kí</small>
-                            <div class="progress">
-                                <div class="progress-bar l-purple" role="progressbar" aria-valuenow="39"
-                                     aria-valuemin="0" aria-valuemax="100" style="width: 39%;"></div>
-                            </div>
+<%--                            <% List<Subscibe> subscibeList = (List<Subscibe>) request.getAttribute("subscibeList");%>--%>
+<%--                            <h6>Email</h6>--%>
+<%--                            <h2><%=subscibeList.size()%> <small class="info">email</small></h2>--%>
+<%--                            <small>Tổng số email đăng kí</small>--%>
+<%--                            <div class="progress">--%>
+<%--                                <div class="progress-bar l-purple" role="progressbar" aria-valuenow="39"--%>
+<%--                                     aria-valuemin="0" aria-valuemax="100" style="width: 39%;"></div>--%>
+<%--                            </div>--%>
                         </div>
                     </div>
                 </div>

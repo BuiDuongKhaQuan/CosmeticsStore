@@ -14,7 +14,7 @@ import java.util.List;
 public class UserVoucher extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Voucher> voucherList = VoucherService.getAllVoucherByStatus();
+        List<Voucher> voucherList = VoucherService.getAllVoucherByStatusAndQuantity();
         request.setAttribute("voucherList", voucherList);
         request.getRequestDispatcher("user-template/voucher.jsp").forward(request, response);
 
@@ -36,22 +36,31 @@ public class UserVoucher extends HttpServlet {
                     int reduction = price * voucher.getPrice() / 100;
                     int priceLast = price - reduction;
                     rs = "<ul>\n" +
-                            "                            <li>Đơn giá <span>"+nf.format(price)+"đ</span></li>\n" +
+                            "                            <li>Đơn giá <span>" + nf.format(price) + "đ</span></li>\n" +
                             "                            <li>Phí vận chuyển <span>25.000đ</span></li>\n" +
-                            "                            <li>Giảm giá <span>- "+nf.format(reduction)+"đ</span></li>\n" +
-                            "                            <li>Tổng cộng <span>"+nf.format(priceLast+25000)+"đ</span></li>\n" +
+                            "                            <li>Giảm giá <span>- " + nf.format(reduction) + "đ</span></li>\n" +
+                            "                            <li>Tổng cộng <span>" + nf.format(priceLast + 25000) + "đ</span></li>\n" +
                             "                        </ul>\n" +
                             "                        <a href=\"checkout\" class=\"primary-btn\">THANH TOÁN</a>";
                     session.setAttribute("voucher", voucher);
+                } else {
+                    rs = "<ul>\n" +
+                            "                            <li>Đơn giá <span>" + nf.format(price) + "đ</span></li>\n" +
+                            "                            <li>Phí vận chuyển <span>25.000đ</span></li>\n" +
+                            "                            <li>Giảm giá <span>0đ</span></li>\n" +
+                            "                            <li>Tổng cộng <span>" + nf.format(price + 25000) + "đ</span></li>\n" +
+                            "                        </ul>\n" +
+                            "                        <a href=\"checkout\" class=\"primary-btn\">THANH TOÁN</a>";
+                    session.removeAttribute("voucher");
                 }
             }
             if (voucher == null) {
                 session.removeAttribute("voucher");
                 rs = "<ul>\n" +
-                        "                            <li>Đơn giá <span>"+nf.format(price)+"đ</span></li>\n" +
+                        "                            <li>Đơn giá <span>" + nf.format(price) + "đ</span></li>\n" +
                         "                            <li>Phí vận chuyển <span>25.000đ</span></li>\n" +
                         "                            <li>Giảm giá <span>0đ</span></li>\n" +
-                        "                            <li>Tổng cộng <span>"+nf.format(price+25000)+"đ</span></li>\n" +
+                        "                            <li>Tổng cộng <span>" + nf.format(price + 25000) + "đ</span></li>\n" +
                         "                        </ul>\n" +
                         "                        <a href=\"checkout\" class=\"primary-btn\">THANH TOÁN</a>";
             }
@@ -66,6 +75,8 @@ public class UserVoucher extends HttpServlet {
             if (voucher != null) {
                 if (voucher.getQuantity() > 0 && voucher.getStatus() == 1) {
                     rs = "<p style=\"color: #1fdc0a\">Áp dụng thành công!</p>";
+                } else {
+                    rs = "<p style=\"color: red\">Mã đã hết số lượng sử dụng!</p>";
                 }
             }
             if (voucher == null) {

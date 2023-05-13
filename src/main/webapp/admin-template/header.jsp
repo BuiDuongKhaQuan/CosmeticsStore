@@ -1,14 +1,13 @@
 <%@ page import="qht.shopmypham.com.vn.model.Account" %>
-<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
-<%@ page import="qht.shopmypham.com.vn.service.ShopService" %><%--
-  Created by IntelliJ IDEA.
-  User: khaqu
-  Date: 3/5/2023
-  Time: 10:38 AM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="qht.shopmypham.com.vn.service.ShopService" %>
+<%@ page import="qht.shopmypham.com.vn.model.Log" %>
+<%@ page import="java.util.List" %>
+<%@ page import="qht.shopmypham.com.vn.service.LogService" %>
+<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Page Loader -->
+<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
+      type="text/css"/>
 <div class="page-loader-wrapper">
     <div class="loader">
         <div class="m-t-30"><img class="zmdi-hc-spin" src="admin-template/assets/images/loader.svg" width="48"
@@ -33,7 +32,7 @@
 <!-- Right Icon menu Sidebar -->
 <%
     Account account = (Account) request.getSession().getAttribute("a");
-    Account acc = AccountService.getAccountById(String.valueOf(account.getIdA()));
+    Account acc = account.getAccount();
 %>
 <div class="navbar-right">
     <ul class="navbar-nav">
@@ -95,69 +94,20 @@
                 <li class="header">Thông báo</li>
                 <li class="body">
                     <ul class="menu list-unstyled">
+                        <% List<Log> logList = LogService.getAllLog();
+                            for (Log log : logList) {%>
                         <li>
                             <a href="javascript:void(0);">
-                                <div class="icon-circle bg-blue"><i class="zmdi zmdi-account"></i></div>
+                                <%=log.actionIcon()%>
                                 <div class="menu-info">
-                                    <h4>8 New Members joined</h4>
-                                    <p><i class="zmdi zmdi-time"></i> 14 mins ago </p>
+                                    <h4><%=log.getContent()%>
+                                    </h4>
+                                    <p><i class="zmdi zmdi-time"></i> <%=DateUtil.between(log.getTime())%>
+                                    </p>
                                 </div>
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="icon-circle bg-amber"><i class="zmdi zmdi-shopping-cart"></i></div>
-                                <div class="menu-info">
-                                    <h4>4 Sales made</h4>
-                                    <p><i class="zmdi zmdi-time"></i> 22 mins ago </p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="icon-circle bg-red"><i class="zmdi zmdi-delete"></i></div>
-                                <div class="menu-info">
-                                    <h4><b>Nancy Doe</b> Deleted account</h4>
-                                    <p><i class="zmdi zmdi-time"></i> 3 hours ago </p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="icon-circle bg-green"><i class="zmdi zmdi-edit"></i></div>
-                                <div class="menu-info">
-                                    <h4><b>Nancy</b> Changed name</h4>
-                                    <p><i class="zmdi zmdi-time"></i> 2 hours ago </p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="icon-circle bg-grey"><i class="zmdi zmdi-comment-text"></i></div>
-                                <div class="menu-info">
-                                    <h4><b>John</b> Commented your post</h4>
-                                    <p><i class="zmdi zmdi-time"></i> 4 hours ago </p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="icon-circle bg-purple"><i class="zmdi zmdi-refresh"></i></div>
-                                <div class="menu-info">
-                                    <h4><b>John</b> Updated status</h4>
-                                    <p><i class="zmdi zmdi-time"></i> 3 hours ago </p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <div class="icon-circle bg-light-blue"><i class="zmdi zmdi-settings"></i></div>
-                                <div class="menu-info">
-                                    <h4>Settings Updated</h4>
-                                    <p><i class="zmdi zmdi-time"></i> Yesterday </p>
-                                </div>
-                            </a>
-                        </li>
+                        <%}%>
                     </ul>
                 </li>
                 <li class="footer"><a href="javascript:void(0);">Xem tất cả thông báo</a></li>
@@ -325,6 +275,15 @@
                 </ul>
             </li>
             <li><a href="javascript:void(0);" class="menu-toggle"><i
+                    class="zmdi zmdi-card-giftcard"></i><span>Quản
+                        lí voucher</span></a>
+                <ul class="ml-menu">
+                    <li><a href="AdminVoucher?command=list">Danh sách voucher</a></li>
+                    <li><a href="AdminVoucher?command=add">Thêm voucher</a>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0);" class="menu-toggle"><i
                     class="zmdi zmdi-assignment"></i><span>Quản
                         lí đơn hàng</span></a>
                 <ul class="ml-menu">
@@ -336,10 +295,10 @@
             <li><a href="javascript:void(0);" class="menu-toggle"><i
                     class="zmdi zmdi-widgets"></i><span>Quản lí chung</span></a>
                 <ul class="ml-menu">
+                    <li><a href="admin-general?command=trademark">Quản lí thương hiệu</a></li>
                     <li><a href="admin-general?command=list">Danh sách liên hệ</a></li>
                     <li><a href="admin-general?command=question">Danh sách câu hỏi</a></li>
                     <li><a href="admin-general?command=addQ">Thêm câu hỏi</a></li>
-                    <li><a href="admin-general?command=trademark">Quản lí thương hiệu</a></li>
                 </ul>
             </li>
             <li><a href="javascript:void(0);" class="menu-toggle"><i
@@ -354,26 +313,27 @@
                     <li><a href="AdminHomeAll?command=information">Thông tin cửa hàng</a></li>
                 </ul>
             </li>
-<%--            <li>--%>
-<%--                <div class="progress-container progress-primary m-t-10">--%>
-<%--                    <span class="progress-badge">Lưu lượng truy cập tháng này</span>--%>
-<%--                    <div class="progress">--%>
-<%--                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="67"--%>
-<%--                             aria-valuemin="0" aria-valuemax="100" style="width: 67%;">--%>
-<%--                            <span class="progress-value">67%</span>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div class="progress-container progress-info">--%>
-<%--                    <span class="progress-badge">TẢI MÁY CHỦ</span>--%>
-<%--                    <div class="progress">--%>
-<%--                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="86"--%>
-<%--                             aria-valuemin="0" aria-valuemax="100" style="width: 86%;">--%>
-<%--                            <span class="progress-value">86%</span>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </li>--%>
+
+            <%--            <li>--%>
+            <%--                <div class="progress-container progress-primary m-t-10">--%>
+            <%--                    <span class="progress-badge">Lưu lượng truy cập tháng này</span>--%>
+            <%--                    <div class="progress">--%>
+            <%--                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="67"--%>
+            <%--                             aria-valuemin="0" aria-valuemax="100" style="width: 67%;">--%>
+            <%--                            <span class="progress-value">67%</span>--%>
+            <%--                        </div>--%>
+            <%--                    </div>--%>
+            <%--                </div>--%>
+            <%--                <div class="progress-container progress-info">--%>
+            <%--                    <span class="progress-badge">TẢI MÁY CHỦ</span>--%>
+            <%--                    <div class="progress">--%>
+            <%--                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="86"--%>
+            <%--                             aria-valuemin="0" aria-valuemax="100" style="width: 86%;">--%>
+            <%--                            <span class="progress-value">86%</span>--%>
+            <%--                        </div>--%>
+            <%--                    </div>--%>
+            <%--                </div>--%>
+            <%--            </li>--%>
         </ul>
     </div>
 </aside>

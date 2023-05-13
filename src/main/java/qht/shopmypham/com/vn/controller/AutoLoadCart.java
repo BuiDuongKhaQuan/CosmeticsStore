@@ -1,7 +1,5 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.Image;
 import qht.shopmypham.com.vn.model.ListProductByCart;
@@ -25,63 +23,69 @@ public class AutoLoadCart extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
-        List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
-        List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());
-        if (command.equals("show")) {
-            request.setAttribute("activePage", "active");
-            request.setAttribute("list", list);
-            request.getRequestDispatcher("/user-template/shopping-cart.jsp").forward(request, response);
-            DB.me().insert(new Log(Log.INFO,acc,"auto-load/show","Truy cập trang giỏ hàng",0,ipAddress));
-        }
-        if (command.equals("load_quantity")) {
-            String cartQuantity = String.valueOf(list.size());
-            if (acc != null) {
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(cartQuantity);
+        List<ListProductByCart> list = CartService.getAllByIda(acc.getId());
+        List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getId());
+        int idA = 0;
+        if (acc == null) {
+            response.sendRedirect("login.jsp");
+        } else {
+            idA = acc.getId();
+            if (command.equals("show")) {
+                request.setAttribute("activePage", "active");
+                request.setAttribute("list", list);
+                request.getRequestDispatcher("/user-template/shopping-cart.jsp").forward(request, response);
             }
-        }
-        if (command.equals("load_quantity_favorite")) {
-            String cartQuantity = String.valueOf(productList.size());
-            if (acc != null) {
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(cartQuantity);
+            if (command.equals("load_quantity")) {
+                String cartQuantity = String.valueOf(list.size());
+                if (acc != null) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(cartQuantity);
+                }
             }
-        }
-        if (command.equals("quantity")) {
-            for (ListProductByCart l : list) {
-                Product p = ProductService.getProductById(l.getIdP());
-                List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
+            if (command.equals("load_quantity_favorite")) {
+                String cartQuantity = String.valueOf(productList.size());
+                if (acc != null) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(cartQuantity);
+                }
+            }
+            if (command.equals("quantity")) {
+                for (ListProductByCart l : list) {
+                    Product p = ProductService.getProductById(l.getIdP());
+                    List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
+                    NumberFormat nf = NumberFormat.getInstance();
+                    nf.setMinimumFractionDigits(0);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("<tr>\n" + "                            <td class=\"product__cart__item\">\n" + "                                <div class=\"product__cart__item__pic\"\n" + "                                     style=\"width: 70px;height: 70px; margin-top: 30px;\">\n" + "                                    <img src=\"" + imageList.get(0).getImg() + "\" alt=\"\">\n" + "                                </div>\n" + "                                <div class=\"product__cart__item__text\">\n" + "                                    <h6>" + p.getName() + "\n" + "                                    </h6>\n" + "\n" + "                                </div>\n" + "                            </td>\n" + "                            <td class=\"cart__price\" style=\"    width: 340px;\">" + nf.format(p.getPrice()) + "đ</td>\n" + "                            <td class=\"quantity__item\">\n" + "                                <div class=\"quantity\" style=\" display: flex\">\n" + "                                    <div class=\"input-group-btn\" style=\"background-color: #111111; color: #FFFFFF\">\n" + "                                        <button onclick=\"upDateQuantity(" + p.getIdP() + ",'subItem')\"\n" + "                                                class=\"btn btn-sm btn-minus\" style=\"text-decoration: none\">\n" + "                                            <i class=\"fa fa-minus\"\n" + "                                               style=\"background-color: #111111; color: #FFFFFF\"></i>\n" + "                                        </button>\n" + "                                    </div>\n" + "                                    <span id=\"quantity-product\"\n" + "                                          class=\"form-control form-control-sm text-center  item-table\"\n" + "                                          style=\"width: 30px; \">" + l.getQuantity() + "</span>\n" + "                                    <div class=\"input-group-btn\" style=\"background-color: #111111; color: #FFFFFF\">\n" + "                                        <button onclick=\"upDateQuantity(" + p.getIdP() + ",'addItem')\"\n" + "                                                class=\"btn btn-sm btn-minus\" style=\"text-decoration: none\">\n" + "                                            <i class=\"fa fa-plus\"\n" + "                                               style=\"background-color: #111111; color: #FFFFFF\"></i>\n" + "                                        </button>\n" + "                                    </div>\n" + "                                </div>\n" + "                            </td>\n" + "                            <td class=\"cart__price__total\">" + nf.format(p.getPrice() * l.getQuantity()) + "đ</td>\n" + "                            <td class=\"cart__close\">\n" + "\n" + "                                <button style=\"background-color: rgba(38,255,0,0)\">\n" + "                                    <i onclick=\"upDateQuantity(" + p.getIdP() + ",'deleteItem')\"\n" + "                                               class=\"fa fa-close\" style=\"margin-left: 10px\"></i>\n" + "                                </button>\n" + "                            </td>\n" + "                        </tr>");
+
+                }
+            }
+            if (command.equals("total")) {
                 NumberFormat nf = NumberFormat.getInstance();
                 nf.setMinimumFractionDigits(0);
+                double totalPrice = 0;
+                for (ListProductByCart l : list) {
+                    Product p = ProductService.getProductById(l.getIdP());
+                    totalPrice += (p.getPrice() * l.getQuantity());
+                }
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("<tr>\n" + "                            <td class=\"product__cart__item\">\n" + "                                <div class=\"product__cart__item__pic\"\n" + "                                     style=\"width: 70px;height: 70px; margin-top: 30px;\">\n" + "                                    <img src=\"" + imageList.get(0).getImg() + "\" alt=\"\">\n" + "                                </div>\n" + "                                <div class=\"product__cart__item__text\">\n" + "                                    <h6>" + p.getName() + "\n" + "                                    </h6>\n" + "\n" + "                                </div>\n" + "                            </td>\n" + "                            <td class=\"cart__price\" style=\"    width: 340px;\">" + nf.format(p.getPrice()) + "đ</td>\n" + "                            <td class=\"quantity__item\">\n" + "                                <div class=\"quantity\" style=\" display: flex\">\n" + "                                    <div class=\"input-group-btn\" style=\"background-color: #111111; color: #FFFFFF\">\n" + "                                        <button onclick=\"upDateQuantity(" + p.getIdP() + ",'subItem')\"\n" + "                                                class=\"btn btn-sm btn-minus\" style=\"text-decoration: none\">\n" + "                                            <i class=\"fa fa-minus\"\n" + "                                               style=\"background-color: #111111; color: #FFFFFF\"></i>\n" + "                                        </button>\n" + "                                    </div>\n" + "                                    <span id=\"quantity-product\"\n" + "                                          class=\"form-control form-control-sm text-center  item-table\"\n" + "                                          style=\"width: 30px; \">" + l.getQuantity() + "</span>\n" + "                                    <div class=\"input-group-btn\" style=\"background-color: #111111; color: #FFFFFF\">\n" + "                                        <button onclick=\"upDateQuantity(" + p.getIdP() + ",'addItem')\"\n" + "                                                class=\"btn btn-sm btn-minus\" style=\"text-decoration: none\">\n" + "                                            <i class=\"fa fa-plus\"\n" + "                                               style=\"background-color: #111111; color: #FFFFFF\"></i>\n" + "                                        </button>\n" + "                                    </div>\n" + "                                </div>\n" + "                            </td>\n" + "                            <td class=\"cart__price__total\">" + nf.format(p.getPrice() * l.getQuantity()) + "đ</td>\n" + "                            <td class=\"cart__close\">\n" + "\n" + "                                <button style=\"background-color: rgba(38,255,0,0)\">\n" + "                                    <i onclick=\"upDateQuantity(" + p.getIdP() + ",'deleteItem')\"\n" + "                                               class=\"fa fa-close\" style=\"margin-left: 10px\"></i>\n" + "                                </button>\n" + "                            </td>\n" + "                        </tr>");
+                if (list.size() != 0) {
+                    response.getWriter().write(" <ul>\n" + "                        <li>Đơn giá <span>" + nf.format(totalPrice) + "đ</span></li>\n" + "                        <li>Phí vận chuyển <span>25.000đ</span></li>\n" + "                        <li>Tổng cộng <span>" + nf.format(totalPrice + 25000) + "đ</span></li>\n" + "                    </ul>\n" + "                    <a href=\"checkout\" class=\"primary-btn\">THANH TOÁN</a>");
+                } else {
+                    response.getWriter().write(" <ul>\n" + "                        <li><span>Giỏ hàng trống mời bạn tiếp tục mua sắm</span></li>\n" + "                    </ul>\n" + "                    <a href=\"product\" class=\"primary-btn\">Tiếp tục mua hàng</a>");
+                }
+            }
 
-            }
         }
-        if (command.equals("total")) {
-            NumberFormat nf = NumberFormat.getInstance();
-            nf.setMinimumFractionDigits(0);
-            double totalPrice = 0;
-            for (ListProductByCart l : list) {
-                Product p = ProductService.getProductById(l.getIdP());
-                totalPrice += (p.getPrice() * l.getQuantity());
-            }
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            if (list.size() != 0) {
-                response.getWriter().write(" <ul>\n" + "                        <li>Đơn giá <span>" + nf.format(totalPrice) + "đ</span></li>\n" + "                        <li>Phí vận chuyển <span>25.000đ</span></li>\n" + "                        <li>Tổng cộng <span>" + nf.format(totalPrice + 25000) + "đ</span></li>\n" + "                    </ul>\n" + "                    <a href=\"checkout\" class=\"primary-btn\">THANH TOÁN</a>");
-            } else {
-                response.getWriter().write(" <ul>\n" + "                        <li><span>Giỏ hàng trống mời bạn tiếp tục mua sắm</span></li>\n" + "                    </ul>\n" + "                    <a href=\"product\" class=\"primary-btn\">Tiếp tục mua hàng</a>");
-            }
-        }
-
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
+            ServletException, IOException {
 
     }
 }

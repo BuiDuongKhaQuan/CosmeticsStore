@@ -38,6 +38,20 @@ public class ProductCheckoutService {
                     .stream().collect(Collectors.toList());
         });
     }
+
+    public static List<ListProductByCheckOut> getProductProductCheckout(int idA, int idP) {
+        List<ListProductByCheckOut> listProductByCheckOuts = JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT listproductbycheckout.* FROM `listproductbycheckout` INNER JOIN " +
+                            "`checkout` ON listproductbycheckout.idCk = checkout.idCk WHERE checkout.idA = ?  " +
+                            "AND listproductbycheckout.idP = ?")
+                    .bind(0, idA)
+                    .bind(1, idP)
+                    .mapToBean(ListProductByCheckOut.class)
+                    .stream().collect(Collectors.toList());
+        });
+        if (listProductByCheckOuts.size() == 0) return null;
+        return listProductByCheckOuts;
+    }
     public static Map<Integer,Integer> sum_sale() {
        Map<Integer,Integer> map = new HashMap<>();
        int a = 0;

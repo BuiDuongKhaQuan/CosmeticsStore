@@ -1,11 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
-import org.apache.http.client.utils.DateUtils;
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.AccountService;
-import qht.shopmypham.com.vn.service.CartService;
 import qht.shopmypham.com.vn.service.ProductService;
 import qht.shopmypham.com.vn.service.ReviewService;
 import qht.shopmypham.com.vn.tools.CountStar;
@@ -16,9 +12,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.text.NumberFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet(name = "ReviewController", value = "/review")
@@ -27,47 +21,44 @@ public class UserReview extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
         String information = request.getParameter("mess");
         String idP = request.getParameter("idP");
         String command = request.getParameter("command");
+        int idA = 0;
+        if (acc != null) idA = acc.getId();
         if (command.equals("add")) {
-            Account acc = (Account) request.getSession().getAttribute("a");
             String rating = request.getParameter("start");
-            System.out.println(rating);
             if (rating == "") {
                 rating = "0";
             }
-            ReviewService.addReview(idP, String.valueOf(acc.getIdA()), information, rating, DateUtil.getDateNow());
-            DB.me().insert(new Log(Log.ALERT,acc,"profile","Thêm đánh giá sản phẩm",0,ipAddress));
+            Review review = ReviewService.getReviewByIdA(String.valueOf(acc.getId()));
+            if (review == null) {
+                ReviewService.addReview(idP, String.valueOf(acc.getId()), information, rating, DateUtil.getDateNow());
+            } else {
+                ReviewService.updateReview(idP, information, rating, DateUtil.getDateNow(), String.valueOf(review.getIdR()));
+            }
+
         }
         Product product = ProductService.getProductById(Integer.parseInt(idP));
         List<Review> reviewList = ReviewService.getAllReviewByIdP(idP);
         if (command.equals("r")) {
             Collections.reverse(reviewList);
             for (Review r : reviewList) {
-                Account acc = AccountService.getAccountById(String.valueOf(r.getIdA()));
-                String name = "";
-                if (acc.getUser() != null) {
-                    name = acc.getUser();
-                }
-                if (acc.getUser() == null) {
-                    name = acc.getFullName();
-                }
-                if (acc.getUser() != null && acc.getFullName() != null) {
-                    name = acc.getFullName();
-                }
+                Account account = AccountService.getAccountById(r.getIdA());
                 String start = CountStar.starReview(r.getStar());
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("<div class=\"media mb-4\">\n" +
-                        "                                                <img src=\"" + acc.getImg() + "\" alt=\"Image\" class=\"img-fluid mr-3 mt-1\"\n" +
+                        "                                                <img src=\"" + account.getImg() + "\" alt=\"Image\" class=\"img-fluid mr-3 mt-1\"\n" +
                         "                                                     style=\"width: 50px;border-radius: 50%; height: 50px;\">\n" +
                         "                                                <div class=\"media-body\">\n" +
-                        "                                                    <h6>" + name + "<small>\n" +
+                        "                                                    <h6>" + account.getName() + "<small>\n" +
                         "                                                        - <i>" + r.getDate() + "\n" +
                         "                                                    </i></small></h6>\n" +
                         "                                                    <div class=\"rating\">\n" + start +
@@ -86,7 +77,6 @@ public class UserReview extends HttpServlet {
                     "                                                </h4> ");
         }
         if (command.equals("b")) {
-            Account acc = (Account) request.getSession().getAttribute("a");
             String button = "";
             if (acc == null) {
                 button = "<div class=\"form-group mb-0\">\n" +

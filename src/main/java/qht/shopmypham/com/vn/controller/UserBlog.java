@@ -1,10 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.Blog;
-import qht.shopmypham.com.vn.model.BlogOffer;
 import qht.shopmypham.com.vn.service.BlogService;
 
 import javax.servlet.*;
@@ -25,7 +22,8 @@ public class UserBlog extends HttpServlet {
         request.setAttribute("activeBlog", "active");
         request.setAttribute("blogList", blogList);
         request.getRequestDispatcher("/user-template/blog.jsp").forward(request, response);
-        DB.me().insert(new Log(Log.INFO,acc,"blog","Truy cập trang blog",0, ipAddress));
+        int idA = 0;
+        if (acc != null) idA = acc.getId();
 
     }
 

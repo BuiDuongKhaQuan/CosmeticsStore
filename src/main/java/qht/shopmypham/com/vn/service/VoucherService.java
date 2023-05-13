@@ -20,7 +20,7 @@ public class VoucherService {
         );
     }
 
-    public static void editVouchertById(String id, String name, String price, String status, String quantity,  String code) {
+    public static void editVouchertById(String id, String name, String price, String status, String quantity, String code) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("update voucher set status = ?, code =? ,price =? , quantity = ?, name = ? where id =?")
                         .bind(0, status)
@@ -33,18 +33,38 @@ public class VoucherService {
         );
     }
 
+    public static void editQuantityVouchert(int id, int quantity) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("update voucher set quantity = ? where id =?")
+                        .bind(0, quantity)
+                        .bind(1, id)
+                        .execute()
+        );
+    }
+
+    public static void editStatusVouchert(int id, int status) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("update voucher set status = ? where id =?")
+                        .bind(0, status)
+                        .bind(1, id)
+                        .execute()
+        );
+    }
+
     public static List<Voucher> getAllVoucher() {
         return JDBiConnector.me().withHandle(handle -> {
             return handle.createQuery("select * from voucher").mapToBean(Voucher.class)
                     .stream().collect(Collectors.toList());
         });
     }
-    public static List<Voucher> getAllVoucherByStatus() {
+
+    public static List<Voucher> getAllVoucherByStatusAndQuantity() {
         return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("select * from voucher where status = 1").mapToBean(Voucher.class)
+            return handle.createQuery("select * from voucher where status = 1 AND quantity > 0").mapToBean(Voucher.class)
                     .stream().collect(Collectors.toList());
         });
     }
+
     public static Voucher getVoucherById(String id) {
         List<Voucher> voucherList = JDBiConnector.me().withHandle(handle -> {
             return handle.createQuery("select * from voucher where id = ?")
@@ -52,9 +72,10 @@ public class VoucherService {
                     .mapToBean(Voucher.class)
                     .stream().collect(Collectors.toList());
         });
-        if (voucherList.size()==0) return null;
+        if (voucherList.size() == 0) return null;
         return voucherList.get(0);
     }
+
     public static Voucher getVoucherByCode(String code) {
         List<Voucher> voucherList = JDBiConnector.me().withHandle(handle -> {
             return handle.createQuery("select * from voucher where code = ?")
@@ -62,9 +83,10 @@ public class VoucherService {
                     .mapToBean(Voucher.class)
                     .stream().collect(Collectors.toList());
         });
-        if (voucherList.size()==0) return null;
+        if (voucherList.size() == 0) return null;
         return voucherList.get(0);
     }
+
     public static void deleteVoucherById(String id) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("delete from voucher where id = ?")

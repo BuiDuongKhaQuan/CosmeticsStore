@@ -127,7 +127,7 @@
                                                        placeholder="Cập nhật địa chỉ">
                                             </div>
                                         </div>
-                                        <button type="submit" onclick="saveAcc(<%=acc.getIdA()%>)"
+                                        <button type="submit" onclick="saveAcc(<%=acc.getId()%>)"
                                                 class="btn btn-raised btn-primary btn-round waves-effect">Lưu
                                         </button>
                                     </div>

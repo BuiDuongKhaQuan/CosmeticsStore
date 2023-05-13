@@ -1,6 +1,5 @@
-<%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.Account" %>
+<%@ page import="qht.shopmypham.com.vn.model.*" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -34,11 +33,11 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Danh sach tài khoản</h2>
+                    <h2>Danh sách voucher</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.jsp"><i class="zmdi zmdi-home"></i> Admin</a></li>
-                        <li class="breadcrumb-item">Quản lí tài khoản</li>
-                        <li class="breadcrumb-item active">Danh sách tài khoản</li>
+                        <li class="breadcrumb-item">Quản voucher</li>
+                        <li class="breadcrumb-item active">Danh sách voucher</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -57,30 +56,43 @@
                             <table id="table_id" class="table table-hover product_item_list c_table theme-color mb-0">
                                 <thead>
                                 <tr>
-                                    <th>Hình ảnh</th>
-                                    <th>Tên tài khoản</th>
-                                    <th data-breakpoints="xs">email</th>
-                                    <th data-breakpoints="xs md">Trang thái </th>
+                                    <th>Số TT</th>
+                                    <th>Tên</th>
+                                    <th data-breakpoints="xs">Giá trị giảm</th>
+                                    <th data-breakpoints="xs">Số lượng</th>
+                                    <th data-breakpoints="xs">Trạng thái</th>
                                     <th data-breakpoints="sm xs md">Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <% List<Account> accountList = (List<Account>) request.getAttribute("accountList");
-                                    for (Account account : accountList) {
+                                <% List<Voucher> voucherList = (List<Voucher>) request.getAttribute("voucherList");
+                                    String status = "";
+                                    int a = 0;
+                                    for (Voucher voucher : voucherList) {
+                                        a++;
+                                        if (voucher.getStatus() == 0) {
+                                            status = "Đang ẩn";
+                                        } else {
+                                            status = "Đang hiện";
+                                        }
                                 %>
                                 <tr>
-                                    <td><img src="<%=account.getImg()%>" width="48" alt=" img">
-                                    </td>
-                                    <td><h5><%=account.getFullName()%>
+                                    <td><h5><%=a%>
                                     </h5>
                                     </td>
-                                    <td><%=account.getEmail()%></td>
-                                    <td><span class="col-green">Đang hoạt động</span></td>
+                                    <td><%=voucher.getName()%>
+                                    </td>
+                                    <td><%=voucher.getPrice()%>
+                                    </td>
+                                    <td><%=voucher.getQuantity()%>
+                                    </td>
+                                    <td><span class="col-green"><%=status%></span></td>
                                     <td>
-                                        <a href="admin-account?command=edit&IdA=<%=account.getId()%>"
-                                           class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
-                                                class="zmdi zmdi-edit"></i></a>
-                                        <a href="admin-account?command=delete&IdA=<%=account.getId()%>"
+                                        <a class="btn btn-default waves-effect waves-float btn-sm waves-green"
+                                                href="AdminVoucher?command=edit&id=<%=voucher.getId()%>"><i
+                                                class="zmdi zmdi-edit"></i>
+                                        </a>
+                                        <a href="AdminVoucher?command=delete&id=<%=voucher.getId()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>
@@ -88,22 +100,9 @@
                                 <%}%>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
-                    <%--                    <div class="card">--%>
-                    <%--                        <div class="body">--%>
-                    <%--                            <ul class="pagination pagination-primary m-b-0">--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);"><i--%>
-                    <%--                                        class="zmdi zmdi-arrow-left"></i></a></li>--%>
-                    <%--                                <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);">4</a></li>--%>
-                    <%--                                <li class="page-item"><a class="page-link" href="javascript:void(0);"><i--%>
-                    <%--                                        class="zmdi zmdi-arrow-right"></i></a></li>--%>
-                    <%--                            </ul>--%>
-                    <%--                        </div>--%>
-                    <%--                    </div>--%>
                 </div>
             </div>
         </div>

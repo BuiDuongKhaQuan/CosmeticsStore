@@ -1,11 +1,8 @@
 package qht.shopmypham.com.vn.service;
 
 import qht.shopmypham.com.vn.db.JDBiConnector;
-import qht.shopmypham.com.vn.model.Home;
-import qht.shopmypham.com.vn.model.Offer;
 import qht.shopmypham.com.vn.model.Shop;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class ShopService {

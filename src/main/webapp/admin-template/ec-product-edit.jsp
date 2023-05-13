@@ -1,12 +1,10 @@
-﻿<%@ page import="qht.shopmypham.com.vn.model.Product" %>
-<%@ page import="qht.shopmypham.com.vn.model.Categories" %>
-<%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.Image" %>
+﻿<%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="qht.shopmypham.com.vn.model.Trademark" %>
+<%@ page import="qht.shopmypham.com.vn.model.*" %>
+<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
+<%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -25,6 +23,10 @@
     <!-- Custom Css -->
     <link rel="stylesheet" href="admin-template/assets/css/style.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/dropify/css/dropify.min.css" type="text/css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.4/simplePagination.min.css">
 
 </head>
 
@@ -217,16 +219,17 @@
                                                        value="<%=product.getPrice()%>">
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label for="product_quantity">Số lượng trong kho</label>
-                                            <div class="form-group">
-                                                <input type="number" id="product_quantity"
-                                                       value="<%=product.getQuantity()%>" class="form-control"
-                                                       placeholder="Nhập số lượng sản phẩm">
-                                            </div>
-                                        </div>
+                                        <%--                                        <div class="col-sm-6">--%>
+                                        <%--                                            <label for="product_quantity">Số lượng trong kho</label>--%>
+                                        <%--                                            <div class="form-group">--%>
+                                        <%--                                                <input type="number" id="product_quantity"--%>
+                                        <%--                                                       value="<%=product.getQuantity()%>" class="form-control"--%>
+                                        <%--                                                       placeholder="Nhập số lượng sản phẩm">--%>
+                                        <%--                                            </div>--%>
+                                        <%--                                        </div>--%>
                                     </div>
-                                    <%List<Categories> categoriesList = (List<Categories>) request.getAttribute("listCategories");
+                                    <%
+                                        List<Categories> categoriesList = (List<Categories>) request.getAttribute("listCategories");
                                         List<Trademark> trademarks = (List<Trademark>) request.getAttribute("trademarks");
                                     %>
                                     <div class="row clearfix">
@@ -380,38 +383,37 @@
                                                 class="zmdi zmdi-delete"></i></a>
                                     </div>
                                     <div class="tab-pane" id="review">
-                                        <p>Những đánh giá của sản phẩm</p>
-                                        <ul class="row list-unstyled c_review mt-4">
-                                            <li class="col-12">
+                                        <% List<Review> reviewList = (List<Review>) request.getAttribute("reviewList");%>
+                                        <p id="size_review">Có <%=reviewList.size()%> đánh giá về sản phẩm</p>
+                                        <ul class="row list-unstyled c_review mt-4" id="review1">
+                                            <% for (Review review : reviewList) {
+                                                Account acc = AccountService.getAccountById(review.getIdA());
+                                            %>
+                                            <li class="col-12" id="review_item">
                                                 <div class="avatar">
                                                     <a href="javascript:void(0);"><img class="rounded"
-                                                                                       src="admin-template/assets/images/xs/avatar2.jpg"
+                                                                                       src="<%=acc.getImg()%>"
                                                                                        alt="user"
                                                                                        width="60"></a>
                                                 </div>
                                                 <div class="comment-action">
-                                                    <h5 class="c_name">Hossein Shams</h5>
-                                                    <p class="c_msg mb-0">Cras sit amet nibh libero, in gravida
-                                                        nulla.
-                                                        Nulla vel metus scelerisque ante sollicitudin commodo. </p>
-                                                    <div class="badge badge-primary">iPhone 8</div>
-                                                    <span class="m-l-10">
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star col-amber"></i></a>
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star col-amber"></i></a>
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star col-amber"></i></a>
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star col-amber"></i></a>
-                                                        <a href="javascript:void(0);"><i
-                                                                class="zmdi zmdi-star-outline text-muted"></i></a>
+                                                    <h5 class="c_name"><%=acc.getName()%> - <small
+                                                            class="comment-date float-sm-right"><%=review.getDate()%>
+                                                    </small></h5>
+                                                    <p class="c_msg mb-0"><%=review.getInfomation()%>
+                                                    </p>
+                                                    <span class="m-l-10" id="admin_start_product">
+                                                        <%=CountStar.starReview(review.getStar())%>
                                                     </span>
-                                                    <small class="comment-date float-sm-right">Dec 21, 2019</small>
                                                 </div>
+                                                <small class="comment-date float-sm-right"
+                                                       onclick="deleteReview(<%=review.getIdR()%>)"> Xóa
+                                                </small>
                                             </li>
+                                            <%}%>
 
                                         </ul>
+                                        <div id="pagination"></div>
                                     </div>
 
                                 </div>
@@ -429,15 +431,62 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.js"></script>
 
 <%----%>
 <script>
+    function pagination() {
+        $(document).ready(function () {
+            var itemsPerPage = 5;
+            var itemsCount = $('#review1 #review_item').length;
+            var totalPages = Math.ceil(itemsCount / itemsPerPage);
+
+            $('#pagination').pagination({
+                items: itemsCount,
+                itemsOnPage: itemsPerPage,
+                cssStyle: 'light-theme',
+                onPageClick: function (pageNumber) {
+                    var startIndex = (pageNumber - 1) * itemsPerPage;
+                    var endIndex = startIndex + itemsPerPage;
+                    $('#review1 #review_item').hide().slice(startIndex, endIndex).show();
+                }
+            });
+
+            $('#review1 #review_item').hide().slice(0, itemsPerPage).show();
+        });
+    }
+
+    pagination();
+
+
+    function deleteReview(id) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("review1").innerHTML = this.responseText;
+                sizeReview();
+                pagination();
+            }
+        };
+        xhr.open("GET", "admin-product?command=deleteReview&action=size&id=" + id + "&idP=<%=product.getIdP()%>", true);
+        xhr.send();
+    }
+
+    function sizeReview() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("size_review").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "admin-product?command=size&idP=<%=product.getIdP()%>", true);
+        xhr.send();
+    }
+
 
     $('.dropify').dropify();
-
     const form = document.getElementById('upload-form');
     const fileInput = document.getElementById('file-input');
-
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const formData = new FormData();

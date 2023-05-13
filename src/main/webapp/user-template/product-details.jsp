@@ -6,6 +6,7 @@
 <%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
+<%@ page import="qht.shopmypham.com.vn.service.ProductCheckoutService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -168,7 +169,7 @@
                                    role="tab">Mô tả</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Bình luận</a>
+                                <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Đánh giá</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -194,7 +195,7 @@
                                             <div id="comment">
                                                 <%
                                                     for (Review r : reviewList) {
-                                                        Account acc = AccountService.getAccountById(String.valueOf(r.getIdA()));
+                                                        Account acc = AccountService.getAccountById(r.getIdA());
                                                 %>
                                                 <div class="media mb-4">
                                                     <img src="<%=acc.getImg()%>" alt="Image" class="img-fluid mr-3 mt-1"
@@ -205,105 +206,7 @@
                                                         </i></small></h6>
 
                                                         <div class="rating">
-                                                            <%
-                                                                if (r.getStar() == 5) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 4.5) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp-half-stroke"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 4) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 3.5) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp-half-stroke"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 3) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 2.5) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp-half-stroke"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 2) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 1.5) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp-half-stroke"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 1) {
-                                                            %>
-                                                            <i class="fa-solid fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 0.5) {
-                                                            %>
-                                                            <i class="fa-regular fa-star-sharp-half-stroke"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
-                                                            <%
-                                                                if (r.getStar() == 0) {
-                                                            %>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <i class="fa-regular fa-star-sharp"></i>
-                                                            <%}%>
+                                                            <%=CountStar.starReview(r.getStar())%>
                                                         </div>
                                                         <p><%=r.getInfomation()%>
                                                         </p>
@@ -372,13 +275,25 @@
                                                        style="border-radius: 5px"> Đăng nhập để đánh giá
                                                     </a>
                                                 </div>
+                                                <%
+                                                } else {
+                                                    if (ProductCheckoutService.getProductProductCheckout(ac.getId(), p.getIdP()) == null) {
+                                                %>
+                                                <div class="form-group mb-0">
+                                                    <h5 class="btn btn-primary px-3"> Bạn cần mua sản phẩm này để đánh
+                                                        giá!
+                                                    </h5>
+                                                </div>
                                                 <%} else {%>
                                                 <div class="form-group mb-0">
                                                     <button type="button" onclick="send(<%=p.getIdP()%>)"
                                                             class="btn btn-primary px-3"> Đánh giá
                                                     </button>
                                                 </div>
-                                                <%}%>
+                                                <%
+                                                        }
+                                                    }
+                                                %>
                                             </form>
                                         </div>
                                     </div>
@@ -399,7 +314,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h3 class="related-title">Related Product</h3>
+                <h3 class="related-title">Sản phẩm tương tự</h3>
             </div>
         </div>
         <div class="row">
@@ -450,12 +365,11 @@
                         <div class="rating">
                             <%
                                 List<Review> reviewList1 = ReviewService.getAllReviewByIdP(String.valueOf(p1.getIdP()));
-                                double avgStart1 = 0;
                                 double sum1 = 0;
                                 for (Review r : reviewList1) {
                                     sum1 += r.getStar();
                                 }
-                                avgStart1 = sum1 / reviewList.size();
+                                double avgStart1 = sum1 / reviewList.size();
                             %>
                             <%=CountStar.star(avgStart1, reviewList1.size())%>
                         </div>
@@ -485,16 +399,17 @@
 <!-- Footer Section End -->
 
 <script>
-    function getStart() {
-        let star = document.forms[0]
-        let txt = "";
-        let i;
-        for (i = 0; i < star.length; i++) {
-            if (star[i].checked) {
-                txt = txt + star[i].value
-            }
-        }
-        return txt;
+
+    const form = document.querySelector("#rating");
+    const ratingInputs = form.elements.star;
+
+    let ratingValue;
+
+    for (let i = 0; i < ratingInputs.length; i++) {
+        ratingInputs[i].addEventListener("change", function () {
+            ratingValue = ratingInputs[i].value;
+            console.log(ratingValue);
+        });
     }
 
     function send(idP) {
@@ -511,9 +426,39 @@
         };
         xhr.send("mess=" + encodeURIComponent(mess)
             + "&command=add"
-            + "&start=" + encodeURIComponent(getStart())
+            + "&start=" + ratingValue
             + "&idP=" + idP);
     }
+
+    function getStart() {
+        let star = document.forms[0]
+        let txt = "";
+        let i;
+        for (i = 0; i < star.length; i++) {
+            if (star[i].checked) {
+                txt = txt + star[i].value
+            }
+        }
+        return txt;
+    }
+
+    // function send(idP) {
+    //     var mess = document.getElementById("message").value;
+    //     var xhr = new XMLHttpRequest();
+    //     xhr.open("POST", "review", true);
+    //     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    //     xhr.onreadystatechange = function () {
+    //         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+    //             loadSizeComment();
+    //             loadComment();
+    //             load();
+    //         }
+    //     };
+    //     xhr.send("mess=" + encodeURIComponent(mess)
+    //         + "&command=add"
+    //         + "&start=" + encodeURIComponent(getStart())
+    //         + "&idP=" + idP);
+    // }
 
     function loadComment() {
         var xhr = new XMLHttpRequest();

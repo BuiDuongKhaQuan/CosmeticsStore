@@ -1,9 +1,8 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
+import qht.shopmypham.com.vn.tools.CountStar;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -23,6 +22,8 @@ public class UserProduct extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
+        int idA = 0;
+        if (acc!=null) idA = acc.getId();
         if (command.equals("product")) {
             List<Product> listProduct = ProductService.getAllProduct();
             String checked = "checked";
@@ -30,7 +31,6 @@ public class UserProduct extends HttpServlet {
             request.setAttribute("checked0", checked);
             request.setAttribute("listProduct", listProduct);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
-            DB.me().insert(new Log(Log.INFO, acc, "product", "Truy cập vào trang sản phẩm", 0, ipAddress));
         }
         if (command.equals("category")) {
             String cid = request.getParameter("cid");
@@ -50,10 +50,9 @@ public class UserProduct extends HttpServlet {
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
         }
         if (command.equals("favorite")) {
-            List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());
+            List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getId());
             request.setAttribute("productList", productList);
             request.getRequestDispatcher("/user-template/favorite-product.jsp").forward(request, response);
-            DB.me().insert(new Log(Log.INFO, acc, "favorite", "Truy cập vào trang sản phẩm favorite", 0, ipAddress));
         }
         if (command.equals("search-header")) {
             String name = request.getParameter("name-product");
@@ -64,7 +63,6 @@ public class UserProduct extends HttpServlet {
             request.setAttribute("checked0", checked);
             request.setAttribute("listProduct", productList);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
-            DB.me().insert(new Log(Log.INFO, acc, "search-header", "Tìm kiếm", 0, ipAddress));
         }
         if (command.equals("search")) {
             String name = request.getParameter("name");
@@ -94,97 +92,6 @@ public class UserProduct extends HttpServlet {
                     sum += r.getStar();
                 }
                 avgStart = sum / reviewList.size();
-                String start1 = "";
-                String s = "style=\"margin-right: 0;\"";
-                String q = "style=\"margin-right: 0;\"";
-                if (avgStart == 0) {
-                    start1 = "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>";
-
-                }
-                if (avgStart > 0 && avgStart < 0.5) {
-                    start1 = "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 0.5 && avgStart < 1) {
-                    start1 = "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 1 && avgStart < 1.5) {
-                    start1 = "<i class=\"fa fa-star\"></i> " +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 1.5 && avgStart < 2) {
-                    start1 = "<i class=\"fa fa-star\"></i> " +
-                            "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 2 && avgStart < 2.5) {
-                    start1 = "<i class=\"fa fa-star\"></i> " +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 2.5 && avgStart < 3) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i> ";
-                }
-                if (avgStart >= 3 && avgStart < 3.5) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 3.5 && avgStart < 4) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 4 && avgStart < 4.5) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 4.5 && avgStart < 5) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-half-o\"" + q + "></i>";
-                }
-                if (avgStart == 5) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>";
-                }
-                if (reviewList.size() == 0) {
-                    start1 = "Chưa có đánh giá";
-                }
                 response.setContentType("application/json");
                 response.getWriter().write("<div class=\"col-lg-4 col-md-6 col-sm-6\" id=\"product_item\">\n" +
                         "                        <div class=\"product__item\" style=\"background-color: rgba(130,140,230,0.11)\">\n" +
@@ -207,7 +114,7 @@ public class UserProduct extends HttpServlet {
                         "                                <h6 onclick=\"detailProduct(" + p.getIdP() + ")\" style=\"cursor: pointer\">" + p.getName() + "\n" +
                         "                                </h6>\n" +
                         "                                <div class=\"rating\" >\n" +
-                        "                                    " + start1 + "\n" +
+                        "                                    " + CountStar.star(avgStart, reviewList.size()) + "\n" +
                         "                                </div>\n" +
                         "                                <h5>" + nf.format(p.getPrice()) + "đ</h5>\n" +
                         "                                <div class=\"product__color__select\">\n" +
@@ -257,97 +164,6 @@ public class UserProduct extends HttpServlet {
                     sum += r.getStar();
                 }
                 avgStart = sum / reviewList.size();
-                String start1 = "";
-                String s = "style=\"margin-right: 0;\"";
-                String q = "style=\"margin-right: 0;\"";
-                if (avgStart == 0) {
-                    start1 = "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>";
-
-                }
-                if (avgStart > 0 && avgStart < 0.5) {
-                    start1 = "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                            " <i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 0.5 && avgStart < 1) {
-                    start1 = "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 1 && avgStart < 1.5) {
-                    start1 = "<i class=\"fa fa-star\"></i> " +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 1.5 && avgStart < 2) {
-                    start1 = "<i class=\"fa fa-star\"></i> " +
-                            "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 2 && avgStart < 2.5) {
-                    start1 = "<i class=\"fa fa-star\"></i> " +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 2.5 && avgStart < 3) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i> ";
-                }
-                if (avgStart >= 3 && avgStart < 3.5) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 3.5 && avgStart < 4) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 4 && avgStart < 4.5) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-o\"" + s + "></i>";
-                }
-                if (avgStart >= 4.5 && avgStart < 5) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star-half-o\"" + q + "></i>";
-                }
-                if (avgStart == 5) {
-                    start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>" +
-                            "<i class=\"fa fa-star\"" + s + "></i>";
-                }
-                if (reviewList.size() == 0) {
-                    start1 = "Chưa có đánh giá";
-                }
                 response.setContentType("application/json");
                 response.getWriter().write("<div class=\"col-lg-4 col-md-6 col-sm-6\" id=\"product_item\">\n" +
                         "                        <div class=\"product__item\" style=\"background-color: rgba(130,140,230,0.11)\">\n" +
@@ -370,7 +186,7 @@ public class UserProduct extends HttpServlet {
                         "                                <h6 onclick=\"detailProduct(" + p.getIdP() + ")\" style=\"cursor: pointer\">" + p.getName() + "\n" +
                         "                                </h6>\n" +
                         "                                <div class=\"rating\" >\n" +
-                        "                                    " + start1 + "\n" +
+                        "                                    " +  CountStar.star(avgStart, reviewList.size()) + "\n" +
                         "                                </div>\n" +
                         "                                <h5>" + nf.format(p.getPrice()) + "đ</h5>\n" +
                         "                                <div class=\"product__color__select\">\n" +
@@ -406,7 +222,6 @@ public class UserProduct extends HttpServlet {
             }
             request.setAttribute("listProduct", productList);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
-            DB.me().insert(new Log(Log.INFO, acc, "filterPrice", "Lọc giá sản phẩm", 0, ipAddress));
 
         }
     }
@@ -419,60 +234,54 @@ public class UserProduct extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
+        int idA = 0;
         if (acc != null) {
-            ListProductByCart byCart = CartService.checkProduct(product_id, String.valueOf(acc.getIdA()));
+            idA = acc.getId();
+            ListProductByCart byCart = CartService.checkProduct(product_id, String.valueOf(acc.getId()));
             if (command.equals("insertItem")) {
                 if (byCart == null) {
-                    CartService.addProductToCart(product_id, quantity, String.valueOf(acc.getIdA()));
-                    DB.me().insert(new Log(Log.INFO, acc, "insertItem", "Thêm sản phẩm vào giỏ hàng", 0, ipAddress));
+                    CartService.addProductToCart(product_id, quantity, String.valueOf(acc.getId()));
 
                 } else {
                     int quantity1 = byCart.getQuantity();
-                    CartService.upQuantityProductListProductByCart(String.valueOf(quantity1 + 1), product_id, String.valueOf(acc.getIdA()));
-                    DB.me().insert(new Log(Log.INFO, acc, "insertItem", "Thêm số sản phẩm vào giỏ hàng", 0, ipAddress));
+                    CartService.upQuantityProductListProductByCart(String.valueOf(quantity1 + 1), product_id, String.valueOf(acc.getId()));
 
                 }
             }
             if (command.equals("addItem")) {
                 if (byCart != null) {
                     int quantity1 = byCart.getQuantity();
-                    CartService.upQuantityProductListProductByCart(String.valueOf(quantity1 + 1), product_id, String.valueOf(acc.getIdA()));
-                    DB.me().insert(new Log(Log.INFO, acc, "insertItem", "Thêm số sản phẩm vào giỏ hàng", 0, ipAddress));
+                    CartService.upQuantityProductListProductByCart(String.valueOf(quantity1 + 1), product_id, String.valueOf(acc.getId()));
                 }
             }
             if (command.equals("subItem")) {
                 int quantity1 = byCart.getQuantity();
                 if (quantity1 > 1) {
-                    CartService.upQuantityProductListProductByCart(String.valueOf(quantity1 - 1), product_id, String.valueOf(acc.getIdA()));
-                    DB.me().insert(new Log(Log.ALERT, acc, "subItem", "Giảm số lượng sản phẩm trong giỏ hàng", 0, ipAddress));
+                    CartService.upQuantityProductListProductByCart(String.valueOf(quantity1 - 1), product_id, String.valueOf(acc.getId()));
                 }
                 if (quantity1 == 1) {
-                    CartService.deleteProductByIdpAndIda(product_id, String.valueOf(acc.getIdA()));
-                    DB.me().insert(new Log(Log.ALERT, acc, "insertItem", "Xóa lượng sản phẩm trong giỏ hàng", 0, ipAddress));
+                    CartService.deleteProductByIdpAndIda(product_id, String.valueOf(acc.getId()));
 
                 }
             }
             if (command.equals("deleteItem")) {
-                CartService.deleteProductByIdpAndIda(product_id, String.valueOf(acc.getIdA()));
-                DB.me().insert(new Log(Log.ALERT, acc, "deleteItem", "Xóa sản phẩm trong giỏ hàng", 0, ipAddress));
+                CartService.deleteProductByIdpAndIda(product_id, String.valueOf(acc.getId()));
 
             }
             if (command.equals("favorite")) {
-                Favorite favorite = ProductService.getFavoriteProduct(product_id, String.valueOf(acc.getIdA()));
+                Favorite favorite = ProductService.getFavoriteProduct(product_id, String.valueOf(acc.getId()));
                 if (favorite == null) {
-                    ProductService.addFavoriteProduct(product_id, String.valueOf(acc.getIdA()));
-                    DB.me().insert(new Log(Log.ALERT, acc, "favorite", "Thêm sản phẩm yêu thích", 0, ipAddress));
+                    ProductService.addFavoriteProduct(product_id, String.valueOf(acc.getId()));
                 }
             }
 
             if (command.equals("delete-favorite")) {
-                ProductService.deleteFavoriteProduct(product_id, String.valueOf(acc.getIdA()));
-                DB.me().insert(new Log(Log.ALERT, acc, "delete-favorite", "Loại bỏ sản phẩm yêu thích", 0, ipAddress));
+                ProductService.deleteFavoriteProduct(product_id, String.valueOf(acc.getId()));
             }
             if (command.equals("load_list_favorite")) {
                 NumberFormat nf = NumberFormat.getInstance();
                 nf.setMinimumFractionDigits(0);
-                List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());
+                List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getId());
                 if (productList.size() != 0) {
                     for (Product p : productList) {
                         List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));

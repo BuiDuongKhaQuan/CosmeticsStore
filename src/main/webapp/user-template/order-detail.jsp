@@ -40,7 +40,6 @@
 <jsp:include page="header.jsp"></jsp:include>
 <%
     Account acc = (Account) request.getSession().getAttribute("a");
-    Account acc1 = AccountService.getAccountById(String.valueOf(acc.getIdA()));
 %>
 <!-- Page Header Start -->
 <section class="breadcrumb-option">

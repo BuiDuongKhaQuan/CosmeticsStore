@@ -1,7 +1,5 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
@@ -22,12 +20,13 @@ public class UserCheckOut extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
-        List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
+        List<ListProductByCart> list = acc.getProductCart();
         request.setAttribute("list", list);
         request.setAttribute("activePage", "active");
         request.setAttribute("paymentList", paymentList);
         request.getRequestDispatcher("/user-template/checkout.jsp").forward(request, response);
-        DB.me().insert(new Log(Log.INFO,acc,"checkout","Truy cập trang thanh toán",0, ipAddress));
+        int idA = 0;
+        if (acc != null) idA = acc.getId();
     }
 
     @Override
@@ -43,26 +42,31 @@ public class UserCheckOut extends HttpServlet {
         String note = request.getParameter("note");
         String payment = request.getParameter("payment");
         String nowDate = DateUtil.getDateNow();
-        List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
-        if (voucher!=null){
-            CheckOutService.addCheckOutByIdA(phone, address, payment, name, note, String.valueOf(acc.getIdA()), String.valueOf(voucher.getId()), nowDate);
+        List<ListProductByCart> list = acc.getProductCart();
+        if (voucher != null) {
+            CheckOutService.addCheckOutByIdA(phone, address, payment, name, note, String.valueOf(acc.getId()), String.valueOf(voucher.getId()), nowDate);
+            VoucherService.editQuantityVouchert(voucher.getId(), voucher.getQuantity() - 1);
+            if ((voucher.getQuantity() - 1) == 0) {
+                VoucherService.editStatusVouchert(voucher.getId(), 0);
+            }
         } else {
-            CheckOutService.addCheckOutByIdA(phone, address, payment, name, note, String.valueOf(acc.getIdA()),null, nowDate);
+            CheckOutService.addCheckOutByIdA(phone, address, payment, name, note, String.valueOf(acc.getId()), null, nowDate);
         }
         session.removeAttribute("voucher");
-        List<CheckOut> checkOutList = CheckOutService.getCheckOutByIdA(String.valueOf(acc.getIdA()));
+        List<CheckOut> checkOutList = CheckOutService.getCheckOutByIdA(String.valueOf(acc.getId()));
         String idCk = String.valueOf(checkOutList.get(checkOutList.size() - 1).getIdCk());
         for (ListProductByCart l : list) {
-            ProductService.upQuantityProductById(String.valueOf(ProductService.getProductById(l.getIdP()).getQuantity() - l.getQuantity()), String.valueOf(l.getIdP()));
+            ProductService.upQuantityProductById(String.valueOf(ProductService.getProductById1(l.getIdP()).getQuantity() - l.getQuantity()), String.valueOf(l.getIdP()));
             ProductCheckoutService.addProductToProductCheckout(idCk, String.valueOf(l.getIdP()), String.valueOf(l.getQuantity()));
         }
-        CartService.deleteProductByIda(String.valueOf(acc.getIdA()));
+        CartService.deleteProductByIda(String.valueOf(acc.getId()));
         request.setAttribute("success", "Đặt hàng thành công, mời bạn tiếp tục mua hàng!");
         List<Payment> paymentList = PaymentService.getAllPayment();
         List<ListProductByCart> list1 = new ArrayList<>();
         request.setAttribute("list", list1);
         request.setAttribute("paymentList", paymentList);
         request.getRequestDispatcher("/user-template/checkout.jsp").forward(request, response);
-        DB.me().insert(new Log(Log.ALERT,acc,"checkout","Đặt hàng thành công",0, ipAddress));
+        int idA = 0;
+        if (acc != null) idA = acc.getId();
     }
 }
