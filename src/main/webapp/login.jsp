@@ -82,11 +82,11 @@
                 <div><p style="height: 2%">OR</p></div>
                 <div class="form_icons">
                     <a
-                            href="https://www.facebook.com/v16.0/dialog/oauth?client_id=713236200417479&redirect_uri=http://localhost:8080/ShopMyPham_war_exploded/login-facebook"
+                            href="https://www.facebook.com/v16.0/dialog/oauth?client_id=713236200417479&redirect_uri=http://3.106.134.105:2908/ShopMyPham/login-facebook"
                     ><i class="bx bxl-facebook-circle"></i>
                     </a>
                     <a
-                            href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/ShopMyPham_war_exploded/login-google&response_type=code
+                            href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://3.106.134.105:2908/ShopMyPham/login-google&response_type=code
                     &client_id=70792321459-u2vj38c8q86v2l64qj98jpst4kme46rg.apps.googleusercontent.com&approval_prompt=force"
                     ><i class="bx bxl-google"></i>
                     </a>
@@ -170,11 +170,11 @@
                 <div><p style="height: 2%">OR</p></div>
                 <div class="form_icons">
                     <a
-                            href="https://www.facebook.com/v16.0/dialog/oauth?client_id=713236200417479&redirect_uri=http://localhost:8080/ShopMyPham_war_exploded/login-facebook"
+                            href="https://www.facebook.com/v16.0/dialog/oauth?client_id=713236200417479&redirect_uri=http://3.106.134.105:2908/ShopMyPham/login-facebook"
                     ><i class="bx bxl-facebook-circle"></i>
                     </a>
                     <a
-                            href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/ShopMyPham_war_exploded/login-google&response_type=code
+                            href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://3.106.134.105:2908/ShopMyPham/login-google&response_type=code
                     &client_id=70792321459-u2vj38c8q86v2l64qj98jpst4kme46rg.apps.googleusercontent.com&approval_prompt=force"
                     ><i class="bx bxl-google"></i>
                     </a>

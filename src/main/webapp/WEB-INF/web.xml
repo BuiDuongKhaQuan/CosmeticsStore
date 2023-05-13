@@ -8,13 +8,36 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
   <display-name>Archetype Created Web Application</display-name>
-<!--  <error-page>-->
-<!--    <error-code>404</error-code>-->
-<!--    <location>/404.jsp</location>-->
-<!--  </error-page>-->
-<!--  <error-page>-->
-<!--    <error-code>500</error-code>-->
-<!--    <location>/500.jsp</location>-->
-<!--  </error-page>-->
-
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/500.jsp</location>
+  </error-page>
+  <servlet-mapping>
+    <servlet-name>Home</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Categories</servlet-name>
+    <url-pattern>/product</url-pattern>
+  </servlet-mapping>
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>HelloServlet</servlet-name>-->
+<!--    <url-pattern>/hello</url-pattern>-->
+<!--  </servlet-mapping>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>HelloServlet</servlet-name>-->
+<!--    <url-pattern>/hello</url-pattern>-->
+<!--  </servlet-mapping>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>HelloServlet</servlet-name>-->
+<!--    <url-pattern>/hello</url-pattern>-->
+<!--  </servlet-mapping>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>HelloServlet</servlet-name>-->
+<!--    <url-pattern>/hello</url-pattern>-->
+<!--  </servlet-mapping>-->
 </web-app>

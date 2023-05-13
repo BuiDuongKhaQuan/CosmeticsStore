@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="DoAnThucTapLTW:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>DoAnThucTapLTW</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ShopMyPham.war">
+      <element id="artifact" artifact-name="DoAnThucTapLTW:war exploded" />
+    </root>
+  </artifact>
+</component>

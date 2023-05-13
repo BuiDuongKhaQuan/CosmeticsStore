@@ -4,6 +4,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.LogService" %>
 <%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
+<%@ page import="java.util.Collections" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Page Loader -->
 <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
@@ -94,7 +95,8 @@
                 <li class="header">Thông báo</li>
                 <li class="body">
                     <ul class="menu list-unstyled">
-                        <% List<Log> logList = LogService.getAllLog();
+                        <% List<Log> logList = LogService.getAllLogAction();
+                            Collections.reverse(logList);
                             for (Log log : logList) {%>
                         <li>
                             <a href="javascript:void(0);">
