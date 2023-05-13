@@ -18,15 +18,22 @@ public class UserCheckOut extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Payment> paymentList = PaymentService.getAllPayment();
         Account acc = (Account) request.getSession().getAttribute("a");
-        InetAddress ip = InetAddress.getLocalHost();
-        String ipAddress = ip.getHostAddress();
         List<ListProductByCart> list = acc.getProductCart();
         request.setAttribute("list", list);
         request.setAttribute("activePage", "active");
         request.setAttribute("paymentList", paymentList);
         request.getRequestDispatcher("/user-template/checkout.jsp").forward(request, response);
+        String ipAddress = request.getRemoteAddr();
+        String url = request.getRequestURI();
+        int level = 1;
+        int action = 4;
+        String dateNow = DateUtil.getDateNow();
+        String content = "";
         int idA = 0;
         if (acc != null) idA = acc.getId();
+        content="Truy cập trang thanh toán";
+        LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
+
     }
 
     @Override
@@ -34,8 +41,13 @@ public class UserCheckOut extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         HttpSession session = request.getSession();
         Voucher voucher = (Voucher) request.getSession().getAttribute("voucher");
-        InetAddress ip = InetAddress.getLocalHost();
-        String ipAddress = ip.getHostAddress();
+        String ipAddress = request.getRemoteAddr();
+        String url = request.getRequestURI();
+        int level = 1;
+        int action = 4;
+        String dateNow = DateUtil.getDateNow();
+        String content = "";
+        int idA = 0;
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
@@ -66,7 +78,9 @@ public class UserCheckOut extends HttpServlet {
         request.setAttribute("list", list1);
         request.setAttribute("paymentList", paymentList);
         request.getRequestDispatcher("/user-template/checkout.jsp").forward(request, response);
-        int idA = 0;
+content ="Thanh toán thành công đơn hàng";
         if (acc != null) idA = acc.getId();
+        LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
+
     }
 }
