@@ -3,7 +3,9 @@ package qht.shopmypham.com.vn.controller;
 import com.restfb.types.User;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.RestFB;
+import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.service.LoginService;
+import qht.shopmypham.com.vn.tools.DateUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -21,7 +23,13 @@ public class LoginFacebook extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
-
+        String ipAddress = request.getRemoteAddr();
+        String url = request.getRequestURI();
+        int level = 1;
+        int action = 4;
+        String dateNow = DateUtil.getDateNow();
+        String content = "";
+        int idA = 0;
         if (code == null || code.isEmpty()) {
             RequestDispatcher dis = request.getRequestDispatcher("login.jsp");
             dis.forward(request, response);
@@ -35,12 +43,18 @@ public class LoginFacebook extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("a", acc);
                 response.sendRedirect("home");
+                level=2;
+                action=2;
+                content="Đăng kí bằng facebook thất bại";
             } else {
                 acc = LoginService.getAccoutFacebook(user.getId());
                 HttpSession session = request.getSession();
                 session.setAttribute("a", acc);
                 response.sendRedirect("home");
+                content="Đăng kí bằng facebook thành công";
             }
+            LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
+
         }
     }
 

@@ -139,7 +139,7 @@ public class AdminGeneral extends HttpServlet {
                         request.setAttribute("message", e.getMessage());
                     }
                     content = "Quản trị viên đã trả lời liên hệ " + idCt;
-                    level =2;
+                    level = 2;
                     action = 2;
                 }
                 if (command.equals("edit")) {

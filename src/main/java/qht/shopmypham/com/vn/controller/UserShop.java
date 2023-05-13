@@ -1,7 +1,9 @@
 package qht.shopmypham.com.vn.controller;
 
 import qht.shopmypham.com.vn.model.Account;
+import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.service.ShopService;
+import qht.shopmypham.com.vn.tools.DateUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -16,12 +18,18 @@ public class UserShop extends HttpServlet {
         qht.shopmypham.com.vn.model.Shop shop = ShopService.getShop();
         request.setAttribute("active3", "active");
         Account acc = (Account) request.getSession().getAttribute("a");
-        InetAddress ip = InetAddress.getLocalHost();
-        String ipAddress = ip.getHostAddress();
         request.setAttribute("shop", shop);
         request.getRequestDispatcher("/user-template/admin-shop-infoShop.jsp").forward(request, response);
+        String ipAddress = request.getRemoteAddr();
+        String url = request.getRequestURI();
+        int level = 1;
+        int action = 4;
+        String dateNow = DateUtil.getDateNow();
+        String content = "";
         int idA = 0;
         if (acc != null) idA = acc.getId();
+        content="Truy cập trang quản lý thông tin cửa hàng";
+        LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
 
     }
 

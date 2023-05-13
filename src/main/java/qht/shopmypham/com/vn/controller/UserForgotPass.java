@@ -3,7 +3,9 @@ package qht.shopmypham.com.vn.controller;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.Email;
 import qht.shopmypham.com.vn.model.OTP;
+import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.service.OTPService;
+import qht.shopmypham.com.vn.tools.DateUtil;
 import qht.shopmypham.com.vn.tools.EmailUtil;
 import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.tools.Encode;
@@ -30,11 +32,16 @@ public class UserForgotPass extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
         HttpSession session = request.getSession();
+        String ipAddress = request.getRemoteAddr();
+        String url = request.getRequestURI();
+        int level = 1;
+        int action = 4;
+        String dateNow = DateUtil.getDateNow();
+        String content = "";
         int idA = 0;
         if (command.equals("forgot")) {
             try {
-                InetAddress ip = InetAddress.getLocalHost();
-                String ipAddress = ip.getHostAddress();
+
                 String email = request.getParameter("email");
                 String user = request.getParameter("user");
                 String number = String.format("%06d", new Random().nextInt(999999));
@@ -63,6 +70,9 @@ public class UserForgotPass extends HttpServlet {
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write("active");
+                    content ="Quên mật khẩu";
+                    level=3;
+                    action=3;
                 }
             } catch (Exception e) {
                 request.setAttribute("mess", e.getMessage());
@@ -77,11 +87,15 @@ public class UserForgotPass extends HttpServlet {
             List<OTP> otpList = OTPService.getOTPByIdA(idA1);
             Collections.reverse(otpList);
             String otp = String.valueOf(otpList.get(0).getOTP());
-            InetAddress ip = InetAddress.getLocalHost();
-            String ipAddress = ip.getHostAddress();
+            level=4;
+            action=3;
+
             if (count < 3) {
                 if (reOtp.equals(otp) && pass.equals(repass)) {
                     AccountService.changePasswordAccountById(idA1, Encode.enCodeMD5(pass));
+                    content = "Đổi mật khẩu thành công";
+                    level=3;
+                    action=3;
                     request.getSession().removeAttribute("account_forgot_pass");
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
@@ -93,6 +107,9 @@ public class UserForgotPass extends HttpServlet {
                 }
                 if (!reOtp.equals(otp)) {
                     count++;
+                    content = "sai otp";
+                    level=4;
+                    action=3;
                     System.out.println(count);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
@@ -104,6 +121,9 @@ public class UserForgotPass extends HttpServlet {
                 }
             } else {
                 AccountService.lockUpAcountById("0", String.valueOf(acc.getId()));
+                content = "tài khoản đã bị khóa "+idA1;
+                level=3;
+                action=3;
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(" <div class=\"remember-forgot\"\n" +
@@ -113,5 +133,6 @@ public class UserForgotPass extends HttpServlet {
                         "                </div>");
             }
         }
+        LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
     }
 }

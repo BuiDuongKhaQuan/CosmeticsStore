@@ -5,6 +5,7 @@ import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.tools.DateUtil;
+import qht.shopmypham.com.vn.tools.Encode;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -21,7 +22,10 @@ public class AdminAccount extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
+        int level = 1;
+        int action = 4;
         String dateNow = DateUtil.getDateNow();
+        String content = "";
         int idA = 0;
         if (acc == null) {
             response.sendRedirect("login.jsp");
@@ -32,33 +36,41 @@ public class AdminAccount extends HttpServlet {
                 String command = request.getParameter("command");
                 if (command.equals("dashboard")) {
                     request.getRequestDispatcher("/admin-template/ac-dashboard.jsp").forward(request, response);
-                    LogService.addLog(idA, 4, 1, ipAddress, url, "Truy cập trang tổng quan tài khoản", dateNow);
+                    content="Truy cập trnag tổng quan tài khoản";
                 }
                 if (command.equals("profile")) {
                     Account account = acc.getAccount();
                     request.setAttribute("acc", account);
                     request.getRequestDispatcher("/admin-template/profile.jsp").forward(request, response);
-                    LogService.addLog(idA, 4, 1, ipAddress, url, "Truy cập trang cá nhân", dateNow);
+                    content="Truy cập trang cá nhân";
                 }
                 if (command.equals("list")) {
                     request.setAttribute("accountList", accountList);
                     request.getRequestDispatcher("/admin-template/ac-account-list.jsp").forward(request, response);
-                    LogService.addLog(idA, 4, 1, ipAddress, url, "Truy cập trang danh sách tài khoản", dateNow);
-
+                    content="Truy cập trang danh sách tài khoản";
                 }
                 if (command.equals("edit")) {
                     String IdA = request.getParameter("IdA");
                     Account account = AccountService.getAccountById(Integer.parseInt(IdA));
                     request.setAttribute("account", account);
                     request.getRequestDispatcher("/admin-template/ac-account-edit.jsp").forward(request, response);
-                    LogService.addLog(idA, 4, 1, ipAddress, url, "Truy cập trang chỉnh sửa tài khoản", dateNow);
+                    content="Truy cập trang chỉnh sửa tài khoản";
+                }
+                if (command.equals("editAuthur")){
+                    String idA1 = request.getParameter("id");
+                    Account account = AccountService.getAccountById(Integer.parseInt(idA1));
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("/admin-template/ac-acount-authorization.jsp").forward(request,response);
                 }
                 if (command.equals("delete")) {
                     String IdA = request.getParameter("IdA");
                     AccountService.deleteAccountById(IdA);
                     response.sendRedirect("admin-account?command=list1");
-                    LogService.addLog(idA, 3, 3, ipAddress, url, "Xóa tài khoản" + IdA, dateNow);
+                    action = 3;
+                    level = 4;
+                    content="Xóa tài khoản "+ idA;
                 }
+                LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
             } else {
                 response.sendRedirect(error404);
             }
@@ -70,7 +82,10 @@ public class AdminAccount extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
+        int level = 1;
+        int action = 4;
         String dateNow = DateUtil.getDateNow();
+        String content = "";
         int idA = 0;
         if (acc == null) {
             response.sendRedirect("login.jsp");
@@ -85,7 +100,16 @@ public class AdminAccount extends HttpServlet {
                     String phone = request.getParameter("phone");
                     String address = request.getParameter("address");
                     AccountService.updateImgAcountByIdAll(fullName, email, phone, address, idA1);
-                    LogService.addLog(idA, 2, 2, ipAddress, url, "Chỉnh sửa tài khoản" + idA1, dateNow);
+                    action = 2;
+                    level= 2;
+                    content ="Chỉnh sửa tài khoản " + idA1;
+                }
+                if (command.equals("resetPass")) {
+                    String idA1 = request.getParameter("id");
+                    AccountService.resetPasswordAccountById(idA1, Encode.enCodeMD5("000000"));
+                    action = 2;
+                    level = 3;
+                    content ="Đặt lại mật khẩu tài khoản " + idA1;
                 }
                 if (command.equals("editAuthur")) {
                     String idA1 = request.getParameter("idA");
@@ -97,47 +121,73 @@ public class AdminAccount extends HttpServlet {
                     String homeMana = request.getParameter("homeMana");
                     if (acountMana.equals("true")) {
                         AccountService.updateacountMana("1", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Cấp quyền quản lý tài khoản", dateNow);
+                        action=2;
+                        level=3;
+                        content ="Cấp quyền quản lý tài khoản";
                     } else {
                         AccountService.updateacountMana("0", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Thu hồi quyền quản lý tài khoản", dateNow);
+                        action=2;
+                        level=3;
+                        content="Thu hồi quyền quản lý tài khoản";
                     }
                     if (productMana.equals("true")) {
                         AccountService.updateproductMana("1", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Cấp quyền quản lý sản phẩm", dateNow);
+                        action=2;
+                        level=3;
+                        content="Cấp quyền quản lý sản phẩm";
                     } else {
                         AccountService.updateproductMana("0", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Thu hồi quyền quản lý sản phẩm", dateNow);
+                        action=2;
+                        level=3;
+                        content="Thu hồi quyền quản lý sản phẩm";
                     }
                     if (orderMana.equals("true")) {
                         AccountService.updateorderMana("1", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Cấp quyền quản lý đơn hàng", dateNow);
+                        action=2;
+                        level=3;
+                        content="Cấp quyền quản lý đơn hàng";
                     } else {
                         AccountService.updateorderMana("0", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Thu hồi quyền quản lý đơn hàng", dateNow);
+                        action=2;
+                        level=3;
+                        content="Thu hồi quyền quản lý đơn hàng";
                     }
                     if (blogMana.equals("true")) {
                         AccountService.updateblogMana("1", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Cấp quyền quản lý bài viết", dateNow);
+                        action=2;
+                        level=3;
+                        content="Cấp quyền quản lí blog";
                     } else {
                         AccountService.updateblogMana("0", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Thu hồi quyền quản lý bài viết", dateNow);
+                        action=2;
+                        level=3;
+                        content="Thu hồi quyền quản lí blog";
                     }
                     if (genaralMana.equals("true")) {
                         AccountService.updategenaralMana("1", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Cấp quyền quản lý chung", dateNow);
+                        action=2;
+                        level=3;
+                        content="Cấp quyền quản lí chung";
                     } else {
                         AccountService.updategenaralMana("0", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Thu hồi quyền quản lý chung", dateNow);
+                        action=2;
+                        level=3;
+                        content="Thu hồi quyền quản lí chung";
                     }
                     if (homeMana.equals("true")) {
                         AccountService.updatehomeMana("1", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Cấp quyền quản lý trang chủ", dateNow);
+                        action=2;
+                        level=3;
+                        content="Cấp quyền quản lí trang chủ";
                     } else {
                         AccountService.updatehomeMana("0", idA1);
-                        LogService.addLog(idA, 2, 3, ipAddress, url, "Thu hồi quyền quản lý trang chủ", dateNow);
+                        action=2;
+                        level=3;
+                        content="Thu hồi quyền quản lí trang chủ";
                     }
+
                 }
+                LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
             } else {
                 response.sendRedirect(error404);
             }

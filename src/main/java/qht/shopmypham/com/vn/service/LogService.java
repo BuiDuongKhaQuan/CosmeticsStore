@@ -14,6 +14,14 @@ public class LogService {
                         .collect(Collectors.toList())
         );
     }
+    public static List<Log> getAllLogAction() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM log where `action` != 4 ")
+                        .mapToBean(Log.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
     public static void addLog(int idA, int action, int level, String ip, String src, String content, String time) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("INSERT INTO log( idA, action, level, ip, src, content, time)" +
@@ -30,6 +38,6 @@ public class LogService {
     }
 
     public static void main(String[] args) {
-        System.out.println(getAllLog());
+        System.out.println(getAllLogAction());
     }
 }
