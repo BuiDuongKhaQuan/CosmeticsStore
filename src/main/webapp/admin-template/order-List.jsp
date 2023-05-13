@@ -169,6 +169,8 @@
                                         <a href="admin-order?command=delete&IdCk=<%=co.getIdCk()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
+                                        <a href="admin-order?command=bill&IdCk=<%=co.getIdCk()%>"
+                                           class="btn btn-default waves-effect waves-float btn-sm waves-green">Xuất hóa đơn</a>
                                     </td>
                                 </tr>
                                 <%}%>

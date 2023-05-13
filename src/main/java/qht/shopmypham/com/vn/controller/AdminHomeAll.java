@@ -1,7 +1,5 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
@@ -25,15 +23,16 @@ public class AdminHomeAll extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
+        int idA = 0;
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
-            if (acc.getHomeManage() == 1) {
+            if (acc.powerAccount().getHomeManage() == 1) {
+                idA = acc.getId();
                 if (command.equals("productHome")) {
                     Home home = HomeService.getHome();
                     request.setAttribute("home", home);
                     request.getRequestDispatcher("/admin-template/home-product.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"AdminHomeAll/productHome","Truy cập trang quản lí sản phẩm trang chủ",0,ipAddress));
                 }
                 if (command.equals("cate")) {
                     Home home = HomeService.getHome();
@@ -45,7 +44,6 @@ public class AdminHomeAll extends HttpServlet {
                     request.setAttribute("categoriesList", categoriesList);
                     request.setAttribute("categoriesHome", categoriesHome);
                     request.getRequestDispatcher("/admin-template/home-catagory.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"AdminHomeAll/cate","Truy cập trang quản lí cate trên trang chủ",0,ipAddress));
 
                 }
                 if (command.equals("selling")) {
@@ -69,7 +67,6 @@ public class AdminHomeAll extends HttpServlet {
                     request.setAttribute("selling", selling);
                     request.setAttribute("promotionProducts", promotionProducts);
                     request.getRequestDispatcher("/admin-template/home-selling.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"AdminHomeAll/selling","Truy cập trang quản lí ưu đãi trong tuần",0,ipAddress));
                 }
                 if (command.equals("imageTrend")) {
                     List<String> content = new ArrayList<>();
@@ -85,21 +82,18 @@ public class AdminHomeAll extends HttpServlet {
                     request.setAttribute("imgTrends", img);
                     request.setAttribute("imageTrendList", imageTrendList);
                     request.getRequestDispatcher("/admin-template/home-image-trends.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"AdminHomeAll/imageTrend","Truy cập trang quản lí Cosmetics Trends",0,ipAddress));
 
                 }
                 if (command.equals("information")) {
                     Shop shop = ShopService.getShop();
                     request.setAttribute("shop", shop);
                     request.getRequestDispatcher("/admin-template/home-information.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"AdminHomeAll/imageTrend","Truy cập trang quản lí thông tin cửa hàng",0,ipAddress));
                 }
                 if (command.equals("editTrend")) {
                     String idT = request.getParameter("idT");
                     ImageTrend imageTrend = HomeService.getImageTrendById(idT);
                     request.setAttribute("imgTrend", imageTrend);
                     request.getRequestDispatcher("/admin-template/home-image-trends-edit.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"AdminHomeAll/editTrend","Truy cập trang quản lí chỉnh sửa  Cosmetics Trends",0,ipAddress));
 
                 }
             } else {
@@ -114,10 +108,12 @@ public class AdminHomeAll extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
+        int idA = 0;
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
-            if (acc.getHomeManage() == 1) {
+            if (acc.powerAccount().getHomeManage() == 1) {
+                idA = acc.getId();
                 if (command.equals("information")) {
                     String idS = request.getParameter("idS");
                     String phone = request.getParameter("phone");
@@ -131,16 +127,12 @@ public class AdminHomeAll extends HttpServlet {
                     ShopService.editShop(idS, name, logo_header, slogan, address, phone, email, desginer, contact);
                     HttpSession session = request.getSession();
                     session.removeAttribute("logo");
-                    DB.me().insert(new Log(Log.WARNING,acc,"AdminHomeAll/edit","chỉnh sửa thông tin cửa hàng",0,ipAddress));
-
                 }
                 if (command.equals("category")) {
                     String idC1 = request.getParameter("idC1");
                     String idC2 = request.getParameter("idC2");
                     String idC3 = request.getParameter("idC3");
                     HomeService.edit(idC1, idC2, idC3);
-                    DB.me().insert(new Log(Log.WARNING,acc,"AdminHomeAll/category","chỉnh sửa doanh mục trên trang chủ",0,ipAddress));
-
                 }
                 if (command.equals("quantity")) {
                     String quantityProS = request.getParameter("quantityProS");

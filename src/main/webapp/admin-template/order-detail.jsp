@@ -24,12 +24,32 @@
 
 <body class="theme-blush">
 <jsp:include page="header.jsp"></jsp:include>
-<%  int total1 = 0;
+<%
+    int total1 = 0;
     NumberFormat nf = NumberFormat.getInstance();
     nf.setMinimumFractionDigits(0);
     CheckOut checkOut = (CheckOut) request.getAttribute("checkOut");
     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
     List<ListProductByCheckOut> productByCheckOutList = (List<ListProductByCheckOut>) request.getAttribute("listProductByCheckOuts");
+    String status = "";
+    if (checkOut.getIdStatus() == 0) {
+        status = "Chờ xác nhận";
+    }
+    if (checkOut.getIdStatus() == 1) {
+        status = "Đang vận chuyển";
+    }
+    if (checkOut.getIdStatus() == 2) {
+        status = "Hoàn thành";
+    }
+    if (checkOut.getIdStatus() == 3) {
+        status = "Đã hoàn thành";
+    }
+    if (checkOut.getIdStatus() == 4) {
+        status = "Chờ xác nhận hủy";
+    }
+    if (checkOut.getIdStatus() == 5) {
+        status = "Đã hủy";
+    }
 %>
 
 <section class="content">
@@ -188,16 +208,11 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-
-
                                             <%
                                                 for (ListProductByCheckOut productByCheckOut : productByCheckOutList) {
                                                     Product product = ProductService.getProductById(productByCheckOut.getIdP());
-                                                    total1 = product.getPrice() * productByCheckOut.getQuantity();
+                                                    total1 += product.getPrice() * productByCheckOut.getQuantity();
                                                     List<Image> m = ProductService.getImages(String.valueOf(product.getIdP()));
-
-                                                    total2 += product.getPrice() * productByCheckOut.getQuantity();
-
                                             %>
                                             <tr>
                                                 <td><img src="<%=m.get(0).getImg()%>">
@@ -207,7 +222,7 @@
                                                 <td><span class="col-green"><%=productByCheckOut.getQuantity()%></span>
                                                 </td>
                                                 <td><span class="col-green"><%= nf.format(product.getPrice())%> </span></td>
-                                                <td><span class="col-green"><%= nf.format(total1)%> </span></td>
+                                                <td><span class="col-green"><%= nf.format(product.getPrice() * productByCheckOut.getQuantity())%> </span></td>
                                             </tr>
                                             <%}%>
                                             </tbody>

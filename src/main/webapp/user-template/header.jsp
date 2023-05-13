@@ -35,22 +35,10 @@
         <div class="offcanvas__links">
             <%if (acc == null) {%>
             <a href="login.jsp">ĐĂNG NHẬP</a>
-            <% }%>
-            <% if (acc != null) {
-                if (acc.getOrderManage() == 0 && acc.getHomeManage() == 0 && acc.getProductManage() == 0
-                        && acc.getAccountManage() == 0 && acc.getBlogManage() == 0 && acc.getGeneralManage() == 0) {
-                    String rs = "";
-                    if (acc.getIdGoogle() != null) {
-                        rs = acc.getEmail();
-                    }
-                    if (acc.getIdGoogle() == null) {
-                        rs = acc.getFullName();
-                    }
-                    if (acc.getFullName() == null && acc.getIdGoogle() == null) {
-                        rs = acc.getUser();
-                    }
+            <% } if (acc != null) {
+                if (acc.maxPower() == false) {
             %>
-            <a href="profile?command=profile"> Xin chào <%=rs%>
+            <a href="profile?command=profile"> Xin chào <%=acc.getName()%>
             </a>
             <%} else {%>
             <a href="admin-home"> Xin chào
@@ -74,8 +62,8 @@
                 <i class="fa-light fa-magnifying-glass" onclick="showSearchMobile()"></i>
             </a>
             <% if (acc != null) {
-                List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
-                List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());
+                List<ListProductByCart> list = acc.getProductCart();
+                List<Product> productList = acc.getFavoriteProduct();
             %>
             <a href="product?command=favorite"><i class="fa-light fa-heart"></i>
                 <span id="favorite-count1" style="left: 18px;top: -8px"><%=productList.size()%></span></a>
@@ -117,22 +105,11 @@
                         <div class="header__top__links">
                             <%if (acc == null) {%>
                             <a href="login.jsp">ĐĂNG NHẬP</a>
-                            <% }%>
-                            <% if (acc != null) {
-                                if (acc.getOrderManage() == 0 && acc.getHomeManage() == 0 && acc.getProductManage() == 0
-                                        && acc.getAccountManage() == 0 && acc.getBlogManage() == 0 && acc.getGeneralManage() == 0) {
-                                    String rs = "";
-                                    if (acc.getIdGoogle() != null) {
-                                        rs = acc.getEmail();
-                                    }
-                                    if (acc.getIdGoogle() == null) {
-                                        rs = acc.getFullName();
-                                    }
-                                    if (acc.getFullName() == null && acc.getIdGoogle() == null) {
-                                        rs = acc.getUser();
-                                    }
+                            <% }if (acc != null) {
+                                if (acc.maxPower() == false) {
+
                             %>
-                            <a href="profile?command=profile"> Xin chào <%=rs%>
+                            <a href="profile?command=profile"> Xin chào <%=acc.getName()%>
                             </a>
                             <%} else {%>
                             <a href="admin-home"> Xin chào
@@ -207,8 +184,8 @@
                             </form>
                         </a>
                         <% if (acc != null) {
-                            List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
-                            List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());
+                            List<ListProductByCart> list = acc.getProductCart();
+                            List<Product> productList = acc.getFavoriteProduct();
                         %>
                         <a href="product?command=favorite"><i class="fa-light fa-heart"></i>
                             <span id="favorite-count"><%=productList.size()%></span></a>

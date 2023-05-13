@@ -1,7 +1,5 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.FAQs;
 import qht.shopmypham.com.vn.service.FAQsService;
@@ -23,7 +21,8 @@ public class UserFAQs extends HttpServlet {
         List<FAQs> FAQsList = FAQsService.getAllFQAsBy1();
         request.setAttribute("FAQsList", FAQsList);
         request.getRequestDispatcher("/user-template/FAQs.jsp").forward(request, response);
-        DB.me().insert(new Log(Log.INFO,acc,"faqs","Truy cập trang faqs",0, ipAddress));
+        int idA = 0;
+        if (acc != null) idA = acc.getId();
     }
 
     @Override

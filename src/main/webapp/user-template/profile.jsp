@@ -40,7 +40,7 @@
 <jsp:include page="header.jsp"></jsp:include>
 <%
     Account acc = (Account) request.getSession().getAttribute("a");
-    Account acc1 = AccountService.getAccountById(String.valueOf(acc.getIdA()));
+    Account acc1 = AccountService.getAccountById(acc.getId());
 %>
 
 <!-- Page Header Start -->
@@ -172,7 +172,7 @@
                                         %>
                                         <input name="command" type="hidden" class="form-control" value="edit">
                                         <input name="idAccount" type="hidden" class="form-control"
-                                               value="<%=acc1.getIdA()%>">
+                                               value="<%=acc1.getId()%>">
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <h6 class="mb-0">Họ và tên</h6>
@@ -220,7 +220,7 @@
                                                 <h6 class="mb-0">Mật khẩu</h6>
                                             </div>
                                             <div class="col-sm-9 text-secondary">
-                                                <a href="changePass?idA=<%=acc1.getIdA()%>"
+                                                <a href="changePass?idA=<%=acc1.getId()%>"
                                                    class="col-sm-9 text-secondary">Đổi
                                                     mật
                                                     khẩu</a>
@@ -235,7 +235,7 @@
                                                         target="__blank"
                                                         type="button"
                                                         style="margin-top: 20px"
-                                                        onclick="editProfile(<%=acc1.getIdA()%>)"
+                                                        onclick="editProfile(<%=acc1.getId()%>)"
                                                 >Lưu
                                                 </button>
                                                 <a
@@ -255,7 +255,7 @@
                     </div>
                 </div>
                 <%
-                    List<CheckOut> checkOutList = CheckOutService.getCheckOutByIdA(String.valueOf(acc1.getIdA()));
+                    List<CheckOut> checkOutList = CheckOutService.getCheckOutByIdA(String.valueOf(acc1.getId()));
                     Collections.reverse(checkOutList);
                     NumberFormat nf = NumberFormat.getInstance();
                     nf.setMinimumFractionDigits(0);
@@ -404,7 +404,7 @@
                             <div class="card-body p-4">
                                 <div class="d-flex justify-content-between align-items-center mb-4"
                                      style="font-size: 1.3em; color: green">
-                                      <div class="small mb-0">
+                                    <div class="small mb-0">
                                         <a href="profile?command=order-detail&idCk=<%=checkOut.getIdCk()%>">Mã đơn :
                                             #<%=checkOut.getIdCk()%>
                                         </a>

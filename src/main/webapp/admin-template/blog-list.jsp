@@ -62,7 +62,7 @@
                                 <div class="blogitem-header">
                                     <div class="blogitem-meta">
                                         <span><i class="zmdi zmdi-account"></i>Từ <a href="javascript:void(0);">
-                                            <%=AccountService.getAccountById(String.valueOf(blog.getIdA())).getFullName()%>
+                                            <%=AccountService.getAccountById(blog.getIdA()).getFullName()%>
                                         </a></span>
                                     </div>
                                     <div class="blogitem-share">

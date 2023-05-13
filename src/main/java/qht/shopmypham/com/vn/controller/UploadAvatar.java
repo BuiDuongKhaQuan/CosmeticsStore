@@ -1,7 +1,5 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.service.AccountService;
 
@@ -49,9 +47,10 @@ public class UploadAvatar extends HttpServlet {
         session.setAttribute("avatar", base64Image);
 
         Account acc = (Account) request.getSession().getAttribute("a");
-        AccountService.updateImgAcountById(parthImg, String.valueOf(acc.getIdA()));
+        AccountService.updateImgAcountById(parthImg, String.valueOf(acc.getId()));
         response.sendRedirect("profile?command=profile");
-        DB.me().insert(new Log(Log.INFO,acc,"UploadFileServlet","Upload avatar",0,ipAddress));
+        int idA = 0;
+        if (acc != null) idA = acc.getId();
 
     }
 

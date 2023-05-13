@@ -1,7 +1,5 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.CategoryService;
 import qht.shopmypham.com.vn.service.ProductService;
@@ -44,7 +42,8 @@ public class UserDetail extends HttpServlet {
         request.setAttribute("listProduct", listProduct);
         request.setAttribute("product", product);
         request.getRequestDispatcher("/user-template/product-details.jsp").forward(request, response);
-        DB.me().insert(new Log(Log.INFO,acc,"product-details","Truy cập trang sản phẩm chi tiết",0, ipAddress));
+        int idA = 0;
+        if (acc != null) idA = acc.getId();
     }
 
     @Override

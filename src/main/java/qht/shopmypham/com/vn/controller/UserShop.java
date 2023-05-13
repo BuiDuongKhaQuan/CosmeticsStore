@@ -1,7 +1,5 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.service.ShopService;
 
@@ -22,7 +20,8 @@ public class UserShop extends HttpServlet {
         String ipAddress = ip.getHostAddress();
         request.setAttribute("shop", shop);
         request.getRequestDispatcher("/user-template/admin-shop-infoShop.jsp").forward(request, response);
-        DB.me().insert(new Log(Log.ALERT,acc,"infoShop","Truy cập trang thông tin cửa hàng",0,ipAddress));
+        int idA = 0;
+        if (acc != null) idA = acc.getId();
 
     }
 

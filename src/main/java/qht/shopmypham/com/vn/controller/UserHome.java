@@ -1,29 +1,17 @@
 package qht.shopmypham.com.vn.controller;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.auth.oauth2.TokenResponseException;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
-
 
 import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -94,10 +82,11 @@ public class UserHome extends HttpServlet {
         request.setAttribute("blogList", blogList);
         request.setAttribute("listSlider", listSlider);
         request.setAttribute("activeHome", "active");
-
-
         request.getRequestDispatcher("/user-template/home.jsp").forward(request, response);
-        DB.me().insert(new Log(Log.INFO,acc,"home","truy cập home",0,ipAddress));
+        int idA = 0;
+        if (acc != null) {
+            idA = acc.getId();
+        }
 
     }
 

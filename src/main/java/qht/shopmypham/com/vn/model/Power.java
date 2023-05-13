@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class Power implements Serializable {
     int id, idA;
-    int orderManage, generalManage, productManage, accountManage, blogManage, homeManage, voucherManage, sliderManage,warehouseManage;
+    int orderManage, generalManage, productManage, accountManage, blogManage, homeManage, voucherManage, sliderManage;
 
     public Power() {
     }
 
-    public Power(int id, int idA, int orderManage, int generalManage, int productManage, int accountManage, int blogManage, int homeManage, int voucherManage, int sliderManage, int warehouseManage) {
+    public Power(int id, int idA, int orderManage, int generalManage, int productManage, int accountManage, int blogManage, int homeManage, int voucherManage, int sliderManage) {
         this.id = id;
         this.idA = idA;
         this.orderManage = orderManage;
@@ -20,7 +20,6 @@ public class Power implements Serializable {
         this.homeManage = homeManage;
         this.voucherManage = voucherManage;
         this.sliderManage = sliderManage;
-        this.warehouseManage = warehouseManage;
     }
 
     public int getId() {
@@ -101,13 +100,5 @@ public class Power implements Serializable {
 
     public void setSliderManage(int sliderManage) {
         this.sliderManage = sliderManage;
-    }
-
-    public int getWarehouseManage() {
-        return warehouseManage;
-    }
-
-    public void setWarehouseManage(int warehouseManage) {
-        this.warehouseManage = warehouseManage;
     }
 }

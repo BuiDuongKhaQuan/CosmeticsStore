@@ -21111,3 +21111,12 @@ section.content {
     display: flex !important;
     justify-content: center;
 }
+#admin_start_product i {
+    color: #ffb100;
+}
+#pagination {
+    text-align: center;
+}
+#pagination li {
+    display: inline-block;
+}

@@ -1,23 +1,29 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.been.Log;
-import qht.shopmypham.com.vn.db.DB;
 import qht.shopmypham.com.vn.model.*;
-import qht.shopmypham.com.vn.service.CheckOutService;
-import qht.shopmypham.com.vn.service.ProductCheckoutService;
+import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+
+import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.font.*;
+import org.apache.pdfbox.pdmodel.common.*;
+
 import javax.servlet.annotation.*;
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
 
 @WebServlet(name = "AdminOrder", value = "/admin-order")
 public class AdminOrder extends HttpServlet {
     String error404 = "404.jsp";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<CheckOut> checkOuts = CheckOutService.getAllCheckOut();
@@ -27,30 +33,28 @@ public class AdminOrder extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
+        int idA = 0;
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
-            if (acc.getOrderManage() == 1) {
+            if (acc.powerAccount().getOrderManage() == 1) {
+                idA = acc.getId();
                 if (command.equals("dashboard")) {
                     request.getRequestDispatcher("/admin-template/order-dashboard.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"admin-order/dashboard","Truy cập trang tổng quan order",0,ipAddress));
                 }
                 if (command.equals("orders")) {
                     request.setAttribute("checkOuts", checkOuts);
                     request.getRequestDispatcher("/admin-template/order.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"admin-order/orders","Truy cập trang order",0,ipAddress));
                 }
                 if (command.equals("list")) {
                     request.setAttribute("checkOuts", checkOuts);
                     request.getRequestDispatcher("/admin-template/order-List.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"admin-order/list","Truy cập trang danh sách order",0,ipAddress));
                 }
                 if (command.equals("edit")) {
                     String idCk = request.getParameter("IdCk");
                     CheckOut checkOut = CheckOutService.getCheckOutByIdCk(idCk);
                     request.setAttribute("checkOut", checkOut);
                     request.getRequestDispatcher("/admin-template/order-edit.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"admin-order/edit","Truy cập trang order",0,ipAddress));
                 }
                 if (command.equals("detail")) {
                     String idCk = request.getParameter("IdCk");
@@ -59,34 +63,119 @@ public class AdminOrder extends HttpServlet {
                     request.setAttribute("checkOut", checkOut);
                     request.setAttribute("listProductByCheckOuts", listProductByCheckOuts);
                     request.getRequestDispatcher("admin-template/order-detail.jsp").forward(request, response);
-                    DB.me().insert(new Log(Log.INFO,acc,"admin-order/detail","Truy cập trang chi tiết order",0,ipAddress));
                 }
                 if (command.equals("ok")) {
                     String idCk = request.getParameter("idCk");
-                    CheckOutService.confirmCheckOutByidCk(idCk, String.valueOf(acc.getIdA()), nowDate);
+                    CheckOutService.confirmCheckOutByidCk(idCk, String.valueOf(acc.getId()), nowDate);
                     response.sendRedirect("admin-order?command=list");
-                    DB.me().insert(new Log(Log.ALERT,acc,"admin-order/confirm","xác nhận đơn hàng",0,ipAddress));
                 }
                 if (command.equals("confirm")) {
                     String idCk = request.getParameter("idCk");
-                    CheckOutService.completeCheckOutByidCk(idCk, String.valueOf(acc.getIdA()), nowDate);
+                    CheckOutService.completeCheckOutByidCk(idCk, String.valueOf(acc.getId()), nowDate);
                     response.sendRedirect("admin-order?command=list");
-                    DB.me().insert(new Log(Log.ALERT,acc,"admin-order/confirm-complete","xác nhận đơn hàng thành công",0,ipAddress));
                 }
                 if (command.equals("cance")) {
                     String idCk = request.getParameter("idCk");
-                    CheckOutService.canceCheckOutByidCk(idCk, String.valueOf(acc.getIdA()));
+                    CheckOutService.canceCheckOutByidCk(idCk, String.valueOf(acc.getId()));
                     response.sendRedirect("admin-order?command=list");
-                    DB.me().insert(new Log(Log.ALERT,acc,"admin-order/cancel","hủy xác nhận đơn hàng",0,ipAddress));
                 }
                 if (command.equals("delete")) {
                     String IdCk = request.getParameter("IdCk");
                     CheckOutService.deleteCheckOutById(IdCk);
                     response.sendRedirect("admin-order?command=list");
-                    DB.me().insert(new Log(Log.ALERT,acc,"admin-order/delete","xóa đơn hàng",0,ipAddress));
+                }
+                if (command.equals("bill")) {
+                    long total = 0;
+                    NumberFormat nf = NumberFormat.getInstance();
+                    nf.setMinimumFractionDigits(0);
+                    String IdCk = request.getParameter("IdCk");
+                    CheckOut checkOut = CheckOutService.getCheckOutByIdCk(IdCk);
+                    Account account = AccountService.getAccountById(checkOut.getIdA());
+                    Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
+                    List<ListProductByCheckOut> list = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
+                    PDDocument document = new PDDocument();
+
+                    // tạo trang
+                    PDPage page = new PDPage(PDRectangle.A4);
+                    document.addPage(page);
+
+                    // thiết lập font chữ
+                    String path = "admin-template/assets/fonts/TimesNewRoman400.ttf";
+                    ServletContext context = getServletContext();
+                    String absolutePath = context.getRealPath(path);
+                    PDFont font =  PDType0Font.load(document, new File(absolutePath));
+
+                    // tạo content stream để vẽ trên trang
+                    PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+                    // vẽ nội dung hóa đơn
+                    contentStream.beginText();
+                    contentStream.setFont(font, 12);
+                    contentStream.moveTextPositionByAmount(50, 750);
+                    contentStream.drawString("HÓA ĐƠN");
+                    contentStream.moveTextPositionByAmount(0, -50);
+                    contentStream.drawString("Tên khách hàng: " + account.getName());
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Số hóa đơn: #" + checkOut.getIdCk());
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Thời gian: " + DateUtil.getDateNow());
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Địa chỉ: " + checkOut.getAddress());
+                    contentStream.moveTextPositionByAmount(0, -50);
+                    contentStream.drawString("Sản phẩm:");
+                    String text = "";
+                    int a = 0;
+                    for (ListProductByCheckOut l : list) {
+                        a++;
+                        Product p = ProductService.getProductById(l.getIdP());
+                        total += p.getPrice() * l.getQuantity();
+                        text += a + ") " + p.getName() + ": " + nf.format(p.getPrice()) +"đ\n";
+                        text += "x " + l.getQuantity() + ": " + nf.format(p.getPrice() * l.getQuantity()) +"đ\n";
+                    }
+                    String[] lines = text.split("\\n");
+                    for (String line : lines) {
+                        if (!line.isBlank()) {
+                            contentStream.moveTextPositionByAmount(0, -20);
+                            contentStream.showText(line);
+                        }
+                    }
+                    long reduction = 0;
+                    if (voucher != null) {
+                        reduction = total * voucher.getPrice() / 100;
+                    }
+                    long priceLast = total - reduction;
+                    contentStream.moveTextPositionByAmount(0, -50);
+                    contentStream.drawString("Tổng hàng: " + nf.format(total) +"đ");
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Giảm giá: - " + nf.format(reduction) +"đ");
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Tổng đơn hàng: " + nf.format(priceLast) +"đ");
+
+                    contentStream.moveTextPositionByAmount(0, -50);
+                    contentStream.drawString("Chú ý: " + checkOut.getNote());
+                    contentStream.endText();
+
+                    // đóng content stream
+                    contentStream.close();
+
+                    // thiết lập thông tin header để tải xuống file PDF
+                    response.setContentType("application/pdf");
+                    response.setHeader("Content-Disposition", "attachment; filename=HoaDon.pdf");
+
+                    // gửi document đến trình duyệt để tải xuống
+                    OutputStream out = response.getOutputStream();
+                    document.save(out);
+                    out.flush();
+                    out.close();
+
+                    // đóng document
+                    document.close();
+
+//                    response.sendRedirect("admin-order?command=list");
                 }
             } else {
-                response.sendRedirect(error404);            }
+                response.sendRedirect(error404);
+            }
         }
     }
 
@@ -95,10 +184,12 @@ public class AdminOrder extends HttpServlet {
         Account acc = (Account) request.getSession().getAttribute("a");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
+        int idA = 0;
         if (acc == null) {
             response.sendRedirect("login.jsp");
         } else {
-            if (acc.getOrderManage() == 1) {
+            if (acc.powerAccount().getOrderManage() == 1) {
+                idA = acc.getId();
                 String command = request.getParameter("command");
                 String idCk = request.getParameter("idCk");
                 String phone = request.getParameter("phone");
@@ -106,12 +197,12 @@ public class AdminOrder extends HttpServlet {
                 String name = request.getParameter("name");
                 String note = request.getParameter("note");
                 if (command.equals("edit")) {
-                    CheckOutService.editCheckOut(idCk, String.valueOf(acc.getIdA()), note, phone, address, name);
-                    DB.me().insert(new Log(Log.ALERT,acc,"admin-order/edit","chinnh sửa thông tin đơn hàng",0,ipAddress));
+                    CheckOutService.editCheckOut(idCk, String.valueOf(acc.getId()), note, phone, address, name);
                 }
                 response.sendRedirect("admin-order?command=list");
             } else {
-                response.sendRedirect(error404);            }
+                response.sendRedirect(error404);
+            }
         }
     }
 }
