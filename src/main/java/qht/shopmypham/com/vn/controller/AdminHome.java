@@ -34,6 +34,8 @@ public class AdminHome extends HttpServlet {
                 request.setAttribute("productList", productList);
                 request.setAttribute("subscibeList", subscibeList);
                 request.setAttribute("reviewList", reviewList);
+
+
                 request.getRequestDispatcher("/admin-template/index.jsp").forward(request, response);
                 DB.me().insert(new Log(Log.INFO,acc,"admin-home","Truy cập trang tổng quan admin",0,ipAddress));
 

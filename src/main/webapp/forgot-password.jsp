@@ -46,7 +46,7 @@
             <div class="login-register">
                 <p>
                     Bạn đã có tài khoản?
-                    <a href="login.jsp">Đăng nhập</a>
+                    <a href="login">Đăng nhập</a>
                 </p>
             </div>
         </div>

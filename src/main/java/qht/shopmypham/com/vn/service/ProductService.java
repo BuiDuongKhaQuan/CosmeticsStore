@@ -114,6 +114,7 @@ public class ProductService {
     }
 
 
+
     public static List<Product> getProductSortDescendingByPrice() {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM product ORDER BY price")
@@ -453,6 +454,18 @@ public class ProductService {
         });
     }
 
+    public static int getQuantityProductById( int status) {
+        List<Product> products = JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM product WHERE idP = ? where status = 1")
+                        .bind(0, status)
+
+                        .mapToBean(Product.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+
+        return getQuantityProductById(1);
+    }
 
     public static void main(String[] args) {
     }

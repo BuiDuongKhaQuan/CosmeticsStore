@@ -404,7 +404,7 @@
                             <div class="card-body p-4">
                                 <div class="d-flex justify-content-between align-items-center mb-4"
                                      style="font-size: 1.3em; color: green">
-                                    <div class="small mb-0">
+                                      <div class="small mb-0">
                                         <a href="profile?command=order-detail&idCk=<%=checkOut.getIdCk()%>">Mã đơn :
                                             #<%=checkOut.getIdCk()%>
                                         </a>
