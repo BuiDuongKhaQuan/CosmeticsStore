@@ -62,10 +62,9 @@ public class UserProduct extends HttpServlet {
             String checked = "checked";
             request.setAttribute("activeProduct", "active");
             request.setAttribute("checked0", checked);
-            request.setAttribute("productListByIdC", productList);
-            request.getRequestDispatcher("/user-template/category.jsp").forward(request, response);
+            request.setAttribute("listProduct", productList);
+            request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
             DB.me().insert(new Log(Log.INFO, acc, "search-header", "Tìm kiếm", 0, ipAddress));
-
         }
         if (command.equals("search")) {
             String name = request.getParameter("name");

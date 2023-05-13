@@ -2,10 +2,7 @@ package qht.shopmypham.com.vn.controller;
 
 import qht.shopmypham.com.vn.been.Log;
 import qht.shopmypham.com.vn.db.DB;
-import qht.shopmypham.com.vn.model.Account;
-import qht.shopmypham.com.vn.model.CheckOut;
-import qht.shopmypham.com.vn.model.ListProductByCart;
-import qht.shopmypham.com.vn.model.Payment;
+import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
 
@@ -36,6 +33,8 @@ public class UserCheckOut extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
+        HttpSession session = request.getSession();
+        Voucher voucher = (Voucher) request.getSession().getAttribute("voucher");
         InetAddress ip = InetAddress.getLocalHost();
         String ipAddress = ip.getHostAddress();
         String name = request.getParameter("name");
@@ -45,8 +44,12 @@ public class UserCheckOut extends HttpServlet {
         String payment = request.getParameter("payment");
         String nowDate = DateUtil.getDateNow();
         List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
-
-        CheckOutService.addCheckOutByIdA(phone, address, payment, name, note, String.valueOf(acc.getIdA()), nowDate);
+        if (voucher!=null){
+            CheckOutService.addCheckOutByIdA(phone, address, payment, name, note, String.valueOf(acc.getIdA()), String.valueOf(voucher.getId()), nowDate);
+        } else {
+            CheckOutService.addCheckOutByIdA(phone, address, payment, name, note, String.valueOf(acc.getIdA()),null, nowDate);
+        }
+        session.removeAttribute("voucher");
         List<CheckOut> checkOutList = CheckOutService.getCheckOutByIdA(String.valueOf(acc.getIdA()));
         String idCk = String.valueOf(checkOutList.get(checkOutList.size() - 1).getIdCk());
         for (ListProductByCart l : list) {

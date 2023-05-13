@@ -176,7 +176,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" onclick="edit(<%=trademark.getIdTrademark()%>)"
+                                    <button type="submit" onclick="edit(<%=trademark.getId()%>)"
                                             class="btn btn-raised btn-primary btn-round waves-effect">Lưu
                                     </button>
                                 </div>
@@ -211,7 +211,7 @@
         xhr.onload = function () {
             if (xhr.status === 200) {
                 console.log('File uploaded successfully.');
-                window.location.href = "admin-general?command=editTrademark&idT=<%=trademark.getIdTrademark()%>";
+                window.location.href = "admin-general?command=editTrademark&idT=<%=trademark.getId()%>";
             } else {
                 console.log('An error occurred while uploading the file.');
             }

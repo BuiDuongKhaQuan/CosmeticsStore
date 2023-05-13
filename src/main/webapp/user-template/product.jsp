@@ -5,6 +5,7 @@
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.service.ReviewService" %>
 <%@ page import="qht.shopmypham.com.vn.service.TrademarkService" %>
+<%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -55,7 +56,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>Shop</h4>
+                    <h4>Sản phẩm</h4>
                     <div class="breadcrumb__links">
                         <a href="./home">Trang chủ</a>
                         <span>Sản phẩm</span>
@@ -122,7 +123,7 @@
                                                     for (Trademark t : list) {
                                                 %>
                                                 <li>
-                                                    <a href="product?command=trademark&idT=<%=t.getIdTrademark()%>"><%=t.getName()%>
+                                                    <a href="product?command=trademark&idT=<%=t.getId()%>"><%=t.getName()%>
                                                     </a></li>
                                                 <%}%>
                                             </ul>
@@ -178,7 +179,8 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <p>Hiển thị 1- 12 trong 126 kết quả</p>
+                                <% List<Product> productList = (List<Product>) request.getAttribute("listProduct");%>
+                                <p>Hiển thị 1 - 9 trong <%=productList.size()%> kết quả</p>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -200,7 +202,6 @@
                 </div>
                 <div class="row" id="product_list">
                     <%
-                        List<Product> productList = (List<Product>) request.getAttribute("listProduct");
                         NumberFormat nf = NumberFormat.getInstance();
                         nf.setMinimumFractionDigits(0);
                         for (Product p : productList) {
@@ -256,99 +257,8 @@
 
                                         }
                                         avgStart = sum / reviewList.size();
-                                        String start1 = "";
-                                        String s = "style=\"margin-right: 0;\"";
-                                        String q = "style=\"margin-right: 0;\"";
-                                        if (avgStart == 0) {
-                                            start1 = "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    " <i class=\"fa fa-star-o\"" + s + "></i>";
-
-                                        }
-                                        if (avgStart > 0 && avgStart < 0.5) {
-                                            start1 = "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    " <i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    " <i class=\"fa fa-star-o\"" + s + "></i>";
-                                        }
-                                        if (avgStart >= 0.5 && avgStart < 1) {
-                                            start1 = "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>";
-                                        }
-                                        if (avgStart >= 1 && avgStart < 1.5) {
-                                            start1 = "<i class=\"fa fa-star\"></i> " +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>";
-                                        }
-                                        if (avgStart >= 1.5 && avgStart < 2) {
-                                            start1 = "<i class=\"fa fa-star\"></i> " +
-                                                    "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>";
-                                        }
-                                        if (avgStart >= 2 && avgStart < 2.5) {
-                                            start1 = "<i class=\"fa fa-star\"></i> " +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>";
-                                        }
-                                        if (avgStart >= 2.5 && avgStart < 3) {
-                                            start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i> ";
-                                        }
-                                        if (avgStart >= 3 && avgStart < 3.5) {
-                                            start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>";
-                                        }
-                                        if (avgStart >= 3.5 && avgStart < 4) {
-                                            start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-half-o\"" + q + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>";
-                                        }
-                                        if (avgStart >= 4 && avgStart < 4.5) {
-                                            start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-o\"" + s + "></i>";
-                                        }
-                                        if (avgStart >= 4.5 && avgStart < 5) {
-                                            start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star-half-o\"" + q + "></i>";
-                                        }
-                                        if (avgStart == 5) {
-                                            start1 = "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>" +
-                                                    "<i class=\"fa fa-star\"" + s + "></i>";
-                                        }
-                                        if (reviewList.size() == 0) {
-                                            start1 = "Chưa có đánh giá";
-                                        }
                                     %>
-                                    <%=start1%>
+                                    <%=CountStar.star(avgStart, reviewList.size())%>
                                 </div>
                                 <h5><%=nf.format(p.getPrice())%>đ</h5>
                                 <div class="product__color__select">

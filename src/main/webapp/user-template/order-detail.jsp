@@ -1,12 +1,9 @@
-<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Collections" %>
-<%@ page import="qht.shopmypham.com.vn.service.CheckOutService" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductCheckoutService" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
+<%@ page import="qht.shopmypham.com.vn.service.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
@@ -72,6 +69,7 @@
                     NumberFormat nf = NumberFormat.getInstance();
                     nf.setMinimumFractionDigits(0);
                     CheckOut checkOut = (CheckOut) request.getAttribute("checkOut");
+                    Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
                     List<ListProductByCheckOut> productByCheckOutList = (List<ListProductByCheckOut>) request.getAttribute("listProductByCheckOuts");
                     String status = "";
                     if (checkOut.getIdStatus() == 0) {
@@ -260,6 +258,11 @@
                             </div>
                         </div>
                         <div class="total">
+                            <% int reduction = 0;
+                                if (voucher != null) {
+                                    reduction = total1 * voucher.getPrice() / 100;
+                                }
+                                int priceLast = total1 - reduction;%>
                             <div class="inf">
                                 <div class="inf-text">Tổng tiền hàng</div>
                                 <div class="inf-m">
@@ -275,13 +278,14 @@
                             <div class="inf">
                                 <div class="inf-text">Giảm giá voucher</div>
                                 <div class="inf-m">
-                                    <div>-35.000đ</div>
+                                    <div>- <%=nf.format(reduction)%>đ</div>
                                 </div>
                             </div>
                             <div class="inf">
                                 <div class="inf-text">Thành tiền</div>
                                 <div class="inf-m">
-                                    <div><%=nf.format(total1)%></div>
+                                    <div><%=nf.format(priceLast)%>
+                                    </div>
                                 </div>
                             </div>
                             <div class="inf">

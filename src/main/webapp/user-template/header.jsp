@@ -17,9 +17,15 @@
 <%
     Account acc = (Account) request.getSession().getAttribute("a");
 %>
+<link rel="stylesheet" href="user-template/css/main.css" type="text/css">
 <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
       type="text/css"/>
-
+<script>
+    function showSearchMobile() {
+        const formSearch = document.getElementById("search-header-mobile");
+        formSearch.style.display = "block";
+    }
+</script>
 <div id="notification" class="hidden-noti">Đã thêm vào giỏ hàng thành công</div>
 <div id="notification1" class="hidden-noti">Đã thêm vào danh sách sản phẩm yêu thích</div>
 
@@ -62,23 +68,33 @@
             </ul>
         </div>
     </div>
-    <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><i class="fa-light fa-magnifying-glass"></i></a>
-        <% if (acc != null) {
-            List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
-            List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());
-        %>
-        <a href="product?command=favorite"><i class="fa-light fa-heart"></i>
-        <span id="favorite-count1" style="left: 18px;top: -5px"><%=productList.size()%></span></a>
-        <a href="auto-load?command=show"><i class="fa-light fa-cart-shopping"></i>
-            <span id="cart-count1" style="left: 18px;top: -5px"><%=list.size()%></span></a>
-        <%} else {%>
-        <a href="login.jsp"><i class="fa-light fa-heart"></i>
-            <span style="left: 18px;top: -5px">0</span></a>
-        <a href="login.jsp"><i class="fa-light fa-cart-shopping"></i>
-            <span style="left: 18px;top: -5px">0</span></a>
-        <%}%>
-
+    <div>
+        <div class="offcanvas__nav__option">
+            <a href="javascript:void(0);">
+                <i class="fa-light fa-magnifying-glass" onclick="showSearchMobile()"></i>
+            </a>
+            <% if (acc != null) {
+                List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
+                List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());
+            %>
+            <a href="product?command=favorite"><i class="fa-light fa-heart"></i>
+                <span id="favorite-count1" style="left: 18px;top: -8px"><%=productList.size()%></span></a>
+            <a href="auto-load?command=show"><i class="fa-light fa-cart-shopping"></i>
+                <span id="cart-count1" style="left: 23px;top: -8px"><%=list.size()%></span></a>
+            <%} else {%>
+            <a href="login.jsp"><i class="fa-light fa-heart"></i>
+                <span style="left: 18px;top: -8px">0</span></a>
+            <a href="login.jsp"><i class="fa-light fa-cart-shopping"></i>
+                <span style="left: 23px;top: -8px">0</span></a>
+            <%}%>
+        </div>
+        <form action="product" method="get" id="search-header-mobile" style="display: none">
+            <div class="search-box">
+                <input type="text" class="input-search-mobile" name="name-product"
+                       placeholder="Tìm kiếm...">
+                <input type="hidden" value="search-header" name="command">
+            </div>
+        </form>
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
@@ -148,23 +164,27 @@
                 </div>
                 <div class="col-lg-6 col-md-6 pading-profile">
                     <nav class="header__menu mobile-menu">
-                            <% String activeHome = (String) request.getAttribute("activeHome");
-                                String activeProduct = (String) request.getAttribute("activeProduct");
-                                String activePage = (String) request.getAttribute("activePage");
-                                String activeBlog = (String) request.getAttribute("activeBlog");
-                                String activeContact = (String) request.getAttribute("activeContact");
-                            %>
+                        <% String activeHome = (String) request.getAttribute("activeHome");
+                            String activeProduct = (String) request.getAttribute("activeProduct");
+                            String activePage = (String) request.getAttribute("activePage");
+                            String activeBlog = (String) request.getAttribute("activeBlog");
+                            String activeContact = (String) request.getAttribute("activeContact");
+                        %>
                         <ul>
                             <li class="<%=activeHome%>"><a href="./home">Trang chủ</a></li>
                             <li class="<%=activeProduct%>"><a href="product?command=product">Sản phẩm</a></li>
                             <li class="<%=activePage%>"><a href="#">Trang</a>
                                 <ul class="dropdown">
                                     <%if (acc != null) {%>
-                                    <li><a href="./cart-show"> Giỏ hàng</a></li>
+                                    <li><a href="auto-load?command=show"> Giỏ hàng</a></li>
                                     <li><a href="product?command=favorite">Sản phẩm yêu thích</a></li>
+                                    <li><a href="profile?command=profile">Trang cá nhân</a></li>
+                                    <li><a href="voucher">Kho voucher</a></li>
                                     <%} else {%>
                                     <li><a href="login.jsp"> Giỏ hàng</a></li>
                                     <li><a href="login.jsp">Sản phẩm yêu thích</a></li>
+                                    <li><a href="login.jsp">Trang cá nhân</a></li>
+                                    <li><a href="voucher">Kho voucher</a></li>
                                     <%}%>
                                 </ul>
                             </li>
@@ -175,8 +195,17 @@
                 </div>
                 <div class="col-lg-3 col-md-3 pading-profile">
                     <div class="header__nav__option">
-
-                        <a href="#" class="search-switch"><i class="fa-light fa-magnifying-glass"></i></a>
+                        <a href="javascript:void(0);" style="margin-right: 10px;">
+                            <form action="product" method="get">
+                                <div class="search-box">
+                                    <button class="btn-search" type="submit"><i
+                                            class="fa-light fa-magnifying-glass"></i></button>
+                                    <input type="text" class="input-search" name="name-product"
+                                           placeholder="Tìm kiếm...">
+                                    <input type="hidden" value="search-header" name="command">
+                                </div>
+                            </form>
+                        </a>
                         <% if (acc != null) {
                             List<ListProductByCart> list = CartService.getAllByIda(String.valueOf(acc.getIdA()));
                             List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getIdA());

@@ -525,7 +525,8 @@ ol {
     font-size: 14px;
     margin-top: -15px;
 }
-.header__nav__option a #favorite-count{
+
+.header__nav__option a #favorite-count {
     left: 3px;
 }
 
@@ -1096,7 +1097,7 @@ ol {
 .product__item__text .rating i {
     font-size: 14px;
     color: #ffb100;
-    margin-right: -5px;
+    margin-right: -3px;
 }
 
 .product__item__text h5 {
@@ -2450,9 +2451,9 @@ ol {
 }
 
 .cart__discount form input {
-    font-size: 14px;
-    color: #b7b7b7;
-    height: 50px;
+    font-size: 17px;
+    color: #564c4c;
+    height: 48px;
     width: 100%;
     border: 1px solid #e1e1e1;
     padding-left: 20px;
@@ -3675,8 +3676,26 @@ ol {
     }
 
     .offcanvas__nav__option {
-        text-align: center;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
         margin-bottom: 25px;
+    }
+    .search-box{
+        width: auto!important;
+        margin-bottom: 15px;
+    }
+    .input-search-mobile {
+        width: 100%;
+        height: 27px;
+        border-style: none;
+        letter-spacing: 2px;
+        padding: 10px;
+        outline: none;
+        border-radius: 7px;
+        background-color: transparent;
+        border-bottom:1px solid rgba(16, 14, 14, 0.5);
+        transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
     }
 
     .offcanvas__nav__option a {
@@ -3725,7 +3744,7 @@ ol {
     }
 
     .header__nav__option {
-        display: none;
+        display: none !important;
     }
 
     .search-model-form input {
@@ -4379,7 +4398,8 @@ button:hover {
 .card-table {
     border-radius: 0;
 }
-.fa-light{
+
+.fa-light {
     font-size: 1.18em;
     color: #111111;
 }

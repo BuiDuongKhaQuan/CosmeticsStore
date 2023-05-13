@@ -4,7 +4,10 @@ package qht.shopmypham.com.vn.service;
 import qht.shopmypham.com.vn.db.JDBiConnector;
 import qht.shopmypham.com.vn.model.ListProductByCheckOut;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ProductCheckoutService {
@@ -34,5 +37,29 @@ public class ProductCheckoutService {
                     .mapToBean(ListProductByCheckOut.class)
                     .stream().collect(Collectors.toList());
         });
+    }
+    public static Map<Integer,Integer> sum_sale() {
+       Map<Integer,Integer> map = new HashMap<>();
+       int a = 0;
+       List<ListProductByCheckOut> list = ProductCheckoutService.getProductProductCheckout();
+        for (int i = 0; i < list.size(); i++) {
+            int key = list.get(i).getIdP();
+            int value = list.get(i).getQuantity();
+
+            // Kiểm tra xem key của phần tử hiện tại đã tồn tại trong map chưa.
+            if (map.containsKey(key)) {
+                // Nếu key đã tồn tại trong map, cộng giá trị value hiện tại của key với giá trị value của phần tử mới.
+                int oldValue = map.get(key);
+                map.put(key, oldValue + value);
+            } else {
+                // Nếu key chưa tồn tại trong map, đưa phần tử mới vào map với giá trị value của nó.
+                map.put(key, value);
+            }
+        }
+       return map;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(sum_sale());
     }
 }

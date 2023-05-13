@@ -8,6 +8,7 @@ import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.service.CartService;
 import qht.shopmypham.com.vn.service.ProductService;
 import qht.shopmypham.com.vn.service.ReviewService;
+import qht.shopmypham.com.vn.tools.CountStar;
 import qht.shopmypham.com.vn.tools.DateUtil;
 
 import javax.servlet.*;
@@ -36,6 +37,7 @@ public class UserReview extends HttpServlet {
         if (command.equals("add")) {
             Account acc = (Account) request.getSession().getAttribute("a");
             String rating = request.getParameter("start");
+            System.out.println(rating);
             if (rating == "") {
                 rating = "0";
             }
@@ -58,84 +60,7 @@ public class UserReview extends HttpServlet {
                 if (acc.getUser() != null && acc.getFullName() != null) {
                     name = acc.getFullName();
                 }
-                String start = "";
-                if (r.getStar() == 5) {
-                    start = " <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>";
-                }
-                if (r.getStar() == 4.5) {
-                    start = " <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-half\"></i> ";
-                }
-                if (r.getStar() == 4) {
-                    start = " <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i> ";
-                }
-                if (r.getStar() == 3.5) {
-                    start = "  <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-half\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>";
-                }
-                if (r.getStar() == 3) {
-                    start = "    <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>";
-                }
-                if (r.getStar() == 2.5) {
-                    start = " <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-half\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>";
-                }
-                if (r.getStar() == 2) {
-                    start = "<i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>";
-                }
-                if (r.getStar() == 1.5) {
-                    start = " <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-half\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>";
-                }
-                if (r.getStar() == 1) {
-                    start = "  <i class=\"fa fa-star\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>";
-                }
-                if (r.getStar() == 0.5) {
-                    start = "<i class=\"fa fa-star-half\"></i>                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>";
-                }
-                if (r.getStar() == 0) {
-                    start = " <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>\n" +
-                            "                                                        <i class=\"fa fa-star-o\"></i>";
-                }
+                String start = CountStar.starReview(r.getStar());
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("<div class=\"media mb-4\">\n" +

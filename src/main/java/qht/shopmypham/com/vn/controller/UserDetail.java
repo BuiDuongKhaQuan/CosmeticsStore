@@ -2,13 +2,11 @@ package qht.shopmypham.com.vn.controller;
 
 import qht.shopmypham.com.vn.been.Log;
 import qht.shopmypham.com.vn.db.DB;
-import qht.shopmypham.com.vn.model.Account;
-import qht.shopmypham.com.vn.model.Categories;
-import qht.shopmypham.com.vn.model.Product;
-import qht.shopmypham.com.vn.model.Review;
+import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.CategoryService;
 import qht.shopmypham.com.vn.service.ProductService;
 import qht.shopmypham.com.vn.service.ReviewService;
+import qht.shopmypham.com.vn.service.TrademarkService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -28,6 +26,7 @@ public class UserDetail extends HttpServlet {
         String ipAddress = ip.getHostAddress();
         Product product = ProductService.getProductById(Integer.parseInt(id));
         Categories cate = CategoryService.getCategoriesById(String.valueOf(product.getIdC()));
+        Trademark trademark = TrademarkService.getTrademarkByIdT(String.valueOf(product.getIdT()));
         List<Product> listProduct = ProductService.getProductByIdC(String.valueOf(product.getIdC()));
         List<Review> reviewList = ReviewService.getAllReviewByIdP(id);
         Collections.reverse(reviewList);
@@ -40,6 +39,7 @@ public class UserDetail extends HttpServlet {
         avgStart = sum/reviewList.size();
         request.setAttribute("avgStart",avgStart);
         request.setAttribute("cate", cate);
+        request.setAttribute("trademark", trademark);
         request.setAttribute("reviewList", reviewList);
         request.setAttribute("listProduct", listProduct);
         request.setAttribute("product", product);

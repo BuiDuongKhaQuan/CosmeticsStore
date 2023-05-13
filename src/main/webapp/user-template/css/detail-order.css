@@ -46,7 +46,7 @@ h6 {
     margin: 0;
     color: #111111;
     font-weight: 400;
-    /*font-family: "Nunito Sans", sans-serif;*/
+    font-family: "Nunito Sans", sans-serif;
 }
 
 h1 {
@@ -4227,13 +4227,11 @@ button:hover {
     background-image: repeating-linear-gradient(45deg, #6fa6d6, #6fa6d6 33px, transparent 0, transparent 41px, #f18d9b 0, #f18d9b 74px, transparent 0, transparent 82px);
 }
 
-.align-items-center, .mb-02 a, .mb-01 a {
-    font-size: 1.25em;
-    color: green;
+.align-items-center, .mb-02 a {
+    font-size: 1.3em;
+    color: green
 }
-.mb-02 a, .mb-01 a {
-    text-transform: uppercase
-}
+
 .status-text {
     padding: 15px 20px;
     border: 1px solid #00000017;
@@ -4255,7 +4253,7 @@ button:hover {
 }
 
 .flex-wrap {
-    font-size: 1.15em;
+    font-size: 1.3em;
 }
 
 .flex-wrap-1 {
@@ -4276,9 +4274,7 @@ button:hover {
     border-right: 1px solid #3F3F3F;
     padding: 10px 24px 0 0;
 }
-.list-address h6{
-    text-transform: none;
-}
+
 .list-status {
     flex: 2
 }
@@ -4318,8 +4314,6 @@ button:hover {
     width: 100%;
     color: rgba(0, 0, 0, .54);
     font-size: 14px;
-    margin-left: 30px;
-
 }
 
 .card-status {
@@ -4386,6 +4380,6 @@ button:hover {
     border-radius: 0;
 }
 .fa-light{
-    font-size: 1.5em;
+    font-size: 1.18em;
     color: #111111;
 }
