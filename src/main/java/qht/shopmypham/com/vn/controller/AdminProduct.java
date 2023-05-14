@@ -36,10 +36,10 @@ public class AdminProduct extends HttpServlet {
             if (acc.powerAccount().getProductManage() == 1) {
                 idA = acc.getId();
                 if (command.equals("dashboard")) {
-                    List<Product> unsold = ProductService.unsoldProduct();
-                    List<WareHouse> wareHouseList = ProductService.warehouseProduct();
-                    List<Product> inventoryProduct = ProductService.inventoryProduct();
-                    List<WareHouse> soldout = ProductService.soldout();
+                    List<Product> unsold = WareHouseService.unsoldProduct();
+                    List<WareHouse> wareHouseList = WareHouseService.warehouseProduct();
+                    List<Product> inventoryProduct = WareHouseService.inventoryProduct();
+                    List<WareHouse> soldout = WareHouseService.soldout();
                     request.setAttribute("soldout", soldout);
                     request.setAttribute("unsold", unsold);
                     request.setAttribute("inventoryProduct", inventoryProduct);
@@ -58,6 +58,18 @@ public class AdminProduct extends HttpServlet {
                     request.setAttribute("productList", productList);
                     request.getRequestDispatcher("/admin-template/ec-product-list.jsp").forward(request, response);
                     content = "Truy cập trang quản lý danh sách sản phẩm";
+                }
+                if (command.equals("listPromotion")) {
+                    List<PromotionProduct> promotionProductList = ProductService.getPromotion();
+                    request.setAttribute("promotionProducts", promotionProductList);
+                    request.getRequestDispatcher("/admin-template/ec-product-promotion.jsp").forward(request, response);
+                    content = "Truy cập trang quản lý danh sách sản phẩm khuyến mãi";
+                }
+                if (command.equals("deletePromotion")) {
+                    String id = request.getParameter("id");
+                    ProductService.deletePromotion(id);
+                    response.sendRedirect("admin-product?command=listPromotion");
+                    content = "Xóa sản phẩm khuyến mãi" + id;
                 }
                 if (command.equals("edit")) {
                     String idP = request.getParameter("IdP");
@@ -125,6 +137,7 @@ public class AdminProduct extends HttpServlet {
                     content = "Chỉnh sửa danh mục sản phẩm" + IdC;
                 }
                 if (command.equals("add")) {
+                    request.setAttribute("trademarks", trademarks);
                     request.setAttribute("listCategories", listCategories);
                     request.setAttribute("img", "assets/images/sm/img.png");
                     request.getRequestDispatcher("/admin-template/ec-product-add.jsp").forward(request, response);
@@ -182,7 +195,6 @@ public class AdminProduct extends HttpServlet {
                 String idP = request.getParameter("idP");
                 String name = request.getParameter("name");
                 String price = request.getParameter("price");
-                String quantity = request.getParameter("quantity");
                 String description = request.getParameter("description");
                 String trademark = request.getParameter("trademark");
                 String idC = request.getParameter("idC");
@@ -210,7 +222,7 @@ public class AdminProduct extends HttpServlet {
                         }
                     }
 
-                    ProductService.editProductById(name, trademark, description, idC, price, quantity, idP);
+                    ProductService.editProductById(name, trademark, description, idC, price, idP);
                     session.removeAttribute("imgs");
                     action=2;
                     level=2;
@@ -219,7 +231,7 @@ public class AdminProduct extends HttpServlet {
                 }
                 if (command.equals("add")) {
                     int id = ProductService.getAllProduct().get(ProductService.getAllProduct().size() - 1).getIdP() + 1;
-                    ProductService.addProduct(String.valueOf(id), name, trademark, description, idC, price, quantity);
+                    ProductService.addProduct(String.valueOf(id), name, trademark, description, idC, price);
                     Map<String, String> mapImg = (Map<String, String>) request.getSession().getAttribute("imgs");
                     for (Map.Entry<String, String> entry : mapImg.entrySet()) {
                         ProductService.addImageByIdP(String.valueOf(id), entry.getKey());

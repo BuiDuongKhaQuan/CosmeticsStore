@@ -203,7 +203,10 @@
                                     </div>
                                 </div>
                                 <%}%>
-
+                                <%
+                                    List<Categories> categoriesList = (List<Categories>) request.getAttribute("listCategories");
+                                    List<Trademark> trademarks = (List<Trademark>) request.getAttribute("trademarks");
+                                %>
                                 <div class="col-xl-9 col-lg-8 col-md-12">
                                     <input value="<%=product.getIdP()%>" type="hidden" name="IdP" id="IdP">
                                     <label for="product_name">Tên sản phẩm</label>
@@ -217,39 +220,6 @@
                                             <div class="form-group">
                                                 <input type="text" id="product_price" class="form-control"
                                                        value="<%=product.getPrice()%>">
-                                            </div>
-                                        </div>
-                                        <%--                                        <div class="col-sm-6">--%>
-                                        <%--                                            <label for="product_quantity">Số lượng trong kho</label>--%>
-                                        <%--                                            <div class="form-group">--%>
-                                        <%--                                                <input type="number" id="product_quantity"--%>
-                                        <%--                                                       value="<%=product.getQuantity()%>" class="form-control"--%>
-                                        <%--                                                       placeholder="Nhập số lượng sản phẩm">--%>
-                                        <%--                                            </div>--%>
-                                        <%--                                        </div>--%>
-                                    </div>
-                                    <%
-                                        List<Categories> categoriesList = (List<Categories>) request.getAttribute("listCategories");
-                                        List<Trademark> trademarks = (List<Trademark>) request.getAttribute("trademarks");
-                                    %>
-                                    <div class="row clearfix">
-                                        <div class="col-sm-6">
-                                            <label for="product_category">Phân loại sản phẩm</label>
-                                            <div class="form-group">
-                                                <select id="product_category"
-                                                        class="form-control show-tick ms select2"
-                                                        data-placeholder="Select">
-                                                    <%
-                                                        for (Categories category : categoriesList) {
-                                                            String selected = "";
-                                                            if (category.getIdC() == product.getIdC()) {
-                                                                selected = "selected";
-                                                            }
-                                                    %>
-                                                    <option value="<%=category.getIdC()%>" <%=selected%>><%=category.getNameC()%>
-                                                    </option>
-                                                    <%}%>
-                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -271,6 +241,29 @@
                                                 </select>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="row clearfix">
+                                        <div class="col-sm-6">
+                                            <label for="product_category">Phân loại sản phẩm</label>
+                                            <div class="form-group">
+                                                <select id="product_category"
+                                                        class="form-control show-tick ms select2"
+                                                        data-placeholder="Select">
+                                                    <%
+                                                        for (Categories category : categoriesList) {
+                                                            String selected = "";
+                                                            if (category.getIdC() == product.getIdC()) {
+                                                                selected = "selected";
+                                                            }
+                                                    %>
+                                                    <option value="<%=category.getIdC()%>" <%=selected%>><%=category.getNameC()%>
+                                                    </option>
+                                                    <%}%>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <div class="row clearfix">
                                         <div class="col-sm-6">
@@ -507,25 +500,23 @@
     function saveProduct(idP) {
         var product_name = document.getElementById("product_name").value;
         var product_price = document.getElementById("product_price").value;
-        var product_quantity = document.getElementById("product_quantity").value;
         var product_category = document.getElementById("product_category").value;
         var product_description = document.getElementById("product_description").value;
         var product_trademark = document.getElementById("product_trademark").value;
-        if (product_name.trim() === '' && product_price.trim() === '' && product_quantity.trim() === '' && product_category.trim() === ''
-            && product_description.trim() === '' && product_trademark.trim() === '') {
-            alert("Vui lòng nhập đủ thông tin!");
+        if (product_name.trim() === '' || product_price.trim() === '' || product_category.trim() === ''
+            || product_description.trim() === '' || product_trademark.trim() === '') {
+            showAlert("Vui lòng nhập đầy đủ thông tin");
         } else {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "admin-product", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    alert("Sản phẩm đã được cập nhật thành công.");
+                    showNotification("Sản phẩm đã được cập nhật thành công");
                 }
             };
             xhr.send("name=" + encodeURIComponent(product_name)
                 + "&price=" + encodeURIComponent(product_price)
-                + "&quantity=" + encodeURIComponent(product_quantity)
                 + "&description=" + encodeURIComponent(product_description)
                 + "&idC=" + encodeURIComponent(product_category)
                 + "&trademark=" + encodeURIComponent(product_trademark)
@@ -538,6 +529,45 @@
         }
     }
 
+    const notification = document.getElementById("notification");
+    const alert = document.getElementById("alert");
+    var box = document.getElementById('promotion-show');
+    var box1 = document.getElementById('new-show');
+
+    function showNotification(txt) {
+        notification.innerHTML = txt;
+        notification.style.display = "block";
+        setTimeout(function () {
+            notification.style.display = "none";
+        }, 2000);
+    }
+
+    function showNotificationBox(txt) {
+        notification.innerHTML = txt;
+        notification.style.display = "block";
+        box.style.display = 'none';
+        setTimeout(function () {
+            notification.style.display = "none";
+        }, 2000);
+    }
+
+    function showNotificationBox1(txt) {
+        notification.innerHTML = txt;
+        notification.style.display = "block";
+        box1.style.display = 'none';
+        setTimeout(function () {
+            notification.style.display = "none";
+        }, 2000);
+    }
+
+    function showAlert(txt) {
+        alert.innerHTML = txt;
+        alert.style.display = "block";
+        setTimeout(function () {
+            alert.style.display = "none";
+        }, 2000);
+    }
+
     function promotionProduct(idP) {
         var date1 = document.getElementById("date1").value;
         var date2 = document.getElementById("date2").value;
@@ -548,7 +578,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Cập nhật khuyến mãi thành công.");
+                showNotificationBox("Cập nhật khuyến mãi thành công");
             }
         };
         xhr.send("idP=" + idP
@@ -566,7 +596,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Cập nhật sản phẩm mới thành công.");
+                showNotificationBox1("Cập nhật sản phẩm mới thành công");
             }
         };
         xhr.send("idP=" + idP

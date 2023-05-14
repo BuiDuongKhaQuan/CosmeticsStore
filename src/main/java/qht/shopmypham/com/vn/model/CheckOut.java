@@ -138,4 +138,23 @@ public class CheckOut implements Serializable {
     public void setNote(String note) {
         this.note = note;
     }
+
+    @Override
+    public String toString() {
+        return "CheckOut{" +
+                "idCk=" + idCk +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", idVoucher='" + idVoucher + '\'' +
+                ", idPm=" + idPm +
+                ", idA=" + idA +
+                ", idStatus=" + idStatus +
+                ", idAdmin=" + idAdmin +
+                ", orderDate='" + orderDate + '\'' +
+                ", confirmDate='" + confirmDate + '\'' +
+                ", receivedDate='" + receivedDate + '\'' +
+                ", name='" + name + '\'' +
+                ", note='" + note + '\'' +
+                '}';
+    }
 }

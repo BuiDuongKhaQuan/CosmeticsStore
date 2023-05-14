@@ -135,9 +135,8 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/plugins/dropzone/dropzone.js"></script> <!-- Dropzone Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/summernote/dist/summernote.js"></script>
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
@@ -156,10 +155,7 @@
         xhr.open('POST', 'UploadImgBlog', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log('File uploaded successfully.');
                 window.location.href = "admin-blog?command=edit&IdBl=<%=blog.getIdBl()%>";
-            } else {
-                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -171,15 +167,15 @@
         var blog_content = document.getElementById("blog_content").value;
         var blog_link = document.getElementById("blog_link").value;
         var IdBl = document.getElementById("IdBl").value;
-        if (blog_topic.trim() === '' && blog_img.trim() === '' && blog_content.trim() === '' && blog_link.trim() === '') {
-            alert("Vui lòng nhập đủ thông tin!");
+        if (blog_topic.trim() === '' || blog_img.trim() === '' || blog_content.trim() === '' || blog_link.trim() === '') {
+            showAlert('Vui lòng nhập đầy đủ thông tin!');
         } else {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "admin-blog", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    alert("Bài viết đã được cập nhật thành công.");
+                    showNotification('Cập nhật bài viết thành công');
                 }
             };
             xhr.send("topic=" + encodeURIComponent(blog_topic)
@@ -189,18 +185,6 @@
                 + "&IdBl=" + encodeURIComponent(IdBl)
                 + "&command=edit");
         }
-    }
-
-    function show() {
-        var box = document.getElementById('show');
-        box.style.display = 'flex';
-    }
-
-    function closeNew() {
-
-        var box = document.getElementById('show');
-        box.style.display = 'none';
-
     }
 </script><!-- Custom Js -->
 </body>

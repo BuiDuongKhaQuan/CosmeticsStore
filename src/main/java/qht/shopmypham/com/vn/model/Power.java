@@ -101,4 +101,20 @@ public class Power implements Serializable {
     public void setSliderManage(int sliderManage) {
         this.sliderManage = sliderManage;
     }
+
+    @Override
+    public String toString() {
+        return "Power{" +
+                "id=" + id +
+                ", idA=" + idA +
+                ", orderManage=" + orderManage +
+                ", generalManage=" + generalManage +
+                ", productManage=" + productManage +
+                ", accountManage=" + accountManage +
+                ", blogManage=" + blogManage +
+                ", homeManage=" + homeManage +
+                ", voucherManage=" + voucherManage +
+                ", sliderManage=" + sliderManage +
+                '}';
+    }
 }

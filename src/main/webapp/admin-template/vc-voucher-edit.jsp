@@ -1,7 +1,3 @@
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="qht.shopmypham.com.vn.model.Trademark" %>
 <%@ page import="qht.shopmypham.com.vn.model.Voucher" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -131,6 +127,7 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
 
@@ -145,7 +142,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Chỉnh sửa thành công")
+                showNotification("Chỉnh sửa voucher thành công");
             }
         };
         xhr.send("name=" + encodeURIComponent(name)

@@ -149,6 +149,7 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     $('.dropify').dropify();
@@ -178,14 +179,13 @@
         var imgC = document.getElementById("imgC").value;
         var xhr = new XMLHttpRequest();
         if (nameC.trim() === '' && imgC.trim() === '') {
-            alert("Vui lòng nhập đủ thông tin!");
+            showAlert('Vui lòng nhập đầy đủ thông tin');
         } else {
             xhr.open("POST", "admin-product", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    alert("Sản phẩm đã được thêm thành công.");
-                    window.location.href = "admin-product?command=category";
+                    showNotification('Danh mục đã được chỉnh sửa thành công');
                 }
             };
             xhr.send("nameC=" + encodeURIComponent(nameC)
@@ -195,17 +195,6 @@
         }
     }
 
-    function show() {
-        var box = document.getElementById('show');
-        box.style.display = 'flex';
-    }
-
-    function closeNew() {
-
-        var box = document.getElementById('show');
-        box.style.display = 'none';
-
-    }
 </script><!-- Custom Js -->
 </body>
 

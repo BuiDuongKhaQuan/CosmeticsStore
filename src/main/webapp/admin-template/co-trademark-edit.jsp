@@ -195,6 +195,7 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     $('.dropify').dropify();
@@ -210,26 +211,11 @@
         xhr.open('POST', 'UploadLogoTrademark', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log('File uploaded successfully.');
                 window.location.href = "admin-general?command=editTrademark&idT=<%=trademark.getId()%>";
-            } else {
-                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
     });
-
-    function show() {
-        var box = document.getElementById('show');
-        box.style.display = 'flex';
-    }
-
-    function closeNew() {
-
-        var box = document.getElementById('show');
-        box.style.display = 'none';
-
-    }
 
     function edit(idT) {
         var name = document.getElementById("name").value;
@@ -237,12 +223,13 @@
         var logo = document.getElementById("logo").value;
         var phone = document.getElementById("phone").value;
         var status = document.getElementById("status").value;
+
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "admin-general", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("chỉnh sửa thành công")
+                showNotification('Chỉnh sửa thương hiệu thành công');
             }
         };
         xhr.send("name=" + encodeURIComponent(name)

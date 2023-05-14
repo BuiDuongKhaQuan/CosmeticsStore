@@ -254,7 +254,7 @@
                                                                    src="user-template/img/icon/heart.png"
                                                                    alt=""><span>Yêu thích</span></a></li>
                             <%} else {%>
-                            <li><a href="javascript:void(0);"><img onclick="inform(<%=pro.getIdP()%>)"
+                            <li><a href="javascript:void(0);"><img onclick="inform()"
                                                                    src="user-template/img/icon/heart.png"
                                                                    alt=""><span>Yêu thích</span></a></li>
                             <%}%>
@@ -456,6 +456,7 @@
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
 <script src="user-template/js/product.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 </body>
 

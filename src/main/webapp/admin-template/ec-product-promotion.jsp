@@ -2,6 +2,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="qht.shopmypham.com.vn.model.Selling" %>
+<%@ page import="qht.shopmypham.com.vn.model.PromotionProduct" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -35,11 +40,11 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Danh sách sản phẩm</h2>
+                    <h2>Chọn sản phẩm ưu đãi</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
-                        <li class="breadcrumb-item">Quản lí sản phẩm</li>
-                        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+                        <li class="breadcrumb-item">Quản lí trang chủ</li>
+                        <li class="breadcrumb-item active">Chọn sản phẩm làm sản phẩm ưu đãi</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -59,34 +64,67 @@
                                 <thead>
                                 <tr>
                                     <th>Hình ảnh</th>
-                                    <th style="width: 30%">Tên sản phẩm</th>
+                                    <th>Tên sản phẩm</th>
                                     <th data-breakpoints="xs">Giá</th>
-                                    <th data-breakpoints="xs md">Trang thái kho</th>
-                                    <th data-breakpoints="sm xs md">Hành động</th>
+                                    <th data-breakpoints="xs md">Trang thái</th>
+                                    <th data-breakpoints="sm xs md"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <% List<Product> productList = (List<Product>) request.getAttribute("productList");
-                                    for (Product product : productList) {
+                                <% List<PromotionProduct> list = (List<PromotionProduct>) request.getAttribute("promotionProducts");
+                                    String pattern = "hh:mm:ss a dd/MM/yyyy";
+                                    SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+                                    String status = "";
+                                    for (PromotionProduct p : list) {
+                                        Date date1 = formatter.parse(p.getStartDay());
+                                        Date date2 = formatter.parse(p.getEndDay());
+                                        Date dateNow1 = formatter.parse(DateUtil.getDateNow());
+                                        if (dateNow1.after(date1) && dateNow1.before(date2)) {
+                                            status = "Đang khuyến mãi";
+                                        } else {
+                                            status = "Hết khuyến mãi";
+                                        }
+                                        Product product = ProductService.getProductById(p.getIdP());
                                         List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
                                 %>
-                                <tr>
+                                <tr onclick="show<%=p.getId()%>()">
                                     <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
                                     </td>
                                     <td><h5><%=product.getName()%>
                                     </h5>
                                     </td>
                                     <td><%=product.getPrice()%>đ</td>
-                                    <td><span class="col-green">In Stock</span></td>
+                                    <td><span class="col-green"><%=status%></span></td>
                                     <td>
-                                        <a href="admin-product?command=edit&IdP=<%=product.getIdP()%>"
+                                        <a href="admin-product?command=deletePromotion&id=<%=p.getId()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
-                                                class="zmdi zmdi-edit"></i></a>
-                                        <a href="admin-product?command=delete&IdP=<%=product.getIdP()%>"
-                                           class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>
                                 </tr>
+                                <div id="show<%=p.getId()%>" class="promotion">
+                                    <div class="promotion-box">
+                                        <label class="title">Chi tiết
+                                            mãi</label>
+                                        <i class="zmdi zmdi-close icon-close"
+                                           onclick="close<%=p.getId()%>()"></i>
+                                        <div class="promotion-content">
+                                            <div class="label-text">
+                                                <label>Ngày bắt đầu khuyến mãi</label>
+                                            </div>
+                                            <div class="form-group-date">
+                                                <%=p.getStartDay()%>
+                                            </div>
+                                        </div>
+                                        <div class="promotion-content">
+                                            <div class="label-text">
+                                                <label>Ngày kết thúc khuyến mãi</label>
+                                            </div>
+                                            <div class="form-group-date">
+                                                <%=p.getEndDay()%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <%}%>
                                 </tbody>
                             </table>
@@ -100,11 +138,27 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/bundles/footable.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/js/pages/tables/footable.js"></script><!-- Custom Js -->
+<script>
+    <%for (PromotionProduct p:list){%>
+
+
+    function show<%=p.getId()%>() {
+        var box = document.getElementById('show<%=p.getId()%>');
+        box.style.display = 'flex';
+    }
+
+    function close<%=p.getId()%>() {
+        var box = document.getElementById('show<%=p.getId()%>');
+        box.style.display = 'none';
+    }
+
+    <%}%>
+</script>
+
 
 </body>
 

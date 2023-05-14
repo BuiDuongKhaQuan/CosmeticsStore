@@ -109,7 +109,7 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script>
     <% int a = 0;
@@ -133,8 +133,9 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Cập nhật thông tin thành công.");
-                window.location.href = "AdminHomeAll?command=cate";
+                showNotification("Cập nhật thông tin danh mục thành công");
+                closeNew<%=c.getIdC()%>();
+
             }
         };
         xhr.send("idC<%=a%>=" + idC<%=c.getIdC()%>

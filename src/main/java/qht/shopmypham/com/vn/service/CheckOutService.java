@@ -2,6 +2,7 @@ package qht.shopmypham.com.vn.service;
 
 import qht.shopmypham.com.vn.db.JDBiConnector;
 import qht.shopmypham.com.vn.model.CheckOut;
+import qht.shopmypham.com.vn.model.ListProductByCheckOut;
 import qht.shopmypham.com.vn.model.Product;
 
 import java.util.List;
@@ -141,8 +142,48 @@ public class CheckOutService {
         );
 
     }
+    public static List<ListProductByCheckOut> getCancelAll() {
 
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * from listproductbycheckout l join checkout c on l.idCk = c.idCk WHERE idStatus =5 ")
+                    .mapToBean(ListProductByCheckOut.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+    public static void updateStatusCancel(String idCk) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("update checkout set idStatus=? where idCk = ?")
+                        .bind(0, "4")
+                        .bind(1, idCk)
+                        .execute()
+        );
+    }
+    public static List<CheckOut> getAllCheckOutByYear() {
+
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("select * from checkout WHERE  orderDate like '%2023'").mapToBean(CheckOut.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+    // tổng số đơn hàng tháng
+    public static List<CheckOut> getAllCheckOutByMonth() {
+
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("select * from checkout WHERE  orderDate like '%4/2023'").mapToBean(CheckOut.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+    // ds don hàng hủy
+    public static List<CheckOut> getCancel() {
+
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * from checkout  WHERE idStatus =5 ")
+                    .mapToBean(CheckOut.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
     public static void main(String[] args) {
+        System.out.println(getCancel());
     }
 }
 

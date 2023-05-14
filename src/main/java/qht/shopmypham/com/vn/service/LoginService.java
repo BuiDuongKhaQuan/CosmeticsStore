@@ -65,11 +65,18 @@ public class LoginService {
         if (listAccount.size() == 0) return null;
         return listAccount.get(0);
     }
-    public static void signUp(String user, String pass, String email) {
+    public static void signUp(String user, String pass, String email, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("INSERT INTO account(user,pass,email,status,orderManage,generalManage,productManage,accountManage,blogManage,homeManage)" +
-                                "VALUES (?,?,?,1,0,0,0,0,0,0)")
+                h.createUpdate("INSERT INTO account(user,pass,email,status)" +
+                                "VALUES (?,?,?,1)")
                         .bind(0, user).bind(1, pass).bind(2,email)
+                        .execute()
+        );
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("INSERT INTO power(idA,orderManage,generalManage,productManage," +
+                                "accountManage,blogManage,homeManage,voucherManage,sliderManage)" +
+                                "VALUES (?,0,0,0,0,0,0,0,0)")
+                        .bind(0, idA)
                         .execute()
         );
     }

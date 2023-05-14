@@ -45,6 +45,14 @@ public class AdminOrder extends HttpServlet {
             if (acc.powerAccount().getOrderManage() == 1) {
                 idA = acc.getId();
                 if (command.equals("dashboard")) {
+                    List<CheckOut>listOrderYear = CheckOutService.getAllCheckOutByYear();
+                    List<CheckOut>listOrderMonth = CheckOutService.getAllCheckOutByMonth();
+                    List<CheckOut>listCancel = CheckOutService.getCancel();
+                    request.setAttribute("listCancel",listCancel);
+                    request.setAttribute("checkOuts",checkOuts);
+                    request.setAttribute("listOrderMonth",listOrderMonth);
+                    request.setAttribute("listOrderYear",listOrderYear);
+
                     request.getRequestDispatcher("/admin-template/order-dashboard.jsp").forward(request, response);
                     content = "Truy cập trang quản lý tổng quan đơn hàng";
                 }

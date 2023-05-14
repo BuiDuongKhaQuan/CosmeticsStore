@@ -154,6 +154,23 @@ public class Account implements Serializable {
                 && AccountService.getPowerAccount(this.getId()).getVoucherManage() == 1;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", user='" + user + '\'' +
+                ", pass='" + pass + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", img='" + img + '\'' +
+                ", idFacebook='" + idFacebook + '\'' +
+                ", idGoogle='" + idGoogle + '\'' +
+                ", status=" + status +
+                '}';
+    }
+
     public List<ListProductByCart> getProductCart() {
         return CartService.getAllByIda(this.getId());
     }

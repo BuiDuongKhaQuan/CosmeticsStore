@@ -68,12 +68,15 @@
                                         <div class="product details">
                                             <label for="fullName">Tên đầy đủ</label>
                                             <div class="form-group">
-                                                <input type="text" id="fullName" class="form-control"
+                                                <input type="text" id="fullName"
+                                                       placeholder="Nhập tên đầy đủ của bạn"
+                                                       class="form-control"
                                                        name="fullName" value="<%=ac.getFullName()%>">
                                             </div>
                                             <label for="email">Email</label>
                                             <div class="form-group">
                                                 <input type="email" id="email" class="form-control"
+                                                       placeholder="Nhập E-mail của bạn"
                                                        name="email" value="<%=ac.getEmail()%>">
                                             </div>
                                             <label for="phone">Số điện thoại</label>
@@ -106,7 +109,7 @@
                                                        onclick="closeNew()"></i>
                                                     <div style="display: flex; justify-content: center;
                                                                                 flex-direction: column;
-                                                                                padding: 50px 60px 100px 100px;">
+                                                                                padding: 20px 60px 20px 100px;">
                                                         <div class="row clearfix">
                                                             <div class="col-sm-6">
                                                                 <input type="checkbox" id="blogMana"
@@ -164,23 +167,26 @@
                                                                     <%if(ac.powerAccount().getSliderManage()==1){%>
                                                                        checked<%}%>
                                                                 >
-                                                                <label for="genaralMana"> Quản lí slider</label><br>
+                                                                <label for="sliderlMana"> Quản lí slider</label><br>
                                                             </div>
                                                             <div class="col-sm-6">
                                                                 <input type="checkbox" id="voucherMana"
                                                                     <%if(ac.powerAccount().getVoucherManage()==1){%>
                                                                        checked<%}%>
                                                                 >
-                                                                <label for="homeMana"> Quản lí mã giảm
+                                                                <label for="voucherMana"> Quản lí mã giảm
                                                                     giá</label><br>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row clearfix">
+                                                        <button type="submit" onclick="saveAuthur(<%=ac.getId()%>)"
+                                                                class="btn btn-raised btn-primary btn-round waves-effect">
+                                                            Lưu
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div id="alert-div">
-
                                         </div>
                                     </div>
                                 </div>
@@ -196,7 +202,7 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 
 <%----%>
@@ -212,7 +218,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showAlert();
+                showNotification('Lưu thông tin thành công');
             }
         };
         xhr.send("fullName=" + encodeURIComponent(fullName)
@@ -229,7 +235,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showAlert();
+                showNotification('Đặt lại mật khẩu thành công');
             }
         };
         xhr.send();
@@ -242,6 +248,8 @@
         var blogMana = document.getElementById("blogMana").checked;
         var genaralMana = document.getElementById("genaralMana").checked;
         var homeMana = document.getElementById("homeMana").checked;
+        var sliderlMana = document.getElementById("sliderlMana").checked;
+        var voucherMana = document.getElementById("voucherMana").checked;
 
 
         var xhr = new XMLHttpRequest();
@@ -249,7 +257,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showAlert();
+                showNotificationBox("Đã cập nhật quyền thành công");
             }
         };
         xhr.send("acountMana=" + encodeURIComponent(acountMana)
@@ -258,39 +266,12 @@
             + "&blogMana=" + encodeURIComponent(blogMana)
             + "&genaralMana=" + encodeURIComponent(genaralMana)
             + "&homeMana=" + encodeURIComponent(homeMana)
+            + "&sliderlMana=" + encodeURIComponent(sliderlMana)
+            + "&voucherMana=" + encodeURIComponent(voucherMana)
             + "&idA=" + idA
             + "&command=editAuthur");
     }
 
-    function showAlert() {
-        const alertMessage1 = "This is an alert message!";
-        const alertDiv = document.getElementById("alert-div");
-        const closeButton = document.createElement("button");
-
-        alertDiv.innerHTML = `Chỉnh sửa thành công`;
-        closeButton.innerText = "OK";
-        closeButton.addEventListener("click", hideAlert);
-        alertDiv.appendChild(closeButton);
-
-        alertDiv.style.display = "block";
-    }
-
-    function hideAlert() {
-        const alertDiv = document.getElementById("alert-div");
-        alertDiv.style.display = "none";
-    }
-
-    function show() {
-        var box = document.getElementById('show');
-        box.style.display = 'flex';
-    }
-
-    function closeNew() {
-
-        var box = document.getElementById('show');
-        box.style.display = 'none';
-
-    }
 </script><!-- Custom Js -->
 
 </body>

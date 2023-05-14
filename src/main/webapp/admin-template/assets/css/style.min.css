@@ -21000,7 +21000,7 @@ section.content {
     background-color: rgba(0, 0, 0, 0.5);
     display: none;
     position: fixed;
-    z-index: 9999;
+    z-index: 999;
     top: 0;
     left: 0;
     width: 100%;
@@ -21119,4 +21119,19 @@ section.content {
 }
 #pagination li {
     display: inline-block;
+}
+#notification, #alert{
+    position: fixed;
+    top: 6%;
+    right: 12%;
+    background-color: #36f4ee;
+    color: #000000;
+    padding: 10px;
+    z-index: 99999;
+    animation-name: slideDown;
+    animation-duration: 1s;
+}
+#alert{
+    background-color: red;
+    color: #0b0b0b;
 }
