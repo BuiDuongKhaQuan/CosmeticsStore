@@ -163,6 +163,7 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <%----%>
 <script>
@@ -178,7 +179,7 @@
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 editT2();
                 editT3();
-                alert("Cập nhật thông tin thành công.");
+                showNotification("Nội dung đã được cập nhật thành công");
             }
         };
         xhr.send("id=1"

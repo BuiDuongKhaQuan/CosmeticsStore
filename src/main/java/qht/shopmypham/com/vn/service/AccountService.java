@@ -97,7 +97,7 @@ public class AccountService {
     }
     public static void updateacountMana(String acountMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set accountManage=? where id= ?")
+                h.createUpdate("update power set accountManage=? where id= ?")
                         .bind(0, acountMana)
                         .bind(1, idA)
                         .execute()
@@ -105,7 +105,7 @@ public class AccountService {
     }
     public static void updateproductMana( String productMana,String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set productManage=? where id= ?")
+                h.createUpdate("update power set productManage=? where id= ?")
                         .bind(0, productMana)
                         .bind(1, idA)
                         .execute()
@@ -113,7 +113,7 @@ public class AccountService {
     }
     public static void updateorderMana(String orderMana,String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set orderManage=? where id= ?")
+                h.createUpdate("update power set orderManage=? where id= ?")
                         .bind(0, orderMana)
                         .bind(1, idA)
                         .execute()
@@ -121,7 +121,7 @@ public class AccountService {
     }
     public static void updateblogMana(String blogMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set blogManage=? where id= ?")
+                h.createUpdate("update power set blogManage =? where id= ?")
                         .bind(0, blogMana)
                         .bind(1, idA)
                         .execute()
@@ -129,15 +129,31 @@ public class AccountService {
     }
     public static void updatehomeMana( String homeMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set homeManage=? where id= ?")
+                h.createUpdate("update power set homeManage =? where id= ?")
                         .bind(0, homeMana)
+                        .bind(1, idA)
+                        .execute()
+        );
+    }
+    public static void updateSliderMana( String sliderMana, String idA) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("update power set sliderManage =? where id= ?")
+                        .bind(0, sliderMana)
+                        .bind(1, idA)
+                        .execute()
+        );
+    }
+    public static void updateVoucherMana( String voucherMana, String idA) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("update power set voucherManage =? where id= ?")
+                        .bind(0, voucherMana)
                         .bind(1, idA)
                         .execute()
         );
     }
     public static void updategenaralMana( String genaralMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set generalManage=? where id= ?")
+                h.createUpdate("update power set generalManage=? where id= ?")
                         .bind(0, genaralMana)
                         .bind(1, idA)
                         .execute()
@@ -145,7 +161,7 @@ public class AccountService {
     }
     public static void editAcountOrderManageById(String orderManage, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update account set orderManage = ? where id= ?")
+                h.createUpdate("update power set orderManage = ? where id= ?")
                         .bind(0, orderManage)
                         .bind(1, idA)
                         .execute()
@@ -249,6 +265,16 @@ public class AccountService {
         );
 
     }
+    public static List<Power> getAllPower() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT p.* FROM power p join account a on p.idA= a.id ")
+
+                        .mapToBean(Power.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+
+    }
     public static Power getPowerAccount(int idA) {
         List<Power> powerList = JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT power.* FROM `power` INNER JOIN `account` ON power.idA = account.id WHERE account.id = ?")
@@ -260,8 +286,42 @@ public class AccountService {
         if (powerList.size() == 0) return null;
         return powerList.get(0);
     }
-
+    public static List<Account> getAccountCheckout() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("select a.*  FROM account  a  JOIN checkout c on a.id = c.idA GROUP BY a.id ")
+                        .mapToBean(Account.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
+    public static List<Account> getAccountNoCheckout() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("select a.*  FROM account a  WHERE a.id not  in (SELECT idA FROM checkout) ")
+                        .mapToBean(Account.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
+    // tổng số tk truy cập web trong thansg
+    public static List<Account> getAccoutAccessByMonth() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT a.* from log l join account a on l.`idA` = a.id WHERE (l.time) like '%4/2023' GROUP BY l.`idA`")
+                        .mapToBean(Account.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
+    // khách hàng thân thiết
+    public static List<Account> getAccoutLoyal () {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("select a.*, count(c.idA) as 'solanmua',c.idCk FROM account a join  checkout c on c.idA = a.id  JOIN listproductbycheckout l on c.idCk = l.idCk WHERE c.orderDate like '%2023' GROUP BY c.idA HAVING count(c.idA) >7")
+                        .mapToBean(Account.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
 
     public static void main(String[] args) {
+        System.out.println(getAllPower());
     }
 }

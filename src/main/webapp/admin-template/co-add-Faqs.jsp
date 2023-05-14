@@ -102,7 +102,7 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 
 <script>
@@ -111,18 +111,22 @@
         var answer = document.getElementById("answer").value;
         var status = document.getElementById("status").value;
         var xhr = new XMLHttpRequest();
+        if (question.trim() === '' || answer.trim() === '' || status.trim() === '') {
+            showAlert('Vui lòng nhập đầy đủ thông tin!');
+        } else {
         xhr.open("POST", "admin-general", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Thêm thành công.");
+                showNotification('Thêm câu hỏi thành công');
+                window.location.href = "admin-general?command=question";
             }
         };
         xhr.send("question=" + encodeURIComponent(question)
             + "&answer=" + encodeURIComponent(answer)
             + "&status=" + encodeURIComponent(status)
             + "&command=add");
-    }
+    }}
 </script><!-- Custom Js -->
 </body>
 

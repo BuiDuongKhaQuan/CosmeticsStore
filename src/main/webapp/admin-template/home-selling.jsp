@@ -146,9 +146,8 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/bundles/footable.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/js/pages/tables/footable.js"></script><!-- Custom Js -->
 <script>
@@ -158,8 +157,8 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Chọn sản phẩm thành công, vui lòng cập nhật câu giới thiệu!");
-                show();
+                showNotification("Chọn sản phẩm thành công, vui lòng cập nhật câu giới thiệu!");
+                showQ();
             }
         };
         xhr.send("idP=" + idP
@@ -177,8 +176,8 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Cập nhật câu quảng cáo thành công!");
-                closePromotion()
+                showNotification("Cập nhật câu quảng cáo thành công!");
+                closePromotion();
             }
         };
         xhr.send("text1=" + encodeURIComponent(text1)
@@ -188,7 +187,7 @@
             + "&command=selling");
     }
 
-    function show() {
+    function showQ() {
         var box = document.getElementById('promotion-show');
         box.style.display = 'flex';
     }

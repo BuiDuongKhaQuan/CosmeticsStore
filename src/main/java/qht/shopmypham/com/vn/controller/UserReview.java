@@ -2,6 +2,7 @@ package qht.shopmypham.com.vn.controller;
 
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.AccountService;
+import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.service.ProductService;
 import qht.shopmypham.com.vn.service.ReviewService;
 import qht.shopmypham.com.vn.tools.CountStar;
@@ -25,11 +26,15 @@ public class UserReview extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
-        InetAddress ip = InetAddress.getLocalHost();
-        String ipAddress = ip.getHostAddress();
         String information = request.getParameter("mess");
         String idP = request.getParameter("idP");
         String command = request.getParameter("command");
+        String ipAddress = request.getRemoteAddr();
+        String url = request.getRequestURI();
+        int level = 1;
+        int action = 4;
+        String dateNow = DateUtil.getDateNow();
+        String content = "";
         int idA = 0;
         if (acc != null) idA = acc.getId();
         if (command.equals("add")) {
@@ -40,8 +45,14 @@ public class UserReview extends HttpServlet {
             Review review = ReviewService.getReviewByIdA(String.valueOf(acc.getId()));
             if (review == null) {
                 ReviewService.addReview(idP, String.valueOf(acc.getId()), information, rating, DateUtil.getDateNow());
+                level=2;
+                action=6;
+                content="Thêm đánh giá cho sản phẩm "+idP;
             } else {
                 ReviewService.updateReview(idP, information, rating, DateUtil.getDateNow(), String.valueOf(review.getIdR()));
+                level=2;
+                action=6;
+                content="Chỉnh sửa đánh giá cho sản phẩm "+idP;
             }
 
         }
@@ -142,7 +153,7 @@ public class UserReview extends HttpServlet {
                     "                                                              class=\"form-control\" required></textarea>\n" +
                     "                                                </div>\n" + button + "</div>");
         }
-
+        LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
     }
 
 

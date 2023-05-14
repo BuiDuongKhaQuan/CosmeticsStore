@@ -202,6 +202,7 @@
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
 <script src="user-template/js/product.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     function getVoucher() {

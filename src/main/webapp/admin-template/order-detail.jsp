@@ -77,9 +77,8 @@
                             </div>
                             <div class="small mb-0 mb-02">
                                 <i class="fa-light fa-car-side"></i>
-                                <a
-                                        style="color: green">
-                                </a>
+                                <p style="color: green"><%=status%>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -200,7 +199,7 @@
                                                class="table table-hover product_item_list c_table theme-color mb-0">
                                             <thead>
                                             <tr>
-                                                <th  style="width: 10%;">Hình ảnh</th>
+                                                <th style="width: 10%;">Hình ảnh</th>
                                                 <th data-breakpoints="xs">Tên sản phẩm</th>
                                                 <th data-breakpoints="xs md">Số lượng</th>
                                                 <th data-breakpoints="xs md">Đơn giá</th>
@@ -221,8 +220,11 @@
                                                 </td>
                                                 <td><span class="col-green"><%=productByCheckOut.getQuantity()%></span>
                                                 </td>
-                                                <td><span class="col-green"><%= nf.format(product.getPrice())%> </span></td>
-                                                <td><span class="col-green"><%= nf.format(product.getPrice() * productByCheckOut.getQuantity())%> </span></td>
+                                                <td><span class="col-green"><%= nf.format(product.getPrice())%> </span>
+                                                </td>
+                                                <td><span
+                                                        class="col-green"><%= nf.format(product.getPrice() * productByCheckOut.getQuantity())%> </span>
+                                                </td>
                                             </tr>
                                             <%}%>
                                             </tbody>
@@ -279,7 +281,6 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 
 

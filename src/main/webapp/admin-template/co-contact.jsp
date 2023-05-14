@@ -145,7 +145,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Trả lời thành công.");
+                showNotification('Đã gửi câu trả lời');
                 closeNew<%=contact.getIdCt()%>();
             }
         };
@@ -155,13 +155,19 @@
     }
 
     <%}%>
+    const notification = document.getElementById("notification");
+    function showNotification(txt) {
+        notification.innerHTML = txt;
+        notification.style.display = "block";
+        setTimeout(function () {
+            notification.style.display = "none";
+        }, 2000);
+    }
 </script>
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/bundles/footable.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/js/pages/tables/footable.js"></script><!-- Custom Js -->
 

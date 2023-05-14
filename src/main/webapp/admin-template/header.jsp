@@ -4,7 +4,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.LogService" %>
 <%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
+<%@ page import="java.util.Collections" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!-- Custom Js -->
 <!-- Page Loader -->
 <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
       type="text/css"/>
@@ -16,6 +18,8 @@
         <p>Vui lòng chờ...</p>
     </div>
 </div>
+<div id="notification" class="hidden-noti" style="display: none"></div>
+<div id="alert" class="hidden-noti" style="display: none"></div>
 
 <!-- Overlay For Sidebars -->
 <div class="overlay"></div>
@@ -94,7 +98,8 @@
                 <li class="header">Thông báo</li>
                 <li class="body">
                     <ul class="menu list-unstyled">
-                        <% List<Log> logList = LogService.getAllLog();
+                        <% List<Log> logList = LogService.getAllLogAction();
+                            Collections.reverse(logList);
                             for (Log log : logList) {%>
                         <li>
                             <a href="javascript:void(0);">
@@ -269,6 +274,7 @@
                     <li><a href="admin-product?command=products">Sản phẩm</a></li>
                     <li><a href="admin-product?command=list">Danh sách sản phẩm</a></li>
                     <li><a href="admin-product?command=add">Thêm sản phẩm</a></li>
+                    <li><a href="admin-product?command=listPromotion">Danh sách sản phẩm khuyến mãi</a></li>
                     <li><a href="admin-product?command=category">Danh mục sản phẩm</a></li>
                     <li><a href="admin-product?command=addC">Thêm danh mục</a></li>
 
@@ -311,6 +317,14 @@
                     <li><a href="AdminHomeAll?command=selling">Ưu đãi trong tuần</a></li>
                     <li><a href="AdminHomeAll?command=imageTrend">Ảnh Cosmetics Trends</a></li>
                     <li><a href="AdminHomeAll?command=information">Thông tin cửa hàng</a></li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0);" class="menu-toggle"><i
+                    class="zmdi zmdi-assignment"></i><span>Quản
+                        lí kho hàng</span></a>
+                <ul class="ml-menu">
+                    <li><a href="AdminWareHouse?command=list">Danh sách hàng</a></li>
+                    <li><a href="AdminWareHouse?command=add">Thêm hàng</a></li>
                 </ul>
             </li>
 

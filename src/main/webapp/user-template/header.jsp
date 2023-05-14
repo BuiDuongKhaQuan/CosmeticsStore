@@ -26,8 +26,8 @@
         formSearch.style.display = "block";
     }
 </script>
-<div id="notification" class="hidden-noti">Đã thêm vào giỏ hàng thành công</div>
-<div id="notification1" class="hidden-noti">Đã thêm vào danh sách sản phẩm yêu thích</div>
+<div id="notification" class="hidden-noti" style="display: none"></div>
+<div id="alert" class="hidden-noti" style="display: none"></div>
 
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
