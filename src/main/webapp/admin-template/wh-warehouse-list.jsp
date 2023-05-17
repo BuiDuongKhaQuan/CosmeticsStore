@@ -1,9 +1,7 @@
-﻿<%@ page import="qht.shopmypham.com.vn.model.Product" %>
-<%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.Image" %>
+﻿<%@ page import="java.util.List" %>
+<%@ page import="qht.shopmypham.com.vn.model.WareHouse" %>
+<%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
-<%@ page import="qht.shopmypham.com.vn.service.WareHouseService" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -40,8 +38,8 @@
                     <h2>Danh sách sản phẩm</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
-                        <li class="breadcrumb-item">Quản lí sản phẩm</li>
-                        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+                        <li class="breadcrumb-item">Quản lí kho hàng</li>
+                        <li class="breadcrumb-item active">Danh sách hàng</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -60,42 +58,31 @@
                             <table id="table_id" class="table table-hover product_item_list c_table theme-color mb-0">
                                 <thead>
                                 <tr>
-                                    <th>Hình ảnh</th>
                                     <th style="width: 30%">Tên sản phẩm</th>
-                                    <th data-breakpoints="xs">Giá</th>
-                                    <th data-breakpoints="xs md">Trang thái kho</th>
-                                    <th data-breakpoints="sm xs md">Hành động</th>
+                                    <th data-breakpoints="xs">Ngày nhập</th>
+                                    <th data-breakpoints="xs md">Số lượng</th>
+                                    <th data-breakpoints="sm xs md">Số lượng nhập</th>
+                                    <th data-breakpoints="sm xs md"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <% List<Product> productList = (List<Product>) request.getAttribute("productList");
-                                    for (Product product : productList) {
-                                        String status = "";
-                                        int quantity = WareHouseService.getWareHouse(String.valueOf(product.getIdP())).getQuantity();
-                                        if (quantity > 0){
-                                            status = "<span class=\"col-green\">Còn hàng</span>";
-                                        }
-                                        if (quantity > 0 && quantity <= 15){
-                                            status = "<span class=\"col-yellow\">Sắp hết</span>";
-                                        }
-                                        if (quantity == 0 ){
-                                            status = "<span class=\"col-red\">Hết hàng</span>";
-                                        }
-                                        List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
+                                <% List<WareHouse> wareHouseList = (List<WareHouse>) request.getAttribute("wareHouseList");
+                                    for (WareHouse wareHouse : wareHouseList) {
+                                        Product product = ProductService.getProductById(wareHouse.getIdP());
                                 %>
                                 <tr>
-                                    <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
+                                    <td><h5 class="nowrap_text"><%=product.getName()%></h5>
                                     </td>
-                                    <td><h5 class="nowrap_text"><%=product.getName()%>
+                                    <td><h5><%=wareHouse.getDateInput()%>
                                     </h5>
                                     </td>
-                                    <td><%=Format.formatPrice(product.getPrice())%>đ</td>
-                                    <td><%=status%></td>
+                                    <td><%=wareHouse.getQuantity()%></td>
+                                    <td><%=wareHouse.getQuantityInput()%></td>
                                     <td>
-                                        <a href="admin-product?command=edit&IdP=<%=product.getIdP()%>"
+                                        <a href="AdminWareHouse?command=edit&idP=<%=wareHouse.getIdP()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
                                                 class="zmdi zmdi-edit"></i></a>
-                                        <a href="admin-product?command=delete&IdP=<%=product.getIdP()%>"
+                                        <a href="AdminWareHouse?command=delete&idP=<%=wareHouse.getIdP()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>

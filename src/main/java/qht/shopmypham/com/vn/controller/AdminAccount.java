@@ -20,6 +20,8 @@ public class AdminAccount extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
+        request.setAttribute("account1","toggled");
+
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;
@@ -35,40 +37,44 @@ public class AdminAccount extends HttpServlet {
                 List<Account> accountList = AccountService.getAllAccount();
                 String command = request.getParameter("command");
                 if (command.equals("dashboard")) {
+                    List<Account> accountList1 = AccountService.getAccountCheckout();
+                    List<Account> accountsNocheckout = AccountService.getAccountNoCheckout();
+                    List<Account> accesMonth = AccountService.getAccoutAccessByMonth();
+                    List<Account> listAccoutLoyal = AccountService.getAccoutLoyal();
+                    request.setAttribute("listAccoutLoyal", listAccoutLoyal);
+                    request.setAttribute("accesMonth", accesMonth);
+                    request.setAttribute("accountsNocheckout", accountsNocheckout);
+                    request.setAttribute("accountList", accountList);
+                    request.setAttribute("accountList1", accountList1);
                     request.getRequestDispatcher("/admin-template/ac-dashboard.jsp").forward(request, response);
-                    content="Truy cập trnag tổng quan tài khoản";
+                    content = "Truy cập trnag tổng quan tài khoản";
                 }
                 if (command.equals("profile")) {
                     Account account = acc.getAccount();
                     request.setAttribute("acc", account);
                     request.getRequestDispatcher("/admin-template/profile.jsp").forward(request, response);
-                    content="Truy cập trang cá nhân";
+                    content = "Truy cập trang cá nhân";
                 }
                 if (command.equals("list")) {
                     request.setAttribute("accountList", accountList);
                     request.getRequestDispatcher("/admin-template/ac-account-list.jsp").forward(request, response);
-                    content="Truy cập trang danh sách tài khoản";
+                    content = "Truy cập trang danh sách tài khoản";
                 }
                 if (command.equals("edit")) {
                     String IdA = request.getParameter("IdA");
                     Account account = AccountService.getAccountById(Integer.parseInt(IdA));
                     request.setAttribute("account", account);
                     request.getRequestDispatcher("/admin-template/ac-account-edit.jsp").forward(request, response);
-                    content="Truy cập trang chỉnh sửa tài khoản";
+                    content = "Truy cập trang chỉnh sửa tài khoản";
                 }
-                if (command.equals("editAuthur")){
-                    String idA1 = request.getParameter("id");
-                    Account account = AccountService.getAccountById(Integer.parseInt(idA1));
-                    request.setAttribute("account", account);
-                    request.getRequestDispatcher("/admin-template/ac-acount-authorization.jsp").forward(request,response);
-                }
+
                 if (command.equals("delete")) {
                     String IdA = request.getParameter("IdA");
                     AccountService.deleteAccountById(IdA);
                     response.sendRedirect("admin-account?command=list1");
                     action = 3;
                     level = 4;
-                    content="Xóa tài khoản "+ idA;
+                    content = "Xóa tài khoản " + idA;
                 }
                 LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
             } else {
@@ -101,15 +107,15 @@ public class AdminAccount extends HttpServlet {
                     String address = request.getParameter("address");
                     AccountService.updateImgAcountByIdAll(fullName, email, phone, address, idA1);
                     action = 2;
-                    level= 2;
-                    content ="Chỉnh sửa tài khoản " + idA1;
+                    level = 2;
+                    content = "Chỉnh sửa tài khoản " + idA1;
                 }
                 if (command.equals("resetPass")) {
                     String idA1 = request.getParameter("id");
                     AccountService.resetPasswordAccountById(idA1, Encode.enCodeMD5("000000"));
                     action = 2;
                     level = 3;
-                    content ="Đặt lại mật khẩu tài khoản " + idA1;
+                    content = "Đặt lại mật khẩu tài khoản " + idA1;
                 }
                 if (command.equals("editAuthur")) {
                     String idA1 = request.getParameter("idA");
@@ -119,71 +125,95 @@ public class AdminAccount extends HttpServlet {
                     String blogMana = request.getParameter("blogMana");
                     String genaralMana = request.getParameter("genaralMana");
                     String homeMana = request.getParameter("homeMana");
+                    String sliderlMana = request.getParameter("sliderlMana");
+                    String voucherMana = request.getParameter("voucherMana");
                     if (acountMana.equals("true")) {
                         AccountService.updateacountMana("1", idA1);
-                        action=2;
-                        level=3;
-                        content ="Cấp quyền quản lý tài khoản";
+                        action = 2;
+                        level = 3;
+                        content = "Cấp quyền quản lý tài khoản";
                     } else {
                         AccountService.updateacountMana("0", idA1);
-                        action=2;
-                        level=3;
-                        content="Thu hồi quyền quản lý tài khoản";
+                        action = 2;
+                        level = 3;
+                        content = "Thu hồi quyền quản lý tài khoản";
                     }
                     if (productMana.equals("true")) {
                         AccountService.updateproductMana("1", idA1);
-                        action=2;
-                        level=3;
-                        content="Cấp quyền quản lý sản phẩm";
+                        action = 2;
+                        level = 3;
+                        content = "Cấp quyền quản lý sản phẩm";
                     } else {
                         AccountService.updateproductMana("0", idA1);
-                        action=2;
-                        level=3;
-                        content="Thu hồi quyền quản lý sản phẩm";
+                        action = 2;
+                        level = 3;
+                        content = "Thu hồi quyền quản lý sản phẩm";
                     }
                     if (orderMana.equals("true")) {
                         AccountService.updateorderMana("1", idA1);
-                        action=2;
-                        level=3;
-                        content="Cấp quyền quản lý đơn hàng";
+                        action = 2;
+                        level = 3;
+                        content = "Cấp quyền quản lý đơn hàng";
                     } else {
                         AccountService.updateorderMana("0", idA1);
-                        action=2;
-                        level=3;
-                        content="Thu hồi quyền quản lý đơn hàng";
+                        action = 2;
+                        level = 3;
+                        content = "Thu hồi quyền quản lý đơn hàng";
                     }
                     if (blogMana.equals("true")) {
                         AccountService.updateblogMana("1", idA1);
-                        action=2;
-                        level=3;
-                        content="Cấp quyền quản lí blog";
+                        action = 2;
+                        level = 3;
+                        content = "Cấp quyền quản lí blog";
                     } else {
                         AccountService.updateblogMana("0", idA1);
-                        action=2;
-                        level=3;
-                        content="Thu hồi quyền quản lí blog";
+                        action = 2;
+                        level = 3;
+                        content = "Thu hồi quyền quản lí blog";
                     }
                     if (genaralMana.equals("true")) {
                         AccountService.updategenaralMana("1", idA1);
-                        action=2;
-                        level=3;
-                        content="Cấp quyền quản lí chung";
+                        action = 2;
+                        level = 3;
+                        content = "Cấp quyền quản lí chung";
                     } else {
                         AccountService.updategenaralMana("0", idA1);
-                        action=2;
-                        level=3;
-                        content="Thu hồi quyền quản lí chung";
+                        action = 2;
+                        level = 3;
+                        content = "Thu hồi quyền quản lí chung";
                     }
                     if (homeMana.equals("true")) {
                         AccountService.updatehomeMana("1", idA1);
-                        action=2;
-                        level=3;
-                        content="Cấp quyền quản lí trang chủ";
+                        action = 2;
+                        level = 3;
+                        content = "Cấp quyền quản lí trang chủ";
                     } else {
                         AccountService.updatehomeMana("0", idA1);
-                        action=2;
-                        level=3;
-                        content="Thu hồi quyền quản lí trang chủ";
+                        action = 2;
+                        level = 3;
+                        content = "Thu hồi quyền quản lí trang chủ";
+                    }
+                    if (sliderlMana.equals("true")) {
+                        AccountService.updateSliderMana("1", idA1);
+                        action = 2;
+                        level = 3;
+                        content = "Cấp quyền quản lí slider";
+                    } else {
+                        AccountService.updateSliderMana("0", idA1);
+                        action = 2;
+                        level = 3;
+                        content = "Thu hồi quyền quản lí slider";
+                    }
+                    if (voucherMana.equals("true")) {
+                        AccountService.updateVoucherMana("1", idA1);
+                        action = 2;
+                        level = 3;
+                        content = "Cấp quyền quản lí voucher";
+                    } else {
+                        AccountService.updateVoucherMana("0", idA1);
+                        action = 2;
+                        level = 3;
+                        content = "Thu hồi quyền quản lí voucher";
                     }
 
                 }

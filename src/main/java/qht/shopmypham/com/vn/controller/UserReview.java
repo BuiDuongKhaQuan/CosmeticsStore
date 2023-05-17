@@ -46,12 +46,12 @@ public class UserReview extends HttpServlet {
             if (review == null) {
                 ReviewService.addReview(idP, String.valueOf(acc.getId()), information, rating, DateUtil.getDateNow());
                 level=2;
-                action=1;
+                action=6;
                 content="Thêm đánh giá cho sản phẩm "+idP;
             } else {
                 ReviewService.updateReview(idP, information, rating, DateUtil.getDateNow(), String.valueOf(review.getIdR()));
                 level=2;
-                action=2;
+                action=6;
                 content="Chỉnh sửa đánh giá cho sản phẩm "+idP;
             }
 

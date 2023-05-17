@@ -1,6 +1,10 @@
 package qht.shopmypham.com.vn.model;
 
+import qht.shopmypham.com.vn.service.ProductCheckoutService;
+import qht.shopmypham.com.vn.service.ProductService;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -83,5 +87,18 @@ public class Product implements Serializable {
                 ", information='" + information + '\'' +
                 ", idC=" + idC +
                 '}';
+    }
+    public static  long revenue(){
+        long revenues =0;
+        ArrayList<Product> pr = (ArrayList<Product>) ProductService.getAllProduct();
+        ArrayList<ListProductByCheckOut> ls = (ArrayList<ListProductByCheckOut>) ProductCheckoutService.getProductProductCheckout();
+        for(int i =0; i< pr.size();i++){
+            for(int j=0; j< ls.size();j++){
+                if(pr.get(i).getIdP()==ls.get(j).getIdP()){
+                    revenues += pr.get(i).getPrice()*ls.get(j).getQuantity();
+                }
+            }
+        }
+        return revenues;
     }
 }

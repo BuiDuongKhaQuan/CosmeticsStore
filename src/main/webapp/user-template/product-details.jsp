@@ -335,7 +335,7 @@
                                                                    src="user-template/img/icon/heart.png"
                                                                    alt=""><span>Yêu thích</span></a></li>
                             <%} else {%>
-                            <li><a href="javascript:void(0);"><img onclick="inform(<%=p1.getIdP()%>)"
+                            <li><a href="javascript:void(0);"><img onclick="inform()"
                                                                    src="user-template/img/icon/heart.png"
                                                                    alt=""><span>Yêu thích</span></a></li>
                             <%}%>
@@ -442,24 +442,6 @@
         return txt;
     }
 
-    // function send(idP) {
-    //     var mess = document.getElementById("message").value;
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.open("POST", "review", true);
-    //     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    //     xhr.onreadystatechange = function () {
-    //         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-    //             loadSizeComment();
-    //             loadComment();
-    //             load();
-    //         }
-    //     };
-    //     xhr.send("mess=" + encodeURIComponent(mess)
-    //         + "&command=add"
-    //         + "&start=" + encodeURIComponent(getStart())
-    //         + "&idP=" + idP);
-    // }
-
     function loadComment() {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "review", true);
@@ -515,6 +497,7 @@
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
 <script src="user-template/js/product.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 </body>
 

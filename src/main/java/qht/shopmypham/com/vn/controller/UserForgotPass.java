@@ -70,9 +70,9 @@ public class UserForgotPass extends HttpServlet {
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write("active");
-                    content ="Quên mật khẩu";
-                    level=3;
-                    action=3;
+                    content ="Quên mật khẩu gửi otp thành công";
+                    level= 3;
+                    action= 9;
                 }
             } catch (Exception e) {
                 request.setAttribute("mess", e.getMessage());
@@ -87,15 +87,9 @@ public class UserForgotPass extends HttpServlet {
             List<OTP> otpList = OTPService.getOTPByIdA(idA1);
             Collections.reverse(otpList);
             String otp = String.valueOf(otpList.get(0).getOTP());
-            level=4;
-            action=3;
-
             if (count < 3) {
                 if (reOtp.equals(otp) && pass.equals(repass)) {
                     AccountService.changePasswordAccountById(idA1, Encode.enCodeMD5(pass));
-                    content = "Đổi mật khẩu thành công";
-                    level=3;
-                    action=3;
                     request.getSession().removeAttribute("account_forgot_pass");
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
@@ -104,13 +98,12 @@ public class UserForgotPass extends HttpServlet {
                             "                    <i class=\"fa-light fa-check\"></i>\n" +
                             "                    <label>Đổi mật khẩu thành công! <a href=\"login.jsp\">Đăng nhập</a></label>\n" +
                             "                </div>");
+                    content ="Cập nhật mật khẩu mới thành công "+ idA1;
+                    level= 3;
+                    action= 2;
                 }
                 if (!reOtp.equals(otp)) {
                     count++;
-                    content = "sai otp";
-                    level=4;
-                    action=3;
-                    System.out.println(count);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(" <div class=\"remember-forgot\"\n" +
@@ -118,12 +111,12 @@ public class UserForgotPass extends HttpServlet {
                             "                    <i class=\"bx bx-error-circle\"></i>\n" +
                             "                    <label>Sai mã OTP, nhập sai quá 3 lần tài khoản của bạn sẽ bị khóa!</label>\n" +
                             "                </div>");
+                    content = "Sai otp";
+                    level=3;
+                    action=3;
                 }
             } else {
                 AccountService.lockUpAcountById("0", String.valueOf(acc.getId()));
-                content = "tài khoản đã bị khóa "+idA1;
-                level=3;
-                action=3;
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(" <div class=\"remember-forgot\"\n" +
@@ -131,6 +124,9 @@ public class UserForgotPass extends HttpServlet {
                         "                    <i class=\"bx bx-error-circle\" style=\"margin-right: 2px;\"></i>\n" +
                         "                    <label>Tài khoản của bạn đã bị khóa! <a href=\"contact\">Trợ giúp</a></label>\n" +
                         "                </div>");
+                content = "tài khoản đã bị khóa "+idA1;
+                level=3;
+                action=3;
             }
         }
         LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);

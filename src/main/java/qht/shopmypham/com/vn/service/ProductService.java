@@ -174,32 +174,30 @@ public class ProductService {
     }
 
     public static void addProduct(String idP, String name, String trademark, String information,
-                                  String idC, String price, String quantity) {
+                                  String idC, String price) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("insert into product(idP,name,trademark,price,information, idC,quantity) values (?,?,?,?,?,?,?)")
+                h.createUpdate("insert into product(idP,name,idT,price,information, idC) values (?,?,?,?,?,?)")
                         .bind(0, idP)
                         .bind(1, name)
                         .bind(2, trademark)
                         .bind(3, price)
                         .bind(4, information)
                         .bind(5, idC)
-                        .bind(6, quantity)
                         .execute()
         );
     }
 
 
     public static void editProductById(String name, String trademark, String information,
-                                       String idC, String price, String quantity, String idP) {
+                                       String idC, String price, String idP) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update product set name = ?, idT= ?,price= ?,information= ?, idC= ?,quantity= ? where idP = ?")
+                h.createUpdate("update product set name = ?, idT= ?,price= ?,information= ?, idC= ? where idP = ?")
                         .bind(0, name)
                         .bind(1, trademark)
                         .bind(2, price)
                         .bind(3, information)
                         .bind(4, idC)
-                        .bind(5, quantity)
-                        .bind(6, idP)
+                        .bind(5, idP)
                         .execute()
         );
     }
@@ -213,14 +211,6 @@ public class ProductService {
         );
     }
 
-//    public static void upQuantityProductById(String quantity, String idP) {
-//        JDBiConnector.me().withHandle(h ->
-//                h.createUpdate("update product set quantity= ? where idP = ?")
-//                        .bind(0, quantity)
-//                        .bind(1, idP)
-//                        .execute()
-//        );
-//    }
 public static void upQuantityProductById(String quantity, String idP) {
     JDBiConnector.me().withHandle(h ->
             h.createUpdate("update warehouse set quantity= ? where idP = ?")
@@ -328,7 +318,13 @@ public static void upQuantityProductById(String quantity, String idP) {
                         .collect(Collectors.toList())
         );
     }
-
+    public static void deletePromotion(String id) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("delete from promotionproduct where id = ?")
+                        .bind(0, id)
+                        .execute()
+        );
+    }
     public static PromotionProduct getPricePromotion(String idP) {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT promotionproduct.price FROM `promotionproduct` INNER JOIN `product` ON promotionproduct.idP = product.idP WHERE product.idP = ?")
@@ -349,7 +345,15 @@ public static void upQuantityProductById(String quantity, String idP) {
                         .execute()
         );
     }
+    public static List<NewProduct> getAllNewProduct() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM newproduct")
+                        .mapToBean(NewProduct.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
 
+    }
     public static List<NewProduct> getNewProduct(int quantity) {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM newproduct ORDER BY id DESC LIMIT ?")
@@ -360,7 +364,13 @@ public static void upQuantityProductById(String quantity, String idP) {
         );
 
     }
-
+    public static void deleteNew(String id) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("delete from newproduct where id = ?")
+                        .bind(0, id)
+                        .execute()
+        );
+    }
     // lấy tt các các hình ảnh fs
 
     public static Selling getSelling() {
@@ -405,7 +415,7 @@ public static void upQuantityProductById(String quantity, String idP) {
     public static List<Product> getProductByIdT(String idT) {
 
         return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("SELECT * FROM product where trademark = ?")
+            return handle.createQuery("SELECT * FROM product where idT = ?")
                     .bind(0, idT)
                     .mapToBean(Product.class)
                     .stream().collect(Collectors.toList());
@@ -469,41 +479,8 @@ public static void upQuantityProductById(String quantity, String idP) {
                     .stream().collect(Collectors.toList());
         });
     }
-    public static List<Product> inventoryProduct() {
-        return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("SELECT p.* from product p join warehouse w on p.idP = w.idP WHERE p.idP  not in (SELECT idP from listproductbycheckout)AND `status`=1 and year(w.dateinput)=2022 ")
-                    .mapToBean(Product.class)
-                    .stream().collect(Collectors.toList());
-        });
-    }
-
-    // sp cần nhập kho
-    public static List<WareHouse> warehouseProduct() {
-        return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("SELECT * from warehouse where quantity < 100")
-                    .mapToBean(WareHouse.class)
-                    .stream().collect(Collectors.toList());
-        });
-    }
-    // sp không dc bán  trong năm
-    public static List<Product> unsoldProduct() {
-        return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("SELECT p.* FROM product p join  warehouse w on p.idP=w.idP where status ='0' and YEAR(w.dateInput)=2022")
-                    .mapToBean(Product.class)
-                    .stream().collect(Collectors.toList());
-        });
-    }
-    public static List<WareHouse> soldout() {
-        return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("SELECT w.* FROM `warehouse` w inner join product p on w.idP = p.idP inner join listproductbycheckout l on p.idP = l.idP \n" +
-                            "GROUP BY w.idP \n" +
-                            "HAVING sum(l.quantity)>= sum(w.quantityInput)/200")
-                    .mapToBean(WareHouse.class)
-                    .stream().collect(Collectors.toList());
-        });
-    }
 
     public static void main(String[] args) {
-        System.out.println(inventoryProduct());
+        System.out.println();
     }
 }

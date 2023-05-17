@@ -159,6 +159,7 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     $('.dropify').dropify();
@@ -174,10 +175,7 @@
         xhr.open('POST', 'UploadImgTrends', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log('File uploaded successfully.');
                 window.location.href = "AdminHomeAll?command=editTrend&idT=<%=imageTrend.getId()%>";
-            } else {
-                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -192,7 +190,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Cập nhật thành công.");
+                showNotification("Cập nhật hình ảnh thành công.");
                 window.location.href = "AdminHomeAll?command=imageTrend";
             }
         };
@@ -203,17 +201,6 @@
     }
 
 
-    function show() {
-        var box = document.getElementById('show');
-        box.style.display = 'flex';
-    }
-
-    function closeNew() {
-
-        var box = document.getElementById('show');
-        box.style.display = 'none';
-
-    }
 </script><!-- Custom Js -->
 </body>
 

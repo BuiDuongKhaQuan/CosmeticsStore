@@ -1,6 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
 import qht.shopmypham.com.vn.model.Account;
+import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.service.LoginService;
 import qht.shopmypham.com.vn.tools.DateUtil;
@@ -11,6 +12,8 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Collections;
+import java.util.List;
 
 @WebServlet(name = "SignupController", value = "/signup")
 public class UserSignUp extends HttpServlet {
@@ -39,23 +42,25 @@ public class UserSignUp extends HttpServlet {
         } else {
             if (acc == null) {
                 if (password.equals(re_password)) {
-                    los.signUp(user, Encode.enCodeMD5(password),email);
-                    request.setAttribute("success","Đăng ký thành công, mời bạn đăng nhập!");
-                    request.getRequestDispatcher("/login.jsp").forward(request,response);
-                    action=5;
-                    level=2;
-                    content="Đăng kí tài khoản thành công";
+                    List<Account> accountList = AccountService.getAllAccount();
+                    Collections.reverse(accountList);
+                    los.signUp(user, Encode.enCodeMD5(password), email, accountList.get(0).getId() + 1);
+                    request.setAttribute("success", "Đăng ký thành công, mời bạn đăng nhập!");
+                    request.getRequestDispatcher("/login.jsp").forward(request, response);
+                    action = 5;
+                    level = 2;
+                    content = "Đăng kí tài khoản thành công";
                 } else {
                     response.sendRedirect("/login.jsp");
-                    action=5;
-                    level=2;
-                    content="Đăng kí tài khoản thất bại";
+                    action = 5;
+                    level = 2;
+                    content = "Đăng kí tài khoản thất bại";
                 }
             } else {
                 response.sendRedirect("/login.jsp");
-                action=5;
-                level=2;
-                content="Đăng kí tài khoản thất bại";
+                action = 5;
+                level = 2;
+                content = "Đăng kí tài khoản thất bại";
             }
         }
         LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);

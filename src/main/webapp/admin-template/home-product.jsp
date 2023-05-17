@@ -97,7 +97,7 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script>
     function save() {
@@ -111,7 +111,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Cập nhật số lượng thành công.");
+                showNotification("Cập nhật số lượng thành công");
             }
         };
         xhr.send("quantityProS=" + encodeURIComponent(quantityProS)

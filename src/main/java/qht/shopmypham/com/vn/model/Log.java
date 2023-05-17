@@ -110,6 +110,12 @@ public class Log implements Serializable {
         if (this.getAction() == 8) {
             action = "hủy đơn";
         }
+        if (this.getAction() == 9) {
+            action = "quên mật khẩu";
+        }
+        if (this.getAction() == 10) {
+            action = "đăng nhập";
+        }
         return action;
     }
 

@@ -2,8 +2,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="qht.shopmypham.com.vn.model.PromotionProduct" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="qht.shopmypham.com.vn.model.NewProduct" %>
 <%@ page import="qht.shopmypham.com.vn.tools.Format" %>
-<%@ page import="qht.shopmypham.com.vn.service.WareHouseService" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -37,11 +41,11 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Danh sách sản phẩm</h2>
+                    <h2>Danh sách sản phẩm mới </h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
                         <li class="breadcrumb-item">Quản lí sản phẩm</li>
-                        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+                        <li class="breadcrumb-item active">Danh sách sản phẩm mới</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -61,45 +65,55 @@
                                 <thead>
                                 <tr>
                                     <th>Hình ảnh</th>
-                                    <th style="width: 30%">Tên sản phẩm</th>
+                                    <th>Tên sản phẩm</th>
                                     <th data-breakpoints="xs">Giá</th>
-                                    <th data-breakpoints="xs md">Trang thái kho</th>
-                                    <th data-breakpoints="sm xs md">Hành động</th>
+                                    <th data-breakpoints="xs md">Trang thái</th>
+                                    <th data-breakpoints="sm xs md">Thao tác</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <% List<Product> productList = (List<Product>) request.getAttribute("productList");
-                                    for (Product product : productList) {
-                                        String status = "";
-                                        int quantity = WareHouseService.getWareHouse(String.valueOf(product.getIdP())).getQuantity();
-                                        if (quantity > 0){
-                                            status = "<span class=\"col-green\">Còn hàng</span>";
-                                        }
-                                        if (quantity > 0 && quantity <= 15){
-                                            status = "<span class=\"col-yellow\">Sắp hết</span>";
-                                        }
-                                        if (quantity == 0 ){
-                                            status = "<span class=\"col-red\">Hết hàng</span>";
-                                        }
+                                <% List<NewProduct> list = (List<NewProduct>) request.getAttribute("newProducts");
+                                    String pattern = "hh:mm:ss a dd/MM/yyyy";
+                                    SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+                                    String status = "";
+                                    for (NewProduct p : list) {
+                                        Date date_new = formatter.parse(p.getCountDay());
+                                        Date dateNow1 = formatter.parse(DateUtil.getDateNow());
+                                        if (dateNow1.before(date_new)) {
+                                            status = "<span class=\"col-green\">Trong thời gian</span>";
+                                        } else { status = "<span class=\"col-red\">Hết thời gian</span>"; }
+                                        Product product = ProductService.getProductById(p.getIdP());
                                         List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
                                 %>
-                                <tr>
-                                    <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
+                                <tr >
+                                    <td class="cursor-pointer" onclick="show<%=p.getId()%>()"><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
                                     </td>
-                                    <td><h5 class="nowrap_text"><%=product.getName()%>
+                                    <td class="cursor-pointer"   onclick="show<%=p.getId()%>()"><h5 class="nowrap_text"><%=product.getName()%>
                                     </h5>
                                     </td>
                                     <td><%=Format.formatPrice(product.getPrice())%>đ</td>
                                     <td><%=status%></td>
                                     <td>
-                                        <a href="admin-product?command=edit&IdP=<%=product.getIdP()%>"
+                                        <a style="margin-left: 20px" href="admin-product?command=deleteNew&id=<%=p.getId()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
-                                                class="zmdi zmdi-edit"></i></a>
-                                        <a href="admin-product?command=delete&IdP=<%=product.getIdP()%>"
-                                           class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>
                                 </tr>
+                                <div id="show<%=p.getId()%>" class="promotion">
+                                    <div class="promotion-box">
+                                        <label class="title">Chi tiết sản phẩm mới</label>
+                                        <i class="zmdi zmdi-close icon-close"
+                                           onclick="close<%=p.getId()%>()"></i>
+                                        <div class="promotion-content">
+                                            <div class="label-text">
+                                                <label>Ngày bắt đầu khuyến mãi</label>
+                                            </div>
+                                            <div class="form-group-date">
+                                                <%=p.getCountDay()%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <%}%>
                                 </tbody>
                             </table>
@@ -113,11 +127,27 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
 <script src="admin-template/assets/bundles/footable.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
-
+<script src="admin-template/assets/js/notification.js"></script>
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/js/pages/tables/footable.js"></script><!-- Custom Js -->
+<script>
+    <%for (NewProduct p:list){%>
+
+
+    function show<%=p.getId()%>() {
+        var box = document.getElementById('show<%=p.getId()%>');
+        box.style.display = 'flex';
+    }
+
+    function close<%=p.getId()%>() {
+        var box = document.getElementById('show<%=p.getId()%>');
+        box.style.display = 'none';
+    }
+
+    <%}%>
+</script>
+
 
 </body>
 

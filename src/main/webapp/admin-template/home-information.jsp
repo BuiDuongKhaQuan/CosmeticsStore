@@ -1,14 +1,7 @@
-<%@ page import="qht.shopmypham.com.vn.model.Product" %>
-<%@ page import="qht.shopmypham.com.vn.model.Categories" %>
-<%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.Image" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="qht.shopmypham.com.vn.model.Shop" %>
-<!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
 
 <html class="no-js " lang="en">
 
@@ -26,10 +19,11 @@
     <link rel="stylesheet" href="admin-template/assets/css/style.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/dropify/css/dropify.min.css" type="text/css">
     <style>
-        .form-group label{
+        .form-group label {
             flex: 2;
         }
-        .form-group input{
+
+        .form-group input {
             flex: 10;
         }
     </style>
@@ -114,7 +108,8 @@
                                     <% if (map != null) {%>
                                     <input value="<%=path%>" type="hidden" name="logo_header" id="logo_header">
                                     <%} else {%>
-                                    <input value="<%=shop.getLogo_header()%>" type="hidden" name="logo_header" id="logo_header">
+                                    <input value="<%=shop.getLogo_header()%>" type="hidden" name="logo_header"
+                                           id="logo_header">
                                     <%}%>
                                     <div class="form-group">
                                         <label for="name">TÊN CỬA HÀNG</label>
@@ -131,7 +126,7 @@
                                     <div class="form-group">
                                         <label for="phone">SỐ ĐIỆN THOẠI</label>
                                         <input type="text" id="phone"
-                                               value="<%=shop.getPhone()%>" class="form-control" >
+                                               value="<%=shop.getPhone()%>" class="form-control">
                                     </div>
                                     <hr>
                                     <div class="form-group">
@@ -148,16 +143,16 @@
                                     <hr>
                                     <div class="form-group">
                                         <label for="slogan">CÂU SLOGAN</label>
-                                        <textarea rows="6" class="form-control no-resize"  style="flex: 10"
-                                                   id="slogan"
-                                                   name="contact"><%=shop.getAboutShop()%></textarea>
+                                        <textarea rows="6" class="form-control no-resize" style="flex: 10"
+                                                  id="slogan"
+                                                  name="contact"><%=shop.getAboutShop()%></textarea>
                                     </div>
                                     <hr>
                                     <div class="form-group" style="width: 100%;">
                                         <label for="contact">CÂU LIÊN HỆ</label>
                                         <textarea rows="6" class="form-control no-resize" style="flex: 10"
-                                                   id="contact"
-                                                   name="contact"><%=shop.getTextInHelp()%></textarea>
+                                                  id="contact"
+                                                  name="contact"><%=shop.getTextInHelp()%></textarea>
                                     </div>
 
                                     <button type="submit" onclick="save(<%=shop.getIdS()%>)"
@@ -178,6 +173,7 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <%----%>
 <script>
@@ -195,11 +191,7 @@
         xhr.open('POST', 'UploadLogoHeader', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log('File uploaded successfully.');
-                window.location.href ="AdminHomeAll?command=information";
-
-            } else {
-                console.log('An error occurred while uploading the file.');
+                window.location.href = "AdminHomeAll?command=information";
             }
         };
         xhr.send(formData);
@@ -215,16 +207,16 @@
         var desginer = document.getElementById("desginer").value;
         var logo_header = document.getElementById("logo_header").value;
 
-        if (phone.trim() === '' && address.trim() === '' && slogan.trim() === '' && contact.trim() === ''
-            && email.trim() === '' && name.trim() === '' && desginer.trim() === '') {
-            alert("Vui lòng nhập đủ thông tin!");
+        if (phone.trim() === '' || address.trim() === '' || slogan.trim() === '' || contact.trim() === ''
+            || email.trim() === '' || name.trim() === '' || desginer.trim() === '') {
+            showAlert("Vui lòng nhập đủ thông tin!");
         } else {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "AdminHomeAll", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    alert("Sản phẩm đã được cập nhật thành công.");
+                    showNotification("Thông tin đã được cập nhật thành công.");
                 }
             };
             xhr.send("phone=" + encodeURIComponent(phone)
@@ -239,31 +231,6 @@
                 + "&command=information");
         }
     }
-
-    function show() {
-        var box = document.getElementById('show');
-        box.style.display = 'flex';
-    }
-
-    function closeNew() {
-
-        var box = document.getElementById('show');
-        box.style.display = 'none';
-
-    }
-
-    function show1() {
-        var box = document.getElementById('show1');
-        box.style.display = 'flex';
-    }
-
-    function closeNew1() {
-
-        var box = document.getElementById('show1');
-        box.style.display = 'none';
-
-    }
-
 
 </script><!-- Custom Js -->
 

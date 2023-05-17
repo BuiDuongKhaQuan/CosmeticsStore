@@ -219,7 +219,7 @@
                                                                            src="user-template/img/icon/heart.png"
                                                                            alt=""><span>Yêu thích</span></a></li>
                                     <%} else {%>
-                                    <li><a href="javascript:void(0);"><img onclick="inform(<%=p.getIdP()%>)"
+                                    <li><a href="javascript:void(0);"><img onclick="inform()"
                                                                            src="user-template/img/icon/heart.png"
                                                                            alt=""><span>Yêu thích</span></a></li>
                                     <%}%>
@@ -312,6 +312,8 @@
 <script src="user-template/js/main.js"></script>
 <script src="user-template/js/product.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
+<script>pagination(9, '#product_list #product_item');</script>
 
 </body>
 

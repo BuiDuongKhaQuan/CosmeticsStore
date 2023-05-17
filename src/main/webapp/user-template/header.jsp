@@ -5,6 +5,7 @@
 <%@ page import="qht.shopmypham.com.vn.service.ShopService" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
 <%--
   Created by IntelliJ IDEA.
   User: Admin
@@ -26,8 +27,8 @@
         formSearch.style.display = "block";
     }
 </script>
-<div id="notification" class="hidden-noti">Đã thêm vào giỏ hàng thành công</div>
-<div id="notification1" class="hidden-noti">Đã thêm vào danh sách sản phẩm yêu thích</div>
+<div id="notification" class="hidden-noti" style="display: none"></div>
+<div id="alert" class="hidden-noti" style="display: none"></div>
 
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
@@ -35,16 +36,13 @@
         <div class="offcanvas__links">
             <%if (acc == null) {%>
             <a href="login.jsp">ĐĂNG NHẬP</a>
-            <% } if (acc != null) {
-                if (acc.maxPower() == false) {
-            %>
+            <% }if (acc != null) { if (!acc.mediumPower()) { %>
             <a href="profile?command=profile"> Xin chào <%=acc.getName()%>
             </a>
             <%} else {%>
             <a href="admin-home"> Xin chào
                 ADMIN </a>
-            <% }
-            } %>
+            <% }} %>
             <a href="faqs">FAQs</a>
         </div>
         <div class="offcanvas__top__hover">
@@ -105,17 +103,13 @@
                         <div class="header__top__links">
                             <%if (acc == null) {%>
                             <a href="login.jsp">ĐĂNG NHẬP</a>
-                            <% }if (acc != null) {
-                                if (acc.maxPower() == false) {
-
-                            %>
+                            <% }if (acc != null) { if (!acc.mediumPower()) { %>
                             <a href="profile?command=profile"> Xin chào <%=acc.getName()%>
                             </a>
                             <%} else {%>
                             <a href="admin-home"> Xin chào
                                 ADMIN </a>
-                            <% }
-                            } %>
+                            <% }} %>
                             <a href="faqs">FAQs</a>
                         </div>
                         <div class="header__top__hover">
@@ -152,17 +146,10 @@
                             <li class="<%=activeProduct%>"><a href="product?command=product">Sản phẩm</a></li>
                             <li class="<%=activePage%>"><a href="#">Trang</a>
                                 <ul class="dropdown">
-                                    <%if (acc != null) {%>
                                     <li><a href="auto-load?command=show"> Giỏ hàng</a></li>
                                     <li><a href="product?command=favorite">Sản phẩm yêu thích</a></li>
                                     <li><a href="profile?command=profile">Trang cá nhân</a></li>
                                     <li><a href="voucher">Kho voucher</a></li>
-                                    <%} else {%>
-                                    <li><a href="login.jsp"> Giỏ hàng</a></li>
-                                    <li><a href="login.jsp">Sản phẩm yêu thích</a></li>
-                                    <li><a href="login.jsp">Trang cá nhân</a></li>
-                                    <li><a href="voucher">Kho voucher</a></li>
-                                    <%}%>
                                 </ul>
                             </li>
                             <li class="<%=activeBlog%>"><a href="./blog">Blog</a></li>
@@ -188,14 +175,14 @@
                             List<Product> productList = acc.getFavoriteProduct();
                         %>
                         <a href="product?command=favorite"><i class="fa-light fa-heart"></i>
-                            <span id="favorite-count"><%=productList.size()%></span></a>
+                            <span style="left: 9px; top: -2px" id="favorite-count"><%=productList.size()%></span></a>
                         <a href="auto-load?command=show"><i class="fa-light fa-cart-shopping"></i>
-                            <span id="cart-count" style=""><%=list.size()%></span></a>
+                            <span style="left: 12px; top: -4px" id="cart-count"><%=list.size()%></span></a>
                         <%} else {%>
                         <a href="login.jsp"><i class="fa-light fa-heart"></i>
-                            <span>0</span></a>
+                            <span style="left: 9px; top: -2px">0</span></a>
                         <a href="login.jsp"><i class="fa-light fa-cart-shopping"></i>
-                            <span>0</span></a>
+                            <span style="left: 12px; top: -4px">0</span></a>
                         <%}%>
                     </div>
                 </div>

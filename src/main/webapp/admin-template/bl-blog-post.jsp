@@ -1,4 +1,4 @@
-<%@ page import="java.util.Map" %>
+﻿<%@ page import="java.util.Map" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="admin-template/assets/plugins/summernote/dist/summernote.css"/>
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap-select/css/bootstrap-select.css"/>
     <link rel="stylesheet" href="admin-template/assets/plugins/dropify/css/dropify.min.css" type="text/css">
+
     <!-- Custom Css -->
     <link rel="stylesheet" href="admin-template/assets/css/style.min.css">
 </head>
@@ -31,12 +32,12 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Thêm Slider </h2>
+                    <h2>Đăng bài Blog</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i>Admin</a>
                         </li>
-                        <li class="breadcrumb-item">Quản lí slider</li>
-                        <li class="breadcrumb-item active">Thêm Slider</li>
+                        <li class="breadcrumb-item">Quản lí Blog</li>
+                        <li class="breadcrumb-item active">Đăng bài Blog</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -52,13 +53,15 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="body">
+                            <label>Tiêu đề</label>
                             <div class="form-group">
-                                <input id="slider_topic" type="text" class="form-control" placeholder="Tiêu đề Slider"/>
+                                <input id="blog_topic" type="text" class="form-control" placeholder="Tiêu đè Blog"/>
                             </div>
+                            <labe>Hình ảnh</labe>
+                            </label>
                             <div class="form-group">
-
                                 <%
-                                    Map<String, String> imgBlog = (Map<String, String>) request.getSession().getAttribute("imgSlider");
+                                    Map<String, String> imgBlog = (Map<String, String>) request.getSession().getAttribute("imgBlog");
                                     String img = "";
                                     String path = "";
                                     if (imgBlog != null) {
@@ -66,12 +69,13 @@
                                             img = entry.getKey();
                                             path = entry.getValue();
                                         }
+
                                 %>
                                 <input value="<%=img%>" required type="text" class="form-control"
                                        placeholder="Hình đại đại diện"/>
-                                <input value="<%=path%>" id="slider_img" required type="hidden"/>
+                                <input value="<%=path%>" id="blog_img" required type="hidden"/>
                                 <% } else { %>
-                                <input id="slider_img" type="text" class="form-control" placeholder="Hình Ảnh"/>
+                                <input id="blog_img" type="text" class="form-control" placeholder="Hình đại đại diện"/>
                                 <%}%>
                                 <button class="btn-primary btn" onclick="show()">Tải ảnh lên
                                 </button>
@@ -92,19 +96,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <label for="status">Trạng thái</label>
+                            <label>Link bài viết chính thức</label>
                             <div class="form-group">
-                                <select id="status" class="form-control show-tick ms select2"
-                                        name="status" data-placeholder="Select">
-                                    <option value="0">Ẩn</option>
-                                    <option value="1">Hiển thị</option>
-                                </select>
+                                <input id="blog_link" required type="text" class="form-control"
+                                       placeholder="Link bài viết"/>
                             </div>
                         </div>
                     </div>
                     <div class="card">
                         <div class="body">
-                            <button onclick="addSlider()" type="button" class="btn btn-info waves-effect m-t-20">ĐĂNG
+                            <div class="form-line">
+                             <textarea rows="4" class="form-control no-resize"
+                                       id="blog_content"
+                                       required
+                                       name="description" placeholder="Hãy nhập khái quát nội dung"></textarea>
+                            </div>
+                            <button onclick="addBlog()" type="button" class="btn btn-info waves-effect m-t-20">ĐĂNG
                             </button>
                         </div>
                     </div>
@@ -133,36 +140,42 @@
         const formData = new FormData();
         formData.append('file', fileInput.files[0]);
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'UploadImgSlider', true);
+        xhr.open('POST', 'UploadImgBlog', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
-                window.location.href = "admin-slider?command=add";
+                console.log('File uploaded successfully.');
+                window.location.href = "admin-blog?command=add";
+            } else {
+                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
     });
 
-    function addSlider() {
-        var slider_topic = document.getElementById("slider_topic").value;
-        var slider_img = document.getElementById("slider_img").value;
-        var status = document.getElementById("status").value;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "admin-slider", true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification("Bài đã được đăng thành công");
-                window.location.href = "admin-slider?command=list";
-            }
-        };
-        xhr.send("text=" + encodeURIComponent(slider_topic)
-            + "&img=" + encodeURIComponent(slider_img)
-            + "&status=" + encodeURIComponent(status)
-            + "&command=add");
+    function addBlog() {
+        var blog_topic = document.getElementById("blog_topic").value;
+        var blog_img = document.getElementById("blog_img").value;
+        var blog_content = document.getElementById("blog_content").value;
+        var blog_link = document.getElementById("blog_link").value;
+        if (blog_topic.trim() === '' || blog_img.trim() === '' || blog_content.trim() === '' || blog_link.trim() === '') {
+            showAlert('Vui lòng nhập đầy đủ thông tin!');
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "admin-blog", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    showNotification('Đăng bài viết thành công');
+                    window.location.href = "admin-blog?command=list";
+                }
+            };
+            xhr.send("topic=" + encodeURIComponent(blog_topic)
+                + "&img=" + encodeURIComponent(blog_img)
+                + "&content=" + encodeURIComponent(blog_content)
+                + "&link=" + encodeURIComponent(blog_link)
+                + "&command=add");
+        }
     }
-
-
 </script><!-- Custom Js -->
 </body>
 

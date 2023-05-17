@@ -1,5 +1,6 @@
-<%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.Slider" %>
+﻿<%@ page import="java.util.List" %>
+<%@ page import="qht.shopmypham.com.vn.model.Blog" %>
+<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -22,6 +23,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.4/simplePagination.min.css">
+
 </head>
 
 <body class="theme-blush">
@@ -33,11 +35,11 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Danh sách slider </h2>
+                    <h2>Danh sách Blog</h2>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
-                        <li class="breadcrumb-item">Quản lí slider</li>
-                        <li class="breadcrumb-item active">Danh sách slider</li>
+                        <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i>Admin</a></li>
+                        <li class="breadcrumb-item">Quản lí Blog</li>
+                        <li class="breadcrumb-item active">Danh sách Blog</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -50,28 +52,44 @@
         </div>
         <div class="container">
             <div class="row" id="list">
-                <% List<Slider> sliderList = (List<Slider>) request.getAttribute("sliderList");
-                    for (Slider slider : sliderList) {%>
+                <% List<Blog> blogList = (List<Blog>) request.getAttribute("blogList");
+                    for (Blog blog : blogList) {%>
                 <div class="col-lg-6 col-md-12" id="item">
                     <div class="card">
                         <div class="blogitem mb-5">
                             <div class="blogitem-image">
-                                <a href="blog-details.jsp"><img src="<%=slider.getImg()%>" style="height: 450px"
-                                                                alt="blog image"></a>
+                                <a><img src="<%=blog.getImg()%>" style="height: 450px"
+                                        alt="blog image"></a>
+                                <span class="blogitem-date"><%=blog.getTime()%></span>
+                                <span class="blogitem-date"><%=blog.getTime()%></span>
                             </div>
                             <div class="blogitem-content">
-                                <%  String status = "";
-                                    if (slider.getStatus() == 1) {
-                                        status = "Hiện";
-                                    }else { status = "Ẩn";}
-                                %>
-                                <h5>Trạng thái: <%=status%></h5>
-                                <p><%=slider.getText()%>
-                                </p>
-                                <a href="admin-slider?command=edit&IdSl=<%=slider.getIdSl()%>"
+                                <div class="blogitem-header">
+                                    <div class="blogitem-meta">
+                                        <span><i class="zmdi zmdi-account"></i>Từ <a href="javascript:void(0);">
+                                            <%=AccountService.getAccountById(blog.getIdA()).getFullName()%>
+                                        </a></span>
+                                    </div>
+                                    <div class="blogitem-share">
+                                        <ul class="list-unstyled mb-0">
+                                            <li><a href="javascript:void(0);"><i class="zmdi zmdi-facebook-box"></i></a>
+                                            </li>
+                                            <li><a href="javascript:void(0);"><i class="zmdi zmdi-instagram"></i></a>
+                                            </li>
+                                            <li><a href="javascript:void(0);"><i class="zmdi zmdi-twitter-box"></i></a>
+                                            </li>
+                                            <li><a href="javascript:void(0);"><i class="zmdi zmdi-linkedin-box"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h5><a href="<%=blog.getLinkBlog()%>"><%=blog.getTopic()%>
+                                </a></h5>
+                                <a href="<%=blog.getLinkBlog()%>" class="btn btn-info">Xem thêm</a>
+                                <a href="admin-blog?command=edit&IdBl=<%=blog.getIdBl()%>"
                                    class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
                                         class="zmdi zmdi-edit" style="font-size: 20px;"></i></a>
-                                <a href="admin-slider?command=delete&IdSl=<%=slider.getIdSl()%>"
+                                <a href="admin-blog?command=delete&IdBl=<%=blog.getIdBl()%>"
                                    class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                         class="zmdi zmdi-delete" style="font-size: 20px;"></i></a>
                             </div>

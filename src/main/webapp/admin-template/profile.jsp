@@ -146,6 +146,7 @@
 <script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
     $('.dropify').dropify();
@@ -161,10 +162,7 @@
         xhr.open('POST', 'UploadFileServlet', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log('File uploaded successfully.');
                 window.location.href = "admin-account?command=profile";
-            } else {
-                console.log('An error occurred while uploading the file.');
             }
         };
         xhr.send(formData);
@@ -181,8 +179,7 @@
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                alert("Thông tin tài khoản đã được cập nhật thành công!");
-                window.location.href = "admin-account?command=profile";
+                showNotification("Thông tin tài khoản đã được cập nhật thành công!");
             }
         };
         xhr.send("fullName=" + encodeURIComponent(fullName)
@@ -193,18 +190,6 @@
             + "&command=edit");
     }
 
-
-    function show() {
-        var box = document.getElementById('show');
-        box.style.display = 'flex';
-    }
-
-    function closeNew() {
-
-        var box = document.getElementById('show');
-        box.style.display = 'none';
-
-    }
 </script><!-- Custom Js -->
 </body>
 

@@ -21,6 +21,7 @@ public class AdminHomeAll extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
+        request.setAttribute("home","toggled");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;

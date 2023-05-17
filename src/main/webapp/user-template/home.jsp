@@ -121,7 +121,7 @@
                     <div class="banner__item__text">
                         <h2><%=c1.getNameC()%>
                         </h2>
-                        <a href="categorie?cid=<%=c1.getIdC()%>">Xem thêm</a>
+                        <a href="product?command=category&cid=<%=c1.getIdC()%>">Xem thêm</a>
                     </div>
                 </div>
             </div>
@@ -133,7 +133,7 @@
                     <div class="banner__item__text">
                         <h2><%=c2.getNameC()%>
                         </h2>
-                        <a href="categorie?cid=<%=c2.getIdC()%>">Xem thêm</a>
+                        <a href="product?command=category&cid=<%=c2.getIdC()%>">Xem thêm</a>
                     </div>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                     <div class="banner__item__text">
                         <h2><%=c3.getNameC()%>
                         </h2>
-                        <a href="categorie?cid=<%=c3.getIdC()%>">Xem thêm</a>
+                        <a href="product?command=category&cid=<%=c3.getIdC()%>">Xem thêm</a>
                     </div>
                 </div>
             </div>
@@ -216,7 +216,7 @@
                                 }
                                 avgStart = sum / reviewList.size();
                             %>
-                            <%=CountStar.star(avgStart,reviewList.size())%>
+                            <%=CountStar.star(avgStart, reviewList.size())%>
                         </div>
                         <h5><%=nf.format(p.getPrice())%>đ</h5>
                         <div class="product__color__select">
@@ -254,7 +254,7 @@
                                                                    src="user-template/img/icon/heart.png"
                                                                    alt=""><span>Yêu thích</span></a></li>
                             <%} else {%>
-                            <li><a href="javascript:void(0);"><img onclick="inform(<%=pro.getIdP()%>)"
+                            <li><a href="javascript:void(0);"><img onclick="inform()"
                                                                    src="user-template/img/icon/heart.png"
                                                                    alt=""><span>Yêu thích</span></a></li>
                             <%}%>
@@ -362,7 +362,7 @@
                             <p>Giây</p>
                         </div>
                     </div>
-                    <a href="categorie?cid=" class="primary-btn">Xem thêm</a>
+                    <a href="product?command=category&cid=<%=productSelling.getIdC()%>" class="primary-btn">Xem thêm</a>
                 </div>
             </div>
         </div>
@@ -456,6 +456,7 @@
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
 <script src="user-template/js/product.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 </body>
 

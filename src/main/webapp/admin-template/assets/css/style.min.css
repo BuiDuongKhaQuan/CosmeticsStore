@@ -969,8 +969,8 @@ h5, .h5 {
 }
 
 h6, .h6 {
-    font-size: .9em;
-    font-weight: 700;
+    /*font-size: .9em;*/
+    /*font-weight: 700;*/
     text-transform: uppercase
 }
 
@@ -21000,7 +21000,7 @@ section.content {
     background-color: rgba(0, 0, 0, 0.5);
     display: none;
     position: fixed;
-    z-index: 9999;
+    z-index: 999;
     top: 0;
     left: 0;
     width: 100%;
@@ -21111,12 +21111,84 @@ section.content {
     display: flex !important;
     justify-content: center;
 }
+
 #admin_start_product i {
     color: #ffb100;
 }
+
 #pagination {
     text-align: center;
 }
+
 #pagination li {
     display: inline-block;
+}
+
+#notification, #alert {
+    position: fixed;
+    top: 6%;
+    right: 12%;
+    background-color: #36f4ee;
+    color: #000000;
+    padding: 10px;
+    z-index: 99999;
+    animation-name: slideDown;
+    animation-duration: 1s;
+}
+
+#alert {
+    background-color: red;
+    color: #0b0b0b;
+}
+
+.nowrap_text {
+    width: 500px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.light-theme .current {
+    background: #000 !important;
+    color: #fff !important;
+    border-color: #444 !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 1), 0 0 2px rgba(0, 0, 0, .3) inset !important;
+    cursor: default !important;
+}
+
+.light-theme a, .light-theme span {
+    float: left !important;
+    color: #666 !important;
+    font-size: 14px !important;
+    line-height: 24px !important;
+    font-weight: 400 !important;
+    text-align: center !important;
+    min-width: 14px !important;
+    padding: 4px 10px !important;
+    margin: 0 5px 0 0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .2) !important;
+    background: #efefef !important;
+    background: -moz-linear-gradient(top, #fff 0, #efefef 100%) !important;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(100%, #efefef)) !important;
+    background: -webkit-linear-gradient(top, #fff 0, #efefef 100%) !important;
+    background: -o-linear-gradient(top, #fff 0, #efefef 100%) !important;
+    background: -ms-linear-gradient(top, #fff 0, #efefef 100%) !important;
+    background: linear-gradient(top, #fff 0, #efefef 100%) !important;
+}
+.footable .form-inline .input-group .input-group-btn{
+    display: none;
+}
+.footable.table * {
+    justify-content: flex-end;
+}
+.footable .input-group .form-control:first-child{
+    border-radius: 5px;
+}
+.footable.table>thead:first-child>tr:first-child>th {
+    border-radius: 5px;
+}
+table.footable>thead>tr.footable-filtering>th div.form-group {
+    width: 30.7%;
 }
