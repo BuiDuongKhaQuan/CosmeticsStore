@@ -3,6 +3,7 @@
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.model.Selling" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -62,7 +63,7 @@
                                     <th>Hình ảnh</th>
                                     <th>Tên sản phẩm</th>
                                     <th data-breakpoints="xs">Giá</th>
-                                    <th data-breakpoints="xs md">Trang thái kho</th>
+                                    <th data-breakpoints="xs md">Trang thái</th>
                                     <th data-breakpoints="sm xs md">Hành động</th>
                                 </tr>
                                 </thead>
@@ -70,6 +71,11 @@
                                 <% List<Product> productList = (List<Product>) request.getAttribute("promotionProducts");
                                     for (Product product : productList) {
                                         List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
+                                        Selling selling = ProductService.getSelling();
+                                        String status = "";
+                                        if (product.getIdP() == selling.getIdP()) {
+                                            status = "Đang được chọn";
+                                        } else {status = "Không được chọn";}
                                 %>
                                 <tr>
                                     <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
@@ -77,8 +83,8 @@
                                     <td><h5><%=product.getName()%>
                                     </h5>
                                     </td>
-                                    <td><%=product.getPrice()%>đ</td>
-                                    <td><span class="col-green">In Stock</span></td>
+                                    <td><%=Format.formatPrice(product.getPrice())%>đ</td>
+                                    <td><span class="col-green"><%=status%></span></td>
                                     <td>
                                         <a onclick="selected(<%=product.getIdP()%>)"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i

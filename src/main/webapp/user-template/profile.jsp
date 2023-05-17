@@ -4,6 +4,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.service.*" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
+<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
@@ -303,8 +305,6 @@
                 <%
                     List<CheckOut> checkOutList = CheckOutService.getCheckOutByIdA(String.valueOf(acc1.getId()));
                     Collections.reverse(checkOutList);
-                    NumberFormat nf = NumberFormat.getInstance();
-                    nf.setMinimumFractionDigits(0);
                     List<CheckOut> checkOutList1 = new ArrayList<>();
                     List<CheckOut> checkOutList2 = new ArrayList<>();
                     List<CheckOut> checkOutList3 = new ArrayList<>();
@@ -327,6 +327,7 @@
                                 for (CheckOut checkOut : checkOutList1) {
                                     List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
                                     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
+                                    TransportS transport = api.getOrderById(checkOut.getIdTransport());
                                     int total1 = 0;
                                     String status = "";
                                     if (checkOut.getIdStatus() == 0) {
@@ -385,15 +386,15 @@
                                             style="display: flex; align-items: center; padding: 15px 0px;">
                                             <img src="<%=imageList.get(0).getImg()%>" alt="" style="max-width: 13%;">
                                             <div style="display: flex; flex-direction: column; padding: 0 30px">
-                                                <h6 onclick="detailOrder(<%=checkOut.getIdCk()%>)"
-                                                    style="padding: 17px 0"
+                                                <h6 onclick="detailProduct(<%=product.getIdP()%>)"
+                                                    style="padding: 17px 0; cursor: pointer"
                                                 ><%=product.getName()%>
                                                 </h6>
                                                 <h6>x<%=productByCheckOut.getQuantity()%>
                                                 </h6>
                                             </div>
                                         </td>
-                                        <td class="cart__price__total"><%=nf.format(product.getPrice() * productByCheckOut.getQuantity())%>
+                                        <td class="cart__price__total"><%=Format.formatPrice(product.getPrice() * productByCheckOut.getQuantity())%>
                                             đ
                                         </td>
                                     </tr>
@@ -431,7 +432,8 @@
                                         reduction = total1 * voucher.getPrice() / 100;
                                     }
                                     int priceLast = total1 - reduction;%>
-                                <h3 style="color: #ff4d00; margin-left: 10px"><%=nf.format(priceLast)%>đ</h3>
+                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + transport.getFee())%>
+                                    đ</h3>
                             </div>
                         </div>
                         <%
@@ -449,6 +451,7 @@
                             for (CheckOut checkOut : checkOutList2) {
                                 List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
                                 Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
+                                TransportS transport = api.getOrderById(checkOut.getIdTransport());
                                 int total2 = 0;
                                 String status = "";
                                 if (checkOut.getIdStatus() == 0) {
@@ -515,7 +518,7 @@
                                             </div>
                                         </td>
 
-                                        <td class="cart__price__total"><%=nf.format(product.getPrice() * productByCheckOut.getQuantity())%>
+                                        <td class="cart__price__total"><%=Format.formatPrice(product.getPrice() * productByCheckOut.getQuantity())%>
                                             đ
                                         </td>
                                     </tr>
@@ -540,7 +543,8 @@
                                         reduction = total2 * voucher.getPrice() / 100;
                                     }
                                     int priceLast = total2 - reduction;%>
-                                <h3 style="color: #ff4d00; margin-left: 10px"><%=nf.format(priceLast)%>đ</h3>
+                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + transport.getFee())%>
+                                    đ</h3>
                             </div>
                         </div>
                         <%
@@ -559,6 +563,7 @@
                                 for (CheckOut checkOut : checkOutList3) {
                                     List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
                                     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
+                                    TransportS transport = api.getOrderById(checkOut.getIdTransport());
                                     int total2 = 0;
                                     String status = "";
                                     if (checkOut.getIdStatus() == 0) {
@@ -625,7 +630,7 @@
                                             </div>
                                         </td>
 
-                                        <td class="cart__price__total"><%=nf.format(product.getPrice() * productByCheckOut.getQuantity())%>
+                                        <td class="cart__price__total"><%=Format.formatPrice(product.getPrice() * productByCheckOut.getQuantity())%>
                                             đ
                                         </td>
                                     </tr>
@@ -650,7 +655,8 @@
                                         reduction = total2 * voucher.getPrice() / 100;
                                     }
                                     int priceLast = total2 - reduction;%>
-                                <h3 style="color: #ff4d00; margin-left: 10px"><%=nf.format(priceLast)%>đ</h3>
+                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + transport.getFee())%>
+                                    đ</h3>
                             </div>
                         </div>
                         <%
@@ -685,6 +691,7 @@
 <script src="user-template/js/mixitup.min.js"></script>
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
+<script src="user-template/js/product.js"></script>
 <!-- Template Javascript -->
 <script src="admin-template/assets/plugins/dropify/js/dropify.min.js"></script>
 <script src="admin-template/assets/js/notification.js"></script>
@@ -733,7 +740,7 @@
         var newPass = document.getElementById("newPass").value;
         var repass = document.getElementById("repass").value;
         var pass = document.getElementById("pass").value;
-        if (newPass.trim() === '' || repass.trim() === '' || pass.trim() === '' ) {
+        if (newPass.trim() === '' || repass.trim() === '' || pass.trim() === '') {
             showAlert('Vui lòng nhập đầy đủ thông tin!');
         } else {
             var xhr = new XMLHttpRequest();

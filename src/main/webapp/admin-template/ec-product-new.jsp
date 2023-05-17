@@ -2,11 +2,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="qht.shopmypham.com.vn.model.Selling" %>
 <%@ page import="qht.shopmypham.com.vn.model.PromotionProduct" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="qht.shopmypham.com.vn.model.NewProduct" %>
 <%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -41,11 +41,11 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Danh sách sản phẩm ưu đãi</h2>
+                    <h2>Danh sách sản phẩm mới </h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
                         <li class="breadcrumb-item">Quản lí sản phẩm</li>
-                        <li class="breadcrumb-item active">Danh sách sản phẩm ưu đãi</li>
+                        <li class="breadcrumb-item active">Danh sách sản phẩm mới</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -72,44 +72,36 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <% List<PromotionProduct> list = (List<PromotionProduct>) request.getAttribute("promotionProducts");
+                                <% List<NewProduct> list = (List<NewProduct>) request.getAttribute("newProducts");
                                     String pattern = "hh:mm:ss a dd/MM/yyyy";
                                     SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-                                    Selling selling = ProductService.getSelling();
                                     String status = "";
-                                    for (PromotionProduct p : list) {
-                                        Date date1 = formatter.parse(p.getStartDay());
-                                        Date date2 = formatter.parse(p.getEndDay());
+                                    for (NewProduct p : list) {
+                                        Date date_new = formatter.parse(p.getCountDay());
                                         Date dateNow1 = formatter.parse(DateUtil.getDateNow());
-                                        if (dateNow1.after(date1) && dateNow1.before(date2)) {
-                                            status = "<span class=\"col-green\">Đang khuyến mãi</span>";
-                                        } else {
-                                            status = "<span class=\"col-red\">Hết khuyến mãi</span>";
-                                        }
+                                        if (dateNow1.before(date_new)) {
+                                            status = "<span class=\"col-green\">Trong thời gian</span>";
+                                        } else { status = "<span class=\"col-red\">Hết thời gian</span>"; }
                                         Product product = ProductService.getProductById(p.getIdP());
                                         List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
                                 %>
-                                <tr>
+                                <tr >
                                     <td class="cursor-pointer" onclick="show<%=p.getId()%>()"><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
                                     </td>
-                                    <td class="cursor-pointer" onclick="show<%=p.getId()%>()"><h5 class="nowrap_text"><%=product.getName()%>
+                                    <td class="cursor-pointer"   onclick="show<%=p.getId()%>()"><h5 class="nowrap_text"><%=product.getName()%>
                                     </h5>
                                     </td>
                                     <td><%=Format.formatPrice(product.getPrice())%>đ</td>
                                     <td><%=status%></td>
                                     <td>
-                                        <% if (p.getIdP() != selling.getIdP()){%>
-                                        <a style="margin-left: 20px"
-                                           href="admin-product?command=deletePromotion&id=<%=p.getId()%>"
+                                        <a style="margin-left: 20px" href="admin-product?command=deleteNew&id=<%=p.getId()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
-                                                class="zmdi zmdi-delete"></i></a><%}else {%>
-                                        Sell trong tuần <%}%>
+                                                class="zmdi zmdi-delete"></i></a>
                                     </td>
                                 </tr>
                                 <div id="show<%=p.getId()%>" class="promotion">
                                     <div class="promotion-box">
-                                        <label class="title">Chi tiết khuyến
-                                            mãi</label>
+                                        <label class="title">Chi tiết sản phẩm mới</label>
                                         <i class="zmdi zmdi-close icon-close"
                                            onclick="close<%=p.getId()%>()"></i>
                                         <div class="promotion-content">
@@ -117,15 +109,7 @@
                                                 <label>Ngày bắt đầu khuyến mãi</label>
                                             </div>
                                             <div class="form-group-date">
-                                                <%=p.getStartDay()%>
-                                            </div>
-                                        </div>
-                                        <div class="promotion-content">
-                                            <div class="label-text">
-                                                <label>Ngày kết thúc khuyến mãi</label>
-                                            </div>
-                                            <div class="form-group-date">
-                                                <%=p.getEndDay()%>
+                                                <%=p.getCountDay()%>
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +132,7 @@
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
 <script src="admin-template/assets/js/pages/tables/footable.js"></script><!-- Custom Js -->
 <script>
-    <%for (PromotionProduct p:list){%>
+    <%for (NewProduct p:list){%>
 
 
     function show<%=p.getId()%>() {

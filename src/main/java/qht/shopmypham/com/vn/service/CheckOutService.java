@@ -9,19 +9,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CheckOutService {
-    public static void addCheckOutByIdA(String phone, String address, String idPm, String name, String note, String idA, String voucher, String orderDate) {
+    public static void addCheckOutByIdA(String phone, String idTransport, String idPm, String name, String note, String idA, String voucher, String orderDate, String provinceID, String address_detail) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("INSERT INTO checkout(phone,address,idPm,idA,idStatus,idAdmin,orderDate" +
-                                ", confirmDate, receivedDate,name,note,idVoucher) " +
-                                "VALUES (?,?,?,?,0,null,?,null,null,?,?,?)")
+                h.createUpdate("INSERT INTO checkout(phone,idTransport,idPm,idA,idStatus,idAdmin,orderDate" +
+                                ", confirmDate, receivedDate,name,note,idVoucher,idProvince,detailAddress) " +
+                                "VALUES (?,?,?,?,0,null,?,null,null,?,?,?,?,?)")
                         .bind(0, phone)
-                        .bind(1, address)
+                        .bind(1, idTransport)
                         .bind(2, idPm)
                         .bind(3, idA)
                         .bind(4, orderDate)
                         .bind(5, name)
                         .bind(6, note)
                         .bind(7, voucher)
+                        .bind(8, provinceID)
+                        .bind(9, address_detail)
                         .execute()
 
         );

@@ -44,7 +44,7 @@ public class UserSignUp extends HttpServlet {
                 if (password.equals(re_password)) {
                     List<Account> accountList = AccountService.getAllAccount();
                     Collections.reverse(accountList);
-                    los.signUp(user, Encode.enCodeMD5(password), email, String.valueOf(accountList.get(0).getId() + 1));
+                    los.signUp(user, Encode.enCodeMD5(password), email, accountList.get(0).getId() + 1);
                     request.setAttribute("success", "Đăng ký thành công, mời bạn đăng nhập!");
                     request.getRequestDispatcher("/login.jsp").forward(request, response);
                     action = 5;

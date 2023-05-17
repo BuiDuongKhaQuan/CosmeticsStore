@@ -1,4 +1,3 @@
-
 function search(name) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "product?command=search&name=" + name.value, true);
@@ -6,7 +5,7 @@ function search(name) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             document.getElementById("product_list").innerHTML = this.responseText;
-            pagination();
+            pagination(9, '#product_list #product_item');
         }
     };
     xhr.send();
@@ -26,7 +25,7 @@ function insertItem(IdP) {
 }
 
 function inform() {
-    showNotification("Hãy đăng nhập");
+    showNotification("Bạn hãy đăng nhập để sử dụng chức năng này");
 }
 
 function detailProduct(idP) {
@@ -57,33 +56,11 @@ function arrange(command, action) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             document.getElementById("product_list").innerHTML = this.responseText;
-            pagination();
+            pagination(9, '#product_list #product_item');
         }
     };
     xhr.send();
 }
-function pagination() {
-    $(document).ready(function () {
-        var itemsPerPage = 9;
-        var itemsCount = $('#product_list #product_item').length;
-        var totalPages = Math.ceil(itemsCount / itemsPerPage);
 
-        $('#pagination').pagination({
-            items: itemsCount,
-            itemsOnPage: itemsPerPage,
-            cssStyle: 'light-theme',
-            prevText: 'Trang trước',
-            nextText: 'Trang tiếp',
-            onPageClick: function (pageNumber) {
-                var startIndex = (pageNumber - 1) * itemsPerPage;
-                var endIndex = startIndex + itemsPerPage;
-                $('#product_list #product_item').hide().slice(startIndex, endIndex).show();
-            }
-        });
 
-        $('#product_list #product_item').hide().slice(0, itemsPerPage).show();
-    });
-}
-
-pagination();
 

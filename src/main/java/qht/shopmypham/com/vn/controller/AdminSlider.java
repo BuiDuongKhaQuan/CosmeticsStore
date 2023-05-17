@@ -20,6 +20,7 @@ public class AdminSlider extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Slider> sliderList = SliderSerivce.getAllSlider();
+        request.setAttribute("slide","toggled");
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
         String ipAddress = request.getRemoteAddr();

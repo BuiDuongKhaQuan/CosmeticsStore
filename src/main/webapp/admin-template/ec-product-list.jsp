@@ -2,6 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
+<%@ page import="qht.shopmypham.com.vn.service.WareHouseService" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -68,16 +70,27 @@
                                 <tbody>
                                 <% List<Product> productList = (List<Product>) request.getAttribute("productList");
                                     for (Product product : productList) {
+                                        String status = "";
+                                        int quantity = WareHouseService.getWareHouse(String.valueOf(product.getIdP())).getQuantity();
+                                        if (quantity > 0){
+                                            status = "<span class=\"col-green\">Còn hàng</span>";
+                                        }
+                                        if (quantity > 0 && quantity <= 15){
+                                            status = "<span class=\"col-yellow\">Sắp hết</span>";
+                                        }
+                                        if (quantity == 0 ){
+                                            status = "<span class=\"col-red\">Hết hàng</span>";
+                                        }
                                         List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
                                 %>
                                 <tr>
                                     <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
                                     </td>
-                                    <td><h5><%=product.getName()%>
+                                    <td><h5 class="nowrap_text"><%=product.getName()%>
                                     </h5>
                                     </td>
-                                    <td><%=product.getPrice()%>đ</td>
-                                    <td><span class="col-green">In Stock</span></td>
+                                    <td><%=Format.formatPrice(product.getPrice())%>đ</td>
+                                    <td><%=status%></td>
                                     <td>
                                         <a href="admin-product?command=edit&IdP=<%=product.getIdP()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i

@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
+import qht.shopmypham.com.vn.tools.Format;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -28,6 +29,7 @@ public class AdminOrder extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<CheckOut> checkOuts = CheckOutService.getAllCheckOut();
+        request.setAttribute("oder","toggled");
         Collections.reverse(checkOuts);
         String command = request.getParameter("command");
         String nowDate = DateUtil.getDateNow();
@@ -73,6 +75,8 @@ public class AdminOrder extends HttpServlet {
                     String idCk = request.getParameter("IdCk");
                     List<ListProductByCheckOut> listProductByCheckOuts = ProductCheckoutService.getProductProductCheckoutByIdCk(idCk);
                     CheckOut checkOut = CheckOutService.getCheckOutByIdCk(idCk);
+                    TransportS transport = api.getOrderById(checkOut.getIdTransport());
+                    request.setAttribute("transport",transport);
                     request.setAttribute("checkOut", checkOut);
                     request.setAttribute("listProductByCheckOuts", listProductByCheckOuts);
                     request.getRequestDispatcher("admin-template/order-detail.jsp").forward(request, response);
@@ -109,19 +113,26 @@ public class AdminOrder extends HttpServlet {
                 }
                 if (command.equals("bill")) {
                     long total = 0;
-                    NumberFormat nf = NumberFormat.getInstance();
-                    nf.setMinimumFractionDigits(0);
                     String IdCk = request.getParameter("IdCk");
                     CheckOut checkOut = CheckOutService.getCheckOutByIdCk(IdCk);
                     Account account = AccountService.getAccountById(checkOut.getIdA());
                     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
                     List<ListProductByCheckOut> list = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
+                    TransportS transport = api.getOrderById(checkOut.getIdTransport());
+                    Province province = api.getProvinceById(checkOut.getIdProvince());
+                    District district = api.getDistrictById(checkOut.getIdProvince(), Integer.parseInt(transport.getToDistrictId()));
+                    Ward ward = api.getWardById(Integer.parseInt(transport.getToDistrictId()), Integer.parseInt(transport.getToWardId()));
+                    String address = ward.getWardName() + ", " + district.getDistrictName() + ", " + province.getProvinceName();
+                    String payment = "";
+                    if (checkOut.getIdPm() == 0) {
+                        payment = "Thanh toán khi nhận hàng";
+                    } else {
+                        payment = "Paypal";
+                    }
                     PDDocument document = new PDDocument();
-
                     // tạo trang
                     PDPage page = new PDPage(PDRectangle.A4);
                     document.addPage(page);
-
                     // thiết lập font chữ
                     String path = "admin-template/assets/fonts/TimesNewRoman400.ttf";
                     ServletContext context = getServletContext();
@@ -143,20 +154,33 @@ public class AdminOrder extends HttpServlet {
                     contentStream.moveTextPositionByAmount(0, -20);
                     contentStream.drawString("Thời gian: " + DateUtil.getDateNow());
                     contentStream.moveTextPositionByAmount(0, -20);
-                    contentStream.drawString("Địa chỉ: " + checkOut.getAddress());
+                    contentStream.drawString("Số điện thoại: " + checkOut.getPhone());
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Địa chỉ: " + address);
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Địa chỉ chi tiết: " + address);
+                    String[] lines = checkOut.getDetailAddress().split("\\n");
+                    for (String line : lines) {
+                        if (!line.isBlank()) {
+                            contentStream.moveTextPositionByAmount(0, -20);
+                            contentStream.showText(line);
+                        }
+                    }
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Phương thức thanh toán: " + payment);
                     contentStream.moveTextPositionByAmount(0, -50);
-                    contentStream.drawString("Sản phẩm:");
+                    contentStream.drawString("Danh sách sản phẩm:");
                     String text = "";
                     int a = 0;
                     for (ListProductByCheckOut l : list) {
                         a++;
                         Product p = ProductService.getProductById(l.getIdP());
                         total += p.getPrice() * l.getQuantity();
-                        text += a + ") " + p.getName() + ": " + nf.format(p.getPrice()) + "đ\n";
-                        text += "x " + l.getQuantity() + ": " + nf.format(p.getPrice() * l.getQuantity()) + "đ\n";
+                        text += a + ") " + p.getName() + ": " + Format.formatPrice(p.getPrice()) + "đ\n";
+                        text += "x " + l.getQuantity() + ": " + Format.formatPrice(p.getPrice() * l.getQuantity()) + "đ\n";
                     }
-                    String[] lines = text.split("\\n");
-                    for (String line : lines) {
+                    String[] lines1 = text.split("\\n");
+                    for (String line : lines1) {
                         if (!line.isBlank()) {
                             contentStream.moveTextPositionByAmount(0, -20);
                             contentStream.showText(line);
@@ -168,11 +192,13 @@ public class AdminOrder extends HttpServlet {
                     }
                     long priceLast = total - reduction;
                     contentStream.moveTextPositionByAmount(0, -50);
-                    contentStream.drawString("Tổng hàng: " + nf.format(total) + "đ");
+                    contentStream.drawString("Tổng hàng: " + Format.formatPrice(total) + "đ");
                     contentStream.moveTextPositionByAmount(0, -20);
-                    contentStream.drawString("Giảm giá: - " + nf.format(reduction) + "đ");
+                    contentStream.drawString("Phí vận chuyển: " + Format.formatPrice(transport.getFee()) + "đ");
                     contentStream.moveTextPositionByAmount(0, -20);
-                    contentStream.drawString("Tổng đơn hàng: " + nf.format(priceLast) + "đ");
+                    contentStream.drawString("Giảm giá: - " + Format.formatPrice(reduction) + "đ");
+                    contentStream.moveTextPositionByAmount(0, -20);
+                    contentStream.drawString("Tổng đơn hàng: " + Format.formatPrice(priceLast + transport.getFee()) + "đ");
 
                     contentStream.moveTextPositionByAmount(0, -50);
                     contentStream.drawString("Chú ý: " + checkOut.getNote());

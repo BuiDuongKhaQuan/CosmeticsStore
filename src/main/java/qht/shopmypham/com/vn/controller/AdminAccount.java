@@ -20,6 +20,8 @@ public class AdminAccount extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
+        request.setAttribute("account1","toggled");
+
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;

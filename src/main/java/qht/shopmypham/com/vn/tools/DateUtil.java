@@ -15,12 +15,13 @@ public class DateUtil {
         return formattedDate;
     }
 
-    public static String customDateTimeFormat(Date date) {
+    public static String customDateTimeFormat(String date1) throws ParseException {
         String pattern = "hh:mm:ss a dd/MM/yyyy";
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-        String formattedDate = formatter.format(date);
-        System.out.println("Formatted Date: " + formattedDate);
-        return formattedDate;
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat(pattern);
+        Date date = inputDateFormat.parse(date1);
+        String outputDateString = outputDateFormat.format(date);
+        return  outputDateString;
     }
 
     public static String between(String date) throws ParseException {
@@ -39,6 +40,6 @@ public class DateUtil {
 
     public static void main(String[] args) throws ParseException {
         String pattern = "hh:mm:ss a dd/MM/yyyy";
-
+        System.out.println(customDateTimeFormat("2023-04-23T23:59:59Z"));
     }
 }

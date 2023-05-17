@@ -19,6 +19,7 @@ public class AdminVoucher extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
+        request.setAttribute("voucher","toggled");
         String command = request.getParameter("command");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();

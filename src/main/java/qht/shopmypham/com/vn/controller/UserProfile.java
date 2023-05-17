@@ -1,8 +1,6 @@
 package qht.shopmypham.com.vn.controller;
 
-import qht.shopmypham.com.vn.model.Account;
-import qht.shopmypham.com.vn.model.CheckOut;
-import qht.shopmypham.com.vn.model.ListProductByCheckOut;
+import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.service.CheckOutService;
 import qht.shopmypham.com.vn.service.LogService;
@@ -31,6 +29,7 @@ public class UserProfile extends HttpServlet {
         String dateNow = DateUtil.getDateNow();
         String content = "";
         int idA = 0;
+        if (acc == null) request.getRequestDispatcher("login.jsp").forward(request,response);
         if (acc != null) idA = acc.getId();
         if (command.equals("out")) {
             session.invalidate();
@@ -47,12 +46,16 @@ public class UserProfile extends HttpServlet {
             String idCk = request.getParameter("idCk");
             CheckOutService.updateStatusCancel(idCk);
             request.getRequestDispatcher("user-template/profile.jsp").forward(request, response);
+            action = 8 ;
+            level = 2 ;
             content = "Hủy đơn hàng";
         }
         if (command.equals("order-detail")) {
             String idCk = request.getParameter("idCk");
             CheckOut checkOut = CheckOutService.getCheckOutByIdCk(idCk);
             List<ListProductByCheckOut> listProductByCheckOuts = ProductCheckoutService.getProductProductCheckoutByIdCk(idCk);
+            TransportS transport = api.getOrderById(checkOut.getIdTransport());
+            request.setAttribute("transport",transport);
             request.setAttribute("listProductByCheckOuts", listProductByCheckOuts);
             request.setAttribute("checkOut", checkOut);
             request.getRequestDispatcher("user-template/order-detail.jsp").forward(request, response);

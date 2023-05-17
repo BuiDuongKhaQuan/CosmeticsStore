@@ -345,7 +345,15 @@ public static void upQuantityProductById(String quantity, String idP) {
                         .execute()
         );
     }
+    public static List<NewProduct> getAllNewProduct() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("SELECT * FROM newproduct")
+                        .mapToBean(NewProduct.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
 
+    }
     public static List<NewProduct> getNewProduct(int quantity) {
         return JDBiConnector.me().withHandle(h ->
                 h.createQuery("SELECT * FROM newproduct ORDER BY id DESC LIMIT ?")
@@ -356,7 +364,13 @@ public static void upQuantityProductById(String quantity, String idP) {
         );
 
     }
-
+    public static void deleteNew(String id) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("delete from newproduct where id = ?")
+                        .bind(0, id)
+                        .execute()
+        );
+    }
     // lấy tt các các hình ảnh fs
 
     public static Selling getSelling() {

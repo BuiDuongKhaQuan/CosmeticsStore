@@ -69,10 +69,10 @@
                         <thead>
                         <tr>
                             <th>SẢN PHẨM</th>
-                            <th>ĐƠN GIÁ</th>
-                            <th>SỐ LƯỢNG</th>
-                            <th>TỔNG GIÁ</th>
-                            <th></th>
+                            <th style="width: 17%">ĐƠN GIÁ</th>
+                            <th style="width: 17%">SỐ LƯỢNG</th>
+                            <th style="width: 17%">TỔNG GIÁ</th>
+                            <th style="width: 15%"></th>
                         </tr>
                         </thead>
                         <tbody id="quantity-product">
@@ -125,7 +125,7 @@
                             <td class="cart__price__total"><%=nf.format(p.getPrice() * l.getQuantity())%>đ</td>
                             <td class="cart__close">
                                 <input type="hidden" id="idP" value="<%=p.getIdP()%>">
-                                <button type="submit" style="background-color: rgba(38,255,0,0)"
+                                <button type="submit" style="background-color: rgba(38,255,0,0); cursor: pointer"
                                         onclick="upDateQuantity(<%=p.getIdP()%>,'deleteItem')">
                                     <i class="fa fa-close"
                                        style="margin-left: 10px"></i>
@@ -165,11 +165,11 @@
                     <div id="total-product">
                         <ul>
                             <li>Đơn giá <span><%=nf.format(totalPrice)%>đ</span></li>
-                            <li>Phí vận chuyển <span>25.000đ</span></li>
-                            <li>Giảm giá <span id="voucher">0đ</span></li>
-                            <li>Tổng cộng <span id="total"><%=nf.format(totalPrice + 25000)%>đ</span></li>
+                            <li>Phí vận chuyển <span>Chưa có thông tin</span></li>
+                            <li>Giảm giá <span id="voucher">- 0đ</span></li>
+                            <li>Tổng cộng <span id="total"><%=nf.format(totalPrice)%>đ</span></li>
                         </ul>
-                        <a href="checkout" class="primary-btn">THANH TOÁN</a>
+                        <a href="checkout?command=checkout" class="primary-btn">THANH TOÁN</a>
                     </div>
                     <%} else {%>
                     <div id="total-product">

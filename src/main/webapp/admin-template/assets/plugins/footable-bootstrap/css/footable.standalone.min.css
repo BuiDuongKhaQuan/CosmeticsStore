@@ -693,7 +693,7 @@ table.footable>thead>tr.footable-filtering>th div.form-group+div.form-group {
 }
 
 table.footable>thead>tr.footable-filtering>th div.input-group {
-    width: 100%
+    width: 100%!important;
 }
 
 table.footable>thead>tr.footable-filtering>th ul.dropdown-menu>li>a.checkbox {

@@ -71,7 +71,7 @@
                                         Product product = ProductService.getProductById(wareHouse.getIdP());
                                 %>
                                 <tr>
-                                    <td><%=product.getName()%>
+                                    <td><h5 class="nowrap_text"><%=product.getName()%></h5>
                                     </td>
                                     <td><h5><%=wareHouse.getDateInput()%>
                                     </h5>

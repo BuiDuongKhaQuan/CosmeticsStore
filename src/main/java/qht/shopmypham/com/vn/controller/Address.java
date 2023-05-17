@@ -24,10 +24,10 @@ public class Address extends HttpServlet {
             String provinceID = request.getParameter("provinceID");
             // Xử lý yêu cầu và trả về danh sách quận/huyện tương ứng dưới dạng chuỗi JSON
             List<District> districts = api.getDistrict(Integer.parseInt(provinceID));
-            String li = "", option = "";
+            String li = "", option ="";
             for (District district : districts) {
                 li += "<li data-value=\"" + district.getDistrictID() + "\" class=\"option\">" + district.getDistrictName() + "</li>";
-                option += "<option value=\"" + district.getDistrictID() + "\">" + district.getDistrictName() + "</option>";
+                option += "<option value=\"" + district.getDistrictID() +"\">" + district.getDistrictName() +"</option>";
             }
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -44,10 +44,10 @@ public class Address extends HttpServlet {
         if (command.equals("ward")) {
             String wardID = request.getParameter("wardID");
             List<Ward> wards = api.getWard(Integer.parseInt(wardID));
-            String li = "", option = "";
+            String li = "", option ="";
             for (Ward ward : wards) {
                 li += "<li data-value=\"" + ward.getWardCode() + "\" class=\"option\">" + ward.getWardName() + "</li>";
-                option += "<option value=\"" + ward.getWardCode() + "\">" + ward.getWardName() + "</option>";
+                option += "<option value=\"" + ward.getWardCode()  +"\">" + ward.getWardName() +"</option>";
             }
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -60,38 +60,6 @@ public class Address extends HttpServlet {
                     "<li data-value=\"\" class=\"option selected\">--Chọn Xã/Ấp--</li>" + li +
                     "</ul>" +
                     "</div>");
-        }
-        if (command.equals("provincei")) {
-            // Lấy mã tỉnh/thành phố từ tham số truy vấn
-            String provinceID = request.getParameter("provinceID");
-            List<District> districts = api.getDistrict(Integer.parseInt(provinceID));
-            String option = "";
-            for (District district : districts) {
-                option += "<option value=\"" + district.getDistrictID() + "\">" + district.getDistrictName() + "</option>";
-            }
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("<select id=\"districtID\"\n" +
-                    "                                                        class=\"form-control show-tick ms select2\"\n" +
-                    "                                                        data-placeholder=\"Select\"\n" +
-                    "                                                        onchange=\"getWards()\">\n" +
-                    "                                                    <option value=\"\">--Chọn Huyện--</option>\n" + option +
-                    "                                                </select>");
-        }
-        if (command.equals("wardi")) {
-            String wardID = request.getParameter("wardID");
-            List<Ward> wards = api.getWard(Integer.parseInt(wardID));
-            String option = "";
-            for (Ward ward : wards) {
-                option += "<option value=\"" + ward.getWardCode() + "\">" + ward.getWardName() + "</option>";
-            }
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("<select class=\"form-control show-tick ms select2\"\n" +
-                    "                                                        data-placeholder=\"Select\"\n" +
-                    "                                                        id=\"wardID\">\n" +
-                    "                                                    <option value=\"\">--Chọn Xã/Ấp--</option>\n" + option +
-                    "                                                </select>");
         }
     }
 

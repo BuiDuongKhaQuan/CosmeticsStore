@@ -23,6 +23,8 @@ public class AdminGeneral extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
+        request.setAttribute("general","toggled");
+
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;
@@ -44,11 +46,11 @@ public class AdminGeneral extends HttpServlet {
                 if (command.equals("question")) {
                     List<FAQs> faQsList = FAQsService.getAllFQAs();
                     request.setAttribute("faQsList", faQsList);
-                    request.getRequestDispatcher("/admin-template/co-Faqs.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin-template/co-FAQs-list.jsp").forward(request, response);
                     content = "Truy cập trang danh sách FAQs";
                 }
                 if (command.equals("addQ")) {
-                    request.getRequestDispatcher("/admin-template/co-add-Faqs.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin-template/co-FAQs-add.jsp").forward(request, response);
                     content = "Truy cập trang thêm FAQs";
                 }
                 if (command.equals("trademark")) {

@@ -19,6 +19,7 @@ public class AdminProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Product> productList = ProductService.getAllProduct();
+        request.setAttribute("product","toggled");
         List<Categories> listCategories = CategoryService.getAllCategory();
         List<Trademark> trademarks = TrademarkService.getTrademarkAll();
         String command = request.getParameter("command");
@@ -70,6 +71,18 @@ public class AdminProduct extends HttpServlet {
                     ProductService.deletePromotion(id);
                     response.sendRedirect("admin-product?command=listPromotion");
                     content = "Xóa sản phẩm khuyến mãi" + id;
+                }
+                if (command.equals("listNew")) {
+                    List<NewProduct> newProducts = ProductService.getAllNewProduct();
+                    request.setAttribute("newProducts", newProducts);
+                    request.getRequestDispatcher("/admin-template/ec-product-new.jsp").forward(request, response);
+                    content = "Truy cập trang quản lý danh sách sản phẩm mới";
+                }
+                if (command.equals("deleteNew")) {
+                    String id = request.getParameter("id");
+                    ProductService.deleteNew(id);
+                    response.sendRedirect("admin-product?command=listNew");
+                    content = "Xóa sản phẩm mới" + id;
                 }
                 if (command.equals("edit")) {
                     String idP = request.getParameter("IdP");

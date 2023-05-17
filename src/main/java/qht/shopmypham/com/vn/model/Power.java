@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class Power implements Serializable {
     int id, idA;
-    int orderManage, generalManage, productManage, accountManage, blogManage, homeManage, voucherManage, sliderManage;
+    int orderManage, generalManage, productManage, accountManage, blogManage, homeManage, voucherManage, sliderManage,warehouseManage;
 
     public Power() {
     }
 
-    public Power(int id, int idA, int orderManage, int generalManage, int productManage, int accountManage, int blogManage, int homeManage, int voucherManage, int sliderManage) {
+    public Power(int id, int idA, int orderManage, int generalManage, int productManage, int accountManage, int blogManage, int homeManage, int voucherManage, int sliderManage, int warehouseManage) {
         this.id = id;
         this.idA = idA;
         this.orderManage = orderManage;
@@ -20,6 +20,7 @@ public class Power implements Serializable {
         this.homeManage = homeManage;
         this.voucherManage = voucherManage;
         this.sliderManage = sliderManage;
+        this.warehouseManage = warehouseManage;
     }
 
     public int getId() {
@@ -102,19 +103,11 @@ public class Power implements Serializable {
         this.sliderManage = sliderManage;
     }
 
-    @Override
-    public String toString() {
-        return "Power{" +
-                "id=" + id +
-                ", idA=" + idA +
-                ", orderManage=" + orderManage +
-                ", generalManage=" + generalManage +
-                ", productManage=" + productManage +
-                ", accountManage=" + accountManage +
-                ", blogManage=" + blogManage +
-                ", homeManage=" + homeManage +
-                ", voucherManage=" + voucherManage +
-                ", sliderManage=" + sliderManage +
-                '}';
+    public int getWarehouseManage() {
+        return warehouseManage;
+    }
+
+    public void setWarehouseManage(int warehouseManage) {
+        this.warehouseManage = warehouseManage;
     }
 }
