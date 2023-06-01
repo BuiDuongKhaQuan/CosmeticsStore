@@ -3,9 +3,8 @@
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.service.ReviewService" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zxx" id="product-list">
@@ -16,8 +15,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
-
+    <title>Mỹ Phẩm QST || Trang chủ</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
@@ -31,7 +30,6 @@
     <link rel="stylesheet" href="user-template/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="user-template/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="user-template/css/style.css" type="text/css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
@@ -167,25 +165,30 @@
             </div>
         </div>
         <div class="row product__filter">
-            <%
-                NumberFormat nf = NumberFormat.getInstance();
-                nf.setMinimumFractionDigits(0);
-                Account acc = (Account) request.getSession().getAttribute("a");
+            <% Account acc = (Account) request.getSession().getAttribute("a");
                 List<Product> listIsNew = (List<Product>) request.getAttribute("listNew");
                 for (Product p : listIsNew) {
                     List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
-
             %>
             <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
                 <div class="product__item" style="background-color: rgba(130,140,230,0.11)">
                     <div class="product__item__pic set-bg" data-setbg="<%=imageList.get(0).getImg()%>">
                         <span class="label">Mới</span>
                         <ul class="product__hover">
-                            <li><a href="javascript:void(0);"><img src="user-template/img/icon/heart.png"
+                            <%
+                                if (acc != null) {
+                            %>
+                            <li><a href="javascript:void(0);"><img onclick="addFavorite(<%=p.getIdP()%>)"
+                                                                   src="user-template/img/icon/heart.png"
                                                                    alt=""><span>Yêu thích</span></a></li>
+                            <%} else {%>
+                            <li><a href="javascript:void(0);"><img onclick="inform()"
+                                                                   src="user-template/img/icon/heart.png"
+                                                                   alt=""><span>Yêu thích</span></a></li>
+                            <%}%>
                             <li><a href="javascript:void(0);"><img onclick="category(<%=p.getIdC()%>)"
-                                                                   src="user-template/img/icon/compare.png"
-                                                                   alt=""><span>Cùng loại</span></a></li>
+                                                                   src="user-template/img/icon/compare.png" alt="">
+                                <span>Cùng loại</span></a></li>
                             <li><a href="javascript:void(0);"><img onclick="detailProduct(<%=p.getIdP()%>)"
                                                                    src="user-template/img/icon/view.png"
                                                                    alt=""><span>Chi tiết</span></a></li>
@@ -201,6 +204,7 @@
                                                                    alt=""><span>Thêm vào giỏ</span></a></li>
                             <%}%>
                         </ul>
+
                     </div>
                     <div class="product__item__text">
                         <h6 onclick="detailProduct(<%=p.getIdP()%>)" style="cursor: pointer"><%=p.getName()%>
@@ -218,7 +222,7 @@
                             %>
                             <%=CountStar.star(avgStart, reviewList.size())%>
                         </div>
-                        <h5><%=nf.format(p.getPrice())%>đ</h5>
+                        <h5><%=Format.formatPrice(p.getPrice())%>đ</h5>
                         <div class="product__color__select">
                             <label for="pc-1">
                                 <input type="radio" id="pc-1">
@@ -293,18 +297,11 @@
                             %>
                             <%=CountStar.star(avgStart, reviewList.size())%>
                         </div>
-                        <h5><%=nf.format(price)%>đ</h5>
-                        <del><%=nf.format(pro.getPrice())%>đ</del>
-                        <div class="product__color__select">
-                            <label for="pc-4">
-                                <input type="radio" id="pc-4">
-                            </label>
-                            <label class="active black" for="pc-5">
-                                <input type="radio" id="pc-5">
-                            </label>
-                            <label class="grey" for="pc-6">
-                                <input type="radio" id="pc-6">
-                            </label>
+                        <div style="display: inline-flex">
+                            <h5><%=Format.formatPrice(price)%>đ</h5>
+                            <del style="margin: 0 15px;color: #00000087;"
+                            ><%=Format.formatPrice(pro.getPriceDefault())%>đ
+                            </del>
                         </div>
                     </div>
                 </div>
@@ -334,7 +331,7 @@
                     <img src="<%=imageList.get(0).getImg()%>" alt="">
                     <div class="hot__deal__sticker">
                         <span> Giá chỉ còn</span>
-                        <h5><%=nf.format(ProductService.getPricePromotion(String.valueOf(productSelling.getIdP())).getPrice())%>
+                        <h5><%=Format.formatPrice(ProductService.getPricePromotion(String.valueOf(productSelling.getIdP())).getPrice())%>
                         </h5>
                     </div>
                 </div>
@@ -362,7 +359,7 @@
                             <p>Giây</p>
                         </div>
                     </div>
-                    <a href="product?command=category&cid=<%=productSelling.getIdC()%>" class="primary-btn">Xem thêm</a>
+                    <a href="detail?pid=<%=productSelling.getIdP()%>" class="primary-btn">Xem thêm</a>
                 </div>
             </div>
         </div>

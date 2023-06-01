@@ -1,13 +1,5 @@
-<%@ page import="qht.shopmypham.com.vn.model.Account" %>
-<%@ page import="qht.shopmypham.com.vn.model.Home" %>
-<%@ page import="qht.shopmypham.com.vn.model.Shop" %>
-<%@ page import="qht.shopmypham.com.vn.service.ShopService" %><%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 2/16/2023
-  Time: 10:51 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="qht.shopmypham.com.vn.service.ShopService" %>
+<%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Footer Section Begin -->
 <% Account acc = (Account) request.getSession().getAttribute("a");
@@ -27,7 +19,11 @@
                 <div class="footer__widget">
                     <h6>Thông tin liên lạc</h6>
                     <ul style=" color: #ccc;">
-                        <li><i class="fa fa-home" aria-hidden="true"></i> <%=shop.getAddress()%>
+                        <% Province province = api.getProvinceById(shop.getProvinceID());
+                            District district = api.getDistrictById(province.getProvinceID(), shop.getDistrictID());
+                            Ward ward = api.getWardById(district.getDistrictID(), shop.getWardID());
+                            String address = ward.getWardName() + ", " + district.getDistrictName() + ", " + province.getProvinceName();%>
+                        <li><i class="fa fa-home" aria-hidden="true"></i> <%=address%>
                         </li>
                         <li><i class="fa fa-phone" aria-hidden="true"></i> <%=shop.getPhone()%>
                         </li>
@@ -52,14 +48,15 @@
                 <div class="footer__widget">
                     <h6>Nhập thông tin để cập nhật tin tức thường xuyên</h6>
                     <div class="footer__newslatter">
-                        <form action="contact" style=" color: #ccc;">
-                            <input type="text" name="email" placeholder="Email của bạn" style="color: #b7b7b7">
+                        <form action="" style=" color: #ccc;">
+                            <input type="text" name="email" id="email" required="required" placeholder="Email của bạn"
+                                   style="color: #b7b7b7">
                             <br>
                         </form>
                         <div>
                             <button class="btn btn-primary btn-block border-0 py-3" type="submit" style="    height: 30px;
                                 margin-top: 10px;
-                                line-height: 7px;background-color: #ccc;">
+                                line-height: 7px;background-color: #ccc;" onclick="contact()">
                                 OK
                             </button>
                         </div>
@@ -94,3 +91,22 @@
 <% if (acc != null) {%>
 <script src="user-template/js/auto-load-cart.js"></script>
 <%}%>
+<script>
+
+    function contact() {
+        var email = document.getElementById("email").value;
+        if (email.trim() === '') {
+            showAlert('Vui lòng nhập đầy đủ thông tin!');
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "contact", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    showNotification("Gửi thành công");
+                }
+            };
+            xhr.send("email=" + encodeURIComponent(email));
+        }
+    }
+</script>

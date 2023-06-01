@@ -1,4 +1,3 @@
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.CategoryService" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
@@ -6,6 +5,9 @@
 <%@ page import="qht.shopmypham.com.vn.service.ReviewService" %>
 <%@ page import="qht.shopmypham.com.vn.service.TrademarkService" %>
 <%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
+<%@ page import="qht.shopmypham.com.vn.controller.UserHome" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -18,8 +20,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
-
+    <title>Mỹ Phẩm QST || Sản phẩm</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
@@ -179,7 +181,10 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <% List<Product> productList = (List<Product>) request.getAttribute("listProduct");%>
+                                <%  List<Product> productList = UserHome.productList;
+                                    List<Product> productList1 = (List<Product>) request.getAttribute("listProduct");
+                                    if (productList1 != null) productList = productList1;
+                                %>
                                 <p>Hiển thị 1 - 9 trong <%=productList.size()%> kết quả</p>
                             </div>
                         </div>
@@ -202,8 +207,6 @@
                 </div>
                 <div class="row" id="product_list">
                     <%
-                        NumberFormat nf = NumberFormat.getInstance();
-                        nf.setMinimumFractionDigits(0);
                         for (Product p : productList) {
                             List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
                     %>
@@ -260,7 +263,7 @@
                                     %>
                                     <%=CountStar.star(avgStart, reviewList.size())%>
                                 </div>
-                                <h5><%=nf.format(p.getPrice())%>đ</h5>
+                                <h5><%=Format.formatPrice(p.getPrice())%>đ</h5>
                                 <div class="product__color__select">
                                     <label for="pc-4">
                                         <input type="radio" id="pc-4">
@@ -276,8 +279,6 @@
                         </div>
                     </div>
                     <%}%>
-
-
                 </div>
                 <div class="row" style="width: 100%;">
                     <div class="col-lg-12">

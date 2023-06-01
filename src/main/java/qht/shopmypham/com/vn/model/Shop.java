@@ -3,21 +3,23 @@ package qht.shopmypham.com.vn.model;
 import java.io.Serializable;
 
 public class Shop implements Serializable {
-    int idS;
-    String logo_header, logo_footer, aboutShop, designerBy, textInHelp, shopName, address, phone, email;
+    int idS, provinceID, districtID, wardID;
+    String logo_header, logo_footer, aboutShop, designerBy, textInHelp, shopName, phone, email;
 
     public Shop() {
     }
 
-    public Shop(int idS, String logo_header, String logo_footer, String aboutShop, String designerBy, String textInHelp, String shopName, String address, String phone, String email) {
+    public Shop(int idS, int provinceID, int districtID, int wardID, String logo_header, String logo_footer, String aboutShop, String designerBy, String textInHelp, String shopName, String phone, String email) {
         this.idS = idS;
+        this.provinceID = provinceID;
+        this.districtID = districtID;
+        this.wardID = wardID;
         this.logo_header = logo_header;
         this.logo_footer = logo_footer;
         this.aboutShop = aboutShop;
         this.designerBy = designerBy;
         this.textInHelp = textInHelp;
         this.shopName = shopName;
-        this.address = address;
         this.phone = phone;
         this.email = email;
     }
@@ -26,13 +28,15 @@ public class Shop implements Serializable {
     public String toString() {
         return "Shop{" +
                 "idS=" + idS +
+                ", provinceID=" + provinceID +
+                ", districtID=" + districtID +
+                ", wardID=" + wardID +
                 ", logo_header='" + logo_header + '\'' +
                 ", logo_footer='" + logo_footer + '\'' +
                 ", aboutShop='" + aboutShop + '\'' +
                 ", designerBy='" + designerBy + '\'' +
                 ", textInHelp='" + textInHelp + '\'' +
                 ", shopName='" + shopName + '\'' +
-                ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 '}';
@@ -44,6 +48,30 @@ public class Shop implements Serializable {
 
     public void setIdS(int idS) {
         this.idS = idS;
+    }
+
+    public int getProvinceID() {
+        return provinceID;
+    }
+
+    public void setProvinceID(int provinceID) {
+        this.provinceID = provinceID;
+    }
+
+    public int getDistrictID() {
+        return districtID;
+    }
+
+    public void setDistrictID(int districtID) {
+        this.districtID = districtID;
+    }
+
+    public int getWardID() {
+        return wardID;
+    }
+
+    public void setWardID(int wardID) {
+        this.wardID = wardID;
     }
 
     public String getLogo_header() {
@@ -92,14 +120,6 @@ public class Shop implements Serializable {
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getPhone() {

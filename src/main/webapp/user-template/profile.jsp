@@ -14,7 +14,8 @@
 <head>
 
     <meta charset="utf-8"/>
-    <title>QST | Trang cá nhân</title>
+    <title>Mỹ Phẩm QST || Trang cá nhân</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="Free HTML Templates" name="keywords"/>
     <!-- Google Font -->
@@ -195,7 +196,7 @@
                                             <h6 class="mb-0">E-mail</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            <input name="email" id="email" type="text" class="form-control"
+                                            <input name="email" id="email" type="email" class="form-control"
                                                    value="<%=email%>">
                                         </div>
                                     </div>
@@ -205,7 +206,7 @@
                                             <h6 class="mb-0">Số điện thoại</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            <input name="phone" id="phone" type="text" class="form-control"
+                                            <input name="phone" id="phone" type="number" class="form-control"
                                                    value="<%=phone%>">
                                         </div>
                                     </div>
@@ -246,6 +247,9 @@
                                                             <input name="pass" id="pass" type="password"
                                                                    class="form-control">
                                                         </div>
+                                                        <div id="oldpass" class="col-sm-9" style="color: red; display: none;
+                                                        margin-left: 140px;font-size: 13px;">Mật khẩu cũ không đúng
+                                                        </div>
                                                     </div>
                                                     <hr/>
                                                     <div class="row">
@@ -266,11 +270,14 @@
                                                             <input name="repass" id="repass" type="password"
                                                                    class="form-control">
                                                         </div>
+                                                        <div id="checkpass" class="col-sm-9" style="color: red; display: none;
+                                                        margin-left: 140px;font-size: 13px;">Mật khẩu không khớp
+                                                        </div>
                                                     </div>
                                                     <hr/>
                                                     <button onclick="savePass(<%=acc1.getId()%>)"
                                                             class="btn btn-raised btn-primary btn-round waves-effect">
-                                                        Cài đặt
+                                                        Xác nhận
                                                     </button>
                                                 </div>
                                             </div>
@@ -551,7 +558,7 @@
                             }
                         } else {
                         %>
-                        <p style="font-size: 18px;font-weight: bold"> Bnạ chưa mua đơn hàng nào. <a
+                        <p style="font-size: 18px;font-weight: bold"> Bạn chưa mua đơn hàng nào. <a
                                 href="product?command=product">Tiếp tục mua hàng?</a></p>
                         <%}%>
                     </div>
@@ -743,22 +750,31 @@
         if (newPass.trim() === '' || repass.trim() === '' || pass.trim() === '') {
             showAlert('Vui lòng nhập đầy đủ thông tin!');
         } else {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "profile", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    showNotificationBox("Đổi mật khẩu thành công");
+            if (newPass === repass) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "profile", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                        if (xhr.responseText == "ok") {
+                            showNotificationBox("Đổi mật khẩu thành công");
+                            closeNew1();
+                        } else {
+                           document.getElementById("oldpass").style.display = 'block';
+                        }
+                    }
                 }
+                ;
+                xhr.send("idA=" + idA
+                    + "&command=change_pass"
+                    + "&pass=" + encodeURIComponent(pass)
+                    + "&newPass=" + encodeURIComponent(newPass)
+                    + "&repass=" + encodeURIComponent(repass));
+            } else {
+                document.getElementById("checkpass").style.display = 'block';
+                document.getElementById("oldpass").style.display = 'none';
             }
-            ;
-            xhr.send("idA=" + idA
-                + "&command=change_pass"
-                + "&pass=" + encodeURIComponent(pass)
-                + "&newPass=" + encodeURIComponent(newPass)
-                + "&repass=" + encodeURIComponent(repass));
         }
-
     }
 
     function detailOrder(idCk) {

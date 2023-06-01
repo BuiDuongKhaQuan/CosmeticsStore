@@ -1,5 +1,9 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="qht.shopmypham.com.vn.model.Shop" %>
+<%@ page import="qht.shopmypham.com.vn.model.Province" %>
+<%@ page import="java.util.List" %>
+<%@ page import="qht.shopmypham.com.vn.model.api" %>
+<%@ page import="qht.shopmypham.com.vn.service.ShopService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 
@@ -11,8 +15,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý trang chủ</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -25,6 +29,11 @@
 
         .form-group input {
             flex: 10;
+        }
+
+        .address {
+            width: 33%;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -130,9 +139,40 @@
                                     </div>
                                     <hr>
                                     <div class="form-group">
-                                        <label for="address">ĐỊA CHỈ</label>
-                                        <input type="text" id="address"
-                                               value="<%=shop.getAddress()%>" class="form-control">
+                                        <label for="provinceID">Địa chỉ</label>
+                                        <div class="form-group" style="width: 84%;">
+                                            <div class="address">
+                                                <select id="provinceID"
+                                                        class="form-control show-tick ms select2"
+                                                        data-placeholder="Select"
+                                                        onchange="getDistricts()">
+                                                    <option value="<%=api.getProvinceById(ShopService.getShop().getProvinceID()).getProvinceID()%>"><%=api.getProvinceById(ShopService.getShop().getProvinceID()).getProvinceName()%>
+                                                    </option>
+                                                    <% List<Province> provinces = api.getProvince();
+                                                        for (Province province : provinces) {%>
+                                                    <option value="<%=province.getProvinceID()%>"><%=province.getProvinceName()%>
+                                                    </option>
+                                                    <%}%>
+                                                </select>
+                                            </div>
+                                            <div class="address" id="district">
+                                                <select id="districtID"
+                                                        class="form-control show-tick ms select2"
+                                                        data-placeholder="Select"
+                                                        onchange="getWards()">
+                                                    <option value="<%=api.getDistrictById(ShopService.getShop().getProvinceID(), ShopService.getShop().getDistrictID()).getDistrictID()%>"><%=api.getDistrictById(ShopService.getShop().getProvinceID(), ShopService.getShop().getDistrictID()).getDistrictName()%>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="address" id="ward" style="margin: 0">
+                                                <select class="form-control show-tick ms select2"
+                                                        data-placeholder="Select"
+                                                        id="wardID">
+                                                    <option value="<%=api.getWardById(ShopService.getShop().getDistrictID(), ShopService.getShop().getWardID()).getWardCode()%>"><%=api.getWardById(ShopService.getShop().getDistrictID(), ShopService.getShop().getWardID()).getWardName()%>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="form-group">
@@ -199,15 +239,17 @@
 
     function save(idS) {
         var phone = document.getElementById("phone").value;
-        var address = document.getElementById("address").value;
         var slogan = document.getElementById("slogan").value;
         var contact = document.getElementById("contact").value;
         var email = document.getElementById("email").value;
         var name = document.getElementById("name").value;
         var desginer = document.getElementById("desginer").value;
         var logo_header = document.getElementById("logo_header").value;
+        var provinceID = document.getElementById("provinceID").value;
+        var districtID = document.getElementById("districtID").value;
+        var wardID = document.getElementById("wardID").value;
 
-        if (phone.trim() === '' || address.trim() === '' || slogan.trim() === '' || contact.trim() === ''
+        if (phone.trim() === '' || slogan.trim() === '' || contact.trim() === ''
             || email.trim() === '' || name.trim() === '' || desginer.trim() === '') {
             showAlert("Vui lòng nhập đủ thông tin!");
         } else {
@@ -220,20 +262,57 @@
                 }
             };
             xhr.send("phone=" + encodeURIComponent(phone)
-                + "&address=" + encodeURIComponent(address)
                 + "&slogan=" + encodeURIComponent(slogan)
                 + "&contact=" + encodeURIComponent(contact)
                 + "&email=" + encodeURIComponent(email)
                 + "&name=" + encodeURIComponent(name)
                 + "&desginer=" + encodeURIComponent(desginer)
                 + "&logo_header=" + encodeURIComponent(logo_header)
+                + "&provinceID=" + encodeURIComponent(provinceID)
+                + "&districtID=" + encodeURIComponent(districtID)
+                + "&wardID=" + encodeURIComponent(wardID)
                 + "&idS=" + idS
                 + "&command=information");
         }
     }
 
 </script><!-- Custom Js -->
+<script>
+    function getDistricts() {
+        // Lấy giá trị của tùy chọn được chọn trong danh sách tỉnh/thành phố
+        var provinceID = document.getElementById("provinceID").value;
+        var districtSelect = document.getElementById("district");
 
+        // Tạo yêu cầu AJAX để lấy danh sách quận/huyện tương ứng từ servlet
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "Address?command=provincei&provinceID=" + provinceID, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                districtSelect.innerHTML = this.responseText;
+            }
+        };
+        xhr.send();
+
+    }
+
+    function getWards() {
+        // Lấy giá trị của tùy chọn được chọn trong danh sách tỉnh/thành phố
+        var districtID = document.getElementById("districtID").value;
+        var wardSelect = document.getElementById("ward");
+
+        // Tạo yêu cầu AJAX để lấy danh sách quận/huyện tương ứng từ servlet
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "Address?command=wardi&wardID=" + districtID, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                wardSelect.innerHTML = this.responseText;
+            }
+        };
+        xhr.send();
+    }
+</script>
 </body>
 
 </html>

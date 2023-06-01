@@ -1,26 +1,16 @@
 <%@ page import="qht.shopmypham.com.vn.model.Account" %>
 <%@ page import="qht.shopmypham.com.vn.model.ListProductByCart" %>
-<%@ page import="qht.shopmypham.com.vn.service.CartService" %>
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.ShopService" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 2/15/2023
-  Time: 10:17 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Offcanvas Menu Begin -->
 <%
     Account acc = (Account) request.getSession().getAttribute("a");
 %>
 <link rel="stylesheet" href="user-template/css/main.css" type="text/css">
-<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
-      type="text/css"/>
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta3/css/all.css">
+
 <script>
     function showSearchMobile() {
         const formSearch = document.getElementById("search-header-mobile");
@@ -36,13 +26,16 @@
         <div class="offcanvas__links">
             <%if (acc == null) {%>
             <a href="login.jsp">ĐĂNG NHẬP</a>
-            <% }if (acc != null) { if (!acc.mediumPower()) { %>
+            <% }
+                if (acc != null) {
+                    if (!acc.mediumPower()) { %>
             <a href="profile?command=profile"> Xin chào <%=acc.getName()%>
             </a>
             <%} else {%>
             <a href="admin-home"> Xin chào
                 ADMIN </a>
-            <% }} %>
+            <% }
+            } %>
             <a href="faqs">FAQs</a>
         </div>
         <div class="offcanvas__top__hover">
@@ -84,7 +77,8 @@
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
-        <p>Miễn phí vẫn chuyển, bảo đảm đổi trả hoặc hoàn tiền trong 30 ngày.</p>
+        <p style="text-transform: uppercase"><%=ShopService.getShop().getShopName()%>
+        </p>
     </div>
 </div>
 <!-- Offcanvas Menu End -->
@@ -95,7 +89,8 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7 header_height">
                     <div class="header__top__left">
-                        <p>Miễn phí vẫn chuyển, bảo đảm đổi trả hoặc hoàn tiền trong 30 ngày.</p>
+                        <p style="text-transform: uppercase"><%=ShopService.getShop().getShopName()%>
+                        </p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
@@ -103,13 +98,16 @@
                         <div class="header__top__links">
                             <%if (acc == null) {%>
                             <a href="login.jsp">ĐĂNG NHẬP</a>
-                            <% }if (acc != null) { if (!acc.mediumPower()) { %>
+                            <% }
+                                if (acc != null) {
+                                    if (!acc.mediumPower()) { %>
                             <a href="profile?command=profile"> Xin chào <%=acc.getName()%>
                             </a>
                             <%} else {%>
                             <a href="admin-home"> Xin chào
                                 ADMIN </a>
-                            <% }} %>
+                            <% }
+                            } %>
                             <a href="faqs">FAQs</a>
                         </div>
                         <div class="header__top__hover">

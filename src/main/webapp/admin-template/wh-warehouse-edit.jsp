@@ -1,10 +1,4 @@
-﻿<%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="qht.shopmypham.com.vn.model.*" %>
-<%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
-<%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
+﻿<%@ page import="qht.shopmypham.com.vn.model.*" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -16,8 +10,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý kho</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -36,7 +30,8 @@
 
 <section class="content">
     <div class="body_scroll">
-        <% WareHouse wareHouse = (WareHouse) request.getAttribute("wareHouse");%>
+        <% WarehouseDetail warehouseDetail = (WarehouseDetail) request.getAttribute("warehouseDetail");
+            String idL = (String) request.getAttribute("idL");%>
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
@@ -64,24 +59,22 @@
                         <div class="body">
                             <div class="row">
                                 <div class="col-xl-9 col-lg-8 col-md-12">
-                                    <label for="quantity">Số lượng</label>
-                                    <div class="form-group">
-                                        <input type="number" id="quantity" class="form-control"
-                                               value="<%=wareHouse.getQuantity()%>">
-                                    </div>
                                     <label for="quantityInput">Số lượng nhập</label>
                                     <div class="form-group">
                                         <input type="number" id="quantityInput" class="form-control"
-                                               value="<%=wareHouse.getQuantityInput()%>">
+                                               value="<%=warehouseDetail.getQuantityInput()%>"
+                                               min="1" oninput="this.value =
+ !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : null">
                                     </div>
-                                    <label for="date1">Ngày nhập <%=wareHouse.getDateInput()%></label>
+                                    <label for="date1">Ngày nhập <%=warehouseDetail.getDateInput()%>
+                                    </label>
                                     <div class="form-group">
                                         <input type="datetime-local" id="date1"
                                                class="form-control">
                                     </div>
-                                    <button onclick="save(<%=wareHouse.getIdP()%>)"
+                                    <button onclick="save(<%=warehouseDetail.getId()%>)"
                                             class="btn btn-raised btn-primary btn-round waves-effect">
-                                        Cài đặt
+                                        Lưu chỉnh sửa
                                     </button>
                                 </div>
                             </div>
@@ -103,10 +96,9 @@
 <script>
 
     function save(id) {
-        var quantity = document.getElementById("quantity").value;
         var quantityInput = document.getElementById("quantityInput").value;
         var dateInput = document.getElementById("date1").value;
-        if (quantity.trim() === '' || quantityInput.trim() === '' || dateInput.trim() === '') {
+        if (quantityInput.trim() === '' || dateInput.trim() === '') {
             showAlert("Vui lòng nhập đầy đủ thông tin");
         } else {
             var xhr = new XMLHttpRequest();
@@ -115,11 +107,12 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                     showNotification("Thông tin đã được chỉnh sửa thành công");
+                    window.location.href = "AdminWareHouse?command=detail&id=" +
+                    <%=idL%>;
                 }
             };
-            xhr.send("quantity=" + encodeURIComponent(quantity)
-                + "&quantityInput=" + encodeURIComponent(quantityInput)
-                + "&idP=" + id
+            xhr.send("quantityInput=" + encodeURIComponent(quantityInput)
+                + "&id=" + id
                 + "&dateInput=" + encodeURIComponent(formatDate(dateInput))
                 + "&command=edit");
         }
@@ -157,7 +150,7 @@
         let month = currentDate.getMonth() + 1;
         let year = currentDate.getFullYear();
 
-        if (hours < 12) {
+        if (hours < 10) {
             hours = "0" + hours;
         }
         if (minutes < 10) {

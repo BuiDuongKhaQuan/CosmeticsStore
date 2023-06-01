@@ -34,22 +34,22 @@ public class UserLogin extends HttpServlet {
         if (acc == null) {
             request.setAttribute("mess", "Sai user hoặc mật khẩu!");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
-            level=3;
-            content="Đăng nhập thất bại";
+            level = 3;
+            content = "Đăng nhập thất bại";
         } else if (acc.getStatus() == 0) {
             idA = acc.getId();
             request.setAttribute("mess1", "Tài khoản của bạn đã bị khóa, vui lòng liên hệ với chúng tôi qua 'khaquan9a2.2016@gmail.com' !");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
             level = 3;
-            content="Đăng nhập bằng tài khoản bị khóa";
+            content = "Đăng nhập bằng tài khoản bị khóa";
 
         } else {
             idA = acc.getId();
             HttpSession session = request.getSession();
             session.setAttribute("a", acc);
             response.sendRedirect("home");
-            level=2;
-            content="Đăng nhập thành công";
+            level = 2;
+            content = "Đăng nhập thành công";
         }
         LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
 

@@ -20,7 +20,7 @@ public class AdmintBlog extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
-        request.setAttribute("blog","toggled");
+        request.setAttribute("blog1","toggled");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;
@@ -50,6 +50,7 @@ public class AdmintBlog extends HttpServlet {
                     Blog blog = BlogService.getBlogByIdBl(IdBl);
                     request.setAttribute("blog", blog);
                     request.getRequestDispatcher("/admin-template/bl-blog-edit.jsp").forward(request, response);
+                    action = 2;
                     content = "Truy cập trang quản lý chỉnh sửa blog " + IdBl;
                 }
                 if (command.equals("delete")) {

@@ -13,8 +13,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
-
+    <title>Mỹ Phẩm QST || Sản phẩm yêu thích</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
@@ -54,8 +54,8 @@
                 <div class="breadcrumb__text">
                     <h4> Sản phẩm yêu thích</h4>
                     <div class="breadcrumb__links">
-                        <a href="./home">Trang chủ</a>
-                        <a href="./product">Sản phẩm</a>
+                        <a href="home">Trang chủ</a>
+                        <a href="product?command=product">Sản phẩm</a>
                         <span>Sản phẩm yêu thích</span>
                     </div>
                 </div>

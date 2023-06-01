@@ -8,8 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Custom Js -->
 <!-- Page Loader -->
-<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
-      type="text/css"/>
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta3/css/all.css">
+
 <div class="page-loader-wrapper">
     <div class="loader">
         <div class="m-t-30"><img class="zmdi-hc-spin" src="admin-template/assets/images/loader.svg" width="48"
@@ -232,17 +232,15 @@
     </div>
     <div class="menu">
         <ul class="list">
-            <% String blog = (String) request.getAttribute("blog");
-                String slide = (String) request.getAttribute("slide");
+            <% String blog = (String) request.getAttribute("blog1");
+                String slide = (String) request.getAttribute("slider1");
                 String account1 = (String) request.getAttribute("account1");
-                String product = (String) request.getAttribute("product");
-                String voucher = (String) request.getAttribute("voucher");
-                String oder = (String) request.getAttribute("oder");
-                String general = (String) request.getAttribute("general");
-                String home = (String) request.getAttribute("home");
-                String warehouse = (String) request.getAttribute("warehouse");
-
-
+                String product = (String) request.getAttribute("product1");
+                String voucher = (String) request.getAttribute("voucher1");
+                String oder = (String) request.getAttribute("oder1");
+                String general = (String) request.getAttribute("general1");
+                String home = (String) request.getAttribute("home1");
+                String warehouse = (String) request.getAttribute("warehouse1");
             %>
             <li>
                 <div class="user-info">
@@ -258,7 +256,8 @@
 
             <li><a href="admin-home"><i class="zmdi zmdi-home"></i><span>Tổng quan</span></a></li>
 
-            <li><a href="javascript:void(0);" class="menu-toggle <%=blog%>"><i class="zmdi zmdi-blogger"></i><span>Blog</span></a>
+            <li><a href="javascript:void(0);" class="menu-toggle <%=blog%>"><i
+                    class="zmdi zmdi-blogger"></i><span>Blog</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-blog?command=list">Danh sách blog</a></li>
                     <li><a href="admin-blog?command=add">Đăng bài blog</a></li>
@@ -270,14 +269,16 @@
                     <li><a href="admin-slider?command=add">Thêm slider</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle <%=account1%>"><i class="zmdi zmdi-assignment-account"></i><span>Quản
+            <li><a href="javascript:void(0);" class="menu-toggle <%=account1%>"><i
+                    class="zmdi zmdi-assignment-account"></i><span>Quản
                         lí tài khoản</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-account?command=dashboard">Tổng quan</a></li>
                     <li><a href="admin-account?command=list">Danh sách tài khoản</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle <%=product%>"><i class="zmdi zmdi-shopping-cart"></i><span>Quản
+            <li><a href="javascript:void(0);" class="menu-toggle <%=product%>"><i
+                    class="zmdi zmdi-shopping-cart"></i><span>Quản
                         lí sản phẩm</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-product?command=dashboard">Tổng quan</a></li>
@@ -332,10 +333,12 @@
                         lí kho hàng</span></a>
                 <ul class="ml-menu">
                     <li><a href="AdminWareHouse?command=list">Danh sách hàng</a></li>
+                    <li><a href="AdminWareHouse?command=add_warehouse">
+                        Nhập kho</a></li>
                     <li><a href="AdminWareHouse?command=add">Thêm hàng</a></li>
                 </ul>
             </li>
-
+            <li><a href="AdminLog"><i class="zmdi zmdi-home"></i><span>Quản lý log</span></a></li>
             <%--            <li>--%>
             <%--                <div class="progress-container progress-primary m-t-10">--%>
             <%--                    <span class="progress-badge">Lưu lượng truy cập tháng này</span>--%>

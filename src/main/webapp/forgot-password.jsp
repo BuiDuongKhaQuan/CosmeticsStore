@@ -3,14 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>QST | Quên mật khẩu</title>
-    <link rel="stylesheet" href="user-template/css/login.css"/>
+    <title>Mỹ Phẩm QST || Quên mật khẩu</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">    <link rel="stylesheet" href="user-template/css/login.css"/>
     <link
             href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
             rel="stylesheet"
     />
-    <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
-          type="text/css"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta3/css/all.css">
+
 </head>
 <body>
 <img src="user-template/img/background/login.png" style="width: 100%;height: 100vh; position: absolute">
