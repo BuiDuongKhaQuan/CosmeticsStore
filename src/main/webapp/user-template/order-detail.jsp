@@ -1,7 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Collections" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.service.*" %>
 <%@ page import="qht.shopmypham.com.vn.tools.Format" %>
@@ -12,10 +9,9 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8"/>
-    <title>QST | Trang cá nhân</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Mỹ Phẩm QST || Chi tiết đơn hàng</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="Free HTML Templates" name="keywords"/>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -274,7 +270,7 @@
                                 <div class="inf-text">Phương thức thanh toán</div>
                                 <div class="inf-m">
                                     <% if (checkOut.getIdPm() == 1) {%>
-                                    <div>Tiền mặc</div>
+                                    <div>Thanh toán khi nhận hàng</div>
                                     <%} else {%>
                                     <div>Paypal</div>
                                     <%}%>

@@ -19,7 +19,7 @@ public class AdminVoucher extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
-        request.setAttribute("voucher","toggled");
+        request.setAttribute("voucher1", "toggled");
         String command = request.getParameter("command");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
@@ -37,26 +37,27 @@ public class AdminVoucher extends HttpServlet {
                     List<Voucher> voucherList = VoucherService.getAllVoucher();
                     request.setAttribute("voucherList", voucherList);
                     request.getRequestDispatcher("admin-template/vc-voucher-list.jsp").forward(request, response);
-                    content="Truy cập trang quản lý danh sách voucher";
+                    content = "Truy cập trang quản lý danh sách voucher";
                 }
                 if (command.equals("edit")) {
                     String id = request.getParameter("id");
                     Voucher voucher = VoucherService.getVoucherById(id);
                     request.setAttribute("voucher", voucher);
                     request.getRequestDispatcher("admin-template/vc-voucher-edit.jsp").forward(request, response);
-               content ="Truy cập trang quản lý chỉnh sửa voucher "+id;
+                    content = "Truy cập trang quản lý chỉnh sửa voucher " + id;
+                    action = 2;
                 }
                 if (command.equals("add")) {
                     request.getRequestDispatcher("admin-template/vc-voucher-add.jsp").forward(request, response);
-               content="Truy cập trang quản lý thêm voucher";
+                    content = "Truy cập trang quản lý thêm voucher";
                 }
                 if (command.equals("delete")) {
                     String id = request.getParameter("id");
                     VoucherService.deleteVoucherById(id);
                     response.sendRedirect("AdminVoucher?command=list");
-                    level=3;
-                    action=3;
-                    content="Xóa mã giảm giá "+id;
+                    level = 3;
+                    action = 3;
+                    content = "Xóa mã giảm giá " + id;
                 }
                 LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
 
@@ -89,9 +90,9 @@ public class AdminVoucher extends HttpServlet {
                     String status = request.getParameter("status");
                     String code = request.getParameter("code");
                     VoucherService.editVouchertById(id, name, price, status, quantity, code);
-                    level=2;
-                    action=2;
-                    content="Chỉnh sửa voucher "+id;
+                    level = 2;
+                    action = 2;
+                    content = "Chỉnh sửa voucher " + id;
                 }
                 if (command.equals("add")) {
                     String name = request.getParameter("name");
@@ -99,8 +100,8 @@ public class AdminVoucher extends HttpServlet {
                     String quantity = request.getParameter("quantity");
                     String code = request.getParameter("code");
                     VoucherService.addVoucher(price, quantity, name, code);
-                    level=2;
-                    action=1;
+                    level = 2;
+                    action = 1;
                     content = "Thêm voucher ";
                 }
                 if (command.equals("delete")) {

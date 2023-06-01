@@ -30,6 +30,8 @@ public class ProductCheckoutService {
         });
     }
 
+
+
     public static List<ListProductByCheckOut> getProductProductCheckoutByIdCk(String idCk) {
         return JDBiConnector.me().withHandle(handle -> {
             return handle.createQuery("select * FROM listproductbycheckout where  idCk=?")
@@ -52,10 +54,11 @@ public class ProductCheckoutService {
         if (listProductByCheckOuts.size() == 0) return null;
         return listProductByCheckOuts;
     }
-    public static Map<Integer,Integer> sum_sale() {
-       Map<Integer,Integer> map = new HashMap<>();
-       int a = 0;
-       List<ListProductByCheckOut> list = ProductCheckoutService.getProductProductCheckout();
+
+    public static Map<Integer, Integer> sum_sale() {
+        Map<Integer, Integer> map = new HashMap<>();
+        int a = 0;
+        List<ListProductByCheckOut> list = ProductCheckoutService.getProductProductCheckout();
         for (int i = 0; i < list.size(); i++) {
             int key = list.get(i).getIdP();
             int value = list.get(i).getQuantity();
@@ -70,10 +73,30 @@ public class ProductCheckoutService {
                 map.put(key, value);
             }
         }
-       return map;
+        return map;
+    }
+    public static List<ListProductByCheckOut> getProductProductCheckoutByIdP(int idP) {
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("select * FROM listproductbycheckout  where idP=?").bind(0, idP)
+                    .mapToBean(ListProductByCheckOut.class)
+                    .stream().collect(Collectors.toList());
+        });
     }
 
+    public static int quantitySold(int idP) {
+
+        int quantity = JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT sum(quantity) from listproductbycheckout WHERE idP =?")
+                    .bind(0, idP)
+                    .mapTo(Integer.class)
+                    .one();
+        });
+        return quantity;
+    }
+
+
+
     public static void main(String[] args) {
-        System.out.println(sum_sale());
+        System.out.println(quantitySold(1));
     }
 }

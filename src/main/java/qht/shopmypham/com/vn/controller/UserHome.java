@@ -1,5 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
@@ -14,9 +16,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @WebServlet(name = "Home", value = "/home")
 public class UserHome extends HttpServlet {
+    public static List<Province> provinceList;
+    public static List<Product> productList = ProductService.getProductIsSell(1);
+    static {
+        try {
+            provinceList = api.getProvince();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -88,10 +100,11 @@ public class UserHome extends HttpServlet {
         request.setAttribute("listSlider", listSlider);
         request.setAttribute("activeHome", "active");
         request.getRequestDispatcher("/user-template/home.jsp").forward(request, response);
+        System.out.println(provinceList);
         if (acc != null) {
             idA = acc.getId();
         }
-        content ="Truy cập trang chủ";
+        content = "Truy cập trang chủ";
         LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
 
     }

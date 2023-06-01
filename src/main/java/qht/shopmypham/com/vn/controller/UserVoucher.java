@@ -57,7 +57,7 @@ public class UserVoucher extends HttpServlet {
                             "                            <li>Đơn giá <span>" + Format.formatPrice(price) + "đ</span></li>\n" +
                             "                            <li>Phí vận chuyển <span>Chưa có thông tin</span></li>\n" +
                             "                            <li>Giảm giá <span>- " + Format.formatPrice(reduction) + "đ</span></li>\n" +
-                            "                            <li>Tổng cộng <span>" + Format.formatPrice(priceLast + 25000) + "đ</span></li>\n" +
+                            "                            <li>Tổng cộng <span>" + Format.formatPrice(priceLast) + "đ</span></li>\n" +
                             "                        </ul>\n" +
                             "                        <a href=\"checkout?command=checkout\" class=\"primary-btn\">THANH TOÁN</a>";
                     session.setAttribute("voucher", voucher);
@@ -66,7 +66,7 @@ public class UserVoucher extends HttpServlet {
                             "                            <li>Đơn giá <span>" + Format.formatPrice(price) + "đ</span></li>\n" +
                             "                            <li>Phí vận chuyển <span>Chưa có thông tin</span></li>\n" +
                             "                            <li>Giảm giá <span>0đ</span></li>\n" +
-                            "                            <li>Tổng cộng <span>" + Format.formatPrice(price + 25000) + "đ</span></li>\n" +
+                            "                            <li>Tổng cộng <span>" + Format.formatPrice(price) + "đ</span></li>\n" +
                             "                        </ul>\n" +
                             "                        <a href=\"checkout?command=checkout\" class=\"primary-btn\">THANH TOÁN</a>";
                     session.removeAttribute("voucher");
@@ -78,7 +78,7 @@ public class UserVoucher extends HttpServlet {
                         "                            <li>Đơn giá <span>" + Format.formatPrice(price) + "đ</span></li>\n" +
                         "                            <li>Phí vận chuyển <span>Chưa có thông tin</span></li>\n" +
                         "                            <li>Giảm giá <span>0đ</span></li>\n" +
-                        "                            <li>Tổng cộng <span>" + Format.formatPrice(price + 25000) + "đ</span></li>\n" +
+                        "                            <li>Tổng cộng <span>" + Format.formatPrice(price) + "đ</span></li>\n" +
                         "                        </ul>\n" +
                         "                        <a href=\"checkout?command=checkout\" class=\"primary-btn\">THANH TOÁN</a>";
             }

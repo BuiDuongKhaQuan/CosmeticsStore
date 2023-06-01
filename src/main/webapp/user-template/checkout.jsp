@@ -1,9 +1,8 @@
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.tools.Format" %>
+<%@ page import="qht.shopmypham.com.vn.controller.UserHome" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -14,7 +13,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
+    <title>Mỹ Phẩm QST || Thanh toán</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -119,7 +119,7 @@
                                 <select required="required" id="provinceID" name="provinceID"
                                         onchange="getDistricts()">
                                     <option value="">--Chọn Tỉnh/Thành phố--</option>
-                                    <% List<Province> provinces = api.getProvince();
+                                    <% List<Province> provinces = UserHome.provinceList;
                                         for (Province province : provinces) {%>
                                     <option value="<%=province.getProvinceID()%>"><%=province.getProvinceName()%>
                                     </option>
@@ -288,10 +288,10 @@
             var provinceID = $('#provinceID').val();
             var districtID = $('#districtID').val();
             var wardID = $('#wardID').val();
-            if (name.length == 0 || address_detail.length == 0
-                || phone.length == 0 || address_detail.length == 0
-                || provinceID.length == 0 || districtID.length == 0
-                || wardID.length == 0 || note.length == 0) {
+            if (name.trim().length == 0 || address_detail.trim().length == 0
+                || phone.trim().length == 0 || provinceID.trim().length == 0
+                || districtID.trim().length == 0 || wardID.trim().length == 0
+                || note.trim().length == 0) {
                 showAlert("Vui lòng nhập dầy đủ thông tin thanh toán!");
                 return false;
             }
@@ -346,10 +346,10 @@
         var provinceID = $('#provinceID').val();
         var districtID = $('#districtID').val();
         var wardID = $('#wardID').val();
-        if (name.length == 0 || address_detail.length == 0
-            || phone.length == 0 || address_detail.length == 0
-            || provinceID.length == 0 || districtID.length == 0
-            || wardID.length == 0 || note.length == 0) {
+        if (name.trim().length == 0 || address_detail.trim().length == 0
+            || phone.trim().length == 0 || provinceID.trim().length == 0
+            || districtID.trim().length == 0 || wardID.trim().length == 0
+            || note.trim().length == 0) {
             showAlert("Vui lòng nhập dầy đủ thông tin thanh toán!")
         } else {
             document.getElementById("loading").style.display = 'block';

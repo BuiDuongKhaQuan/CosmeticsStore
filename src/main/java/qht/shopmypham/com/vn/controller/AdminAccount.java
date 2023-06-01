@@ -2,6 +2,7 @@ package qht.shopmypham.com.vn.controller;
 
 
 import qht.shopmypham.com.vn.model.Account;
+import qht.shopmypham.com.vn.model.Log;
 import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.tools.DateUtil;
@@ -21,7 +22,6 @@ public class AdminAccount extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
         request.setAttribute("account1","toggled");
-
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;
@@ -41,13 +41,15 @@ public class AdminAccount extends HttpServlet {
                     List<Account> accountsNocheckout = AccountService.getAccountNoCheckout();
                     List<Account> accesMonth = AccountService.getAccoutAccessByMonth();
                     List<Account> listAccoutLoyal = AccountService.getAccoutLoyal();
+                    List<Log> signbyMonth = AccountService.getSignByMonth();
+                    request.setAttribute("signbyMonth",signbyMonth);
                     request.setAttribute("listAccoutLoyal", listAccoutLoyal);
                     request.setAttribute("accesMonth", accesMonth);
                     request.setAttribute("accountsNocheckout", accountsNocheckout);
                     request.setAttribute("accountList", accountList);
                     request.setAttribute("accountList1", accountList1);
                     request.getRequestDispatcher("/admin-template/ac-dashboard.jsp").forward(request, response);
-                    content = "Truy cập trnag tổng quan tài khoản";
+                    content = "Truy cập trang tổng quan tài khoản";
                 }
                 if (command.equals("profile")) {
                     Account account = acc.getAccount();
@@ -71,7 +73,7 @@ public class AdminAccount extends HttpServlet {
                 if (command.equals("delete")) {
                     String IdA = request.getParameter("IdA");
                     AccountService.deleteAccountById(IdA);
-                    response.sendRedirect("admin-account?command=list1");
+                    response.sendRedirect("admin-account?command=list");
                     action = 3;
                     level = 4;
                     content = "Xóa tài khoản " + idA;

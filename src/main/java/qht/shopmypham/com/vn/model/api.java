@@ -14,6 +14,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import qht.shopmypham.com.vn.service.ShopService;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -21,6 +22,9 @@ import java.util.*;
 
 
 public class api implements Serializable {
+    static String districtID = String.valueOf(ShopService.getShop().getDistrictID());
+    static String wardID = String.valueOf(ShopService.getShop().getWardID());
+
     public static void signup() throws IOException {
         String url = "http://140.238.54.136/api/auth/register";
         HttpClient httpClient = HttpClientBuilder.create().build();
@@ -127,8 +131,8 @@ public class api implements Serializable {
         HttpPost request = new HttpPost(url);
         request.setHeader("Authorization", "Bearer " + getTokenAccess());
         List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("from_district_id", "3695"));
-        params.add(new BasicNameValuePair("from_ward_id", "90737"));
+        params.add(new BasicNameValuePair("from_district_id", districtID));
+        params.add(new BasicNameValuePair("from_ward_id", wardID));
         params.add(new BasicNameValuePair("to_district_id", to_district_id));
         params.add(new BasicNameValuePair("to_ward_id", to_ward_id));
         params.add(new BasicNameValuePair("height", "20"));
@@ -158,8 +162,8 @@ public class api implements Serializable {
         HttpPost request = new HttpPost(url);
         request.setHeader("Authorization", "Bearer " + getTokenAccess());
         List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("from_district_id", "3695"));
-        params.add(new BasicNameValuePair("from_ward_id", "90737"));
+        params.add(new BasicNameValuePair("from_district_id", districtID));
+        params.add(new BasicNameValuePair("from_ward_id", wardID));
         params.add(new BasicNameValuePair("to_district_id", to_district_id));
         params.add(new BasicNameValuePair("to_ward_id", to_ward_id));
         params.add(new BasicNameValuePair("height", "20"));
@@ -181,8 +185,8 @@ public class api implements Serializable {
         HttpPost request = new HttpPost(url);
         request.setHeader("Authorization", "Bearer " + getTokenAccess());
         List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("from_district_id", "3695"));
-        params.add(new BasicNameValuePair("from_ward_id", "90737"));
+        params.add(new BasicNameValuePair("from_district_id", districtID));
+        params.add(new BasicNameValuePair("from_ward_id", wardID));
         params.add(new BasicNameValuePair("to_district_id", to_district_id));
         params.add(new BasicNameValuePair("to_ward_id", to_ward_id));
         params.add(new BasicNameValuePair("height", "20"));
@@ -252,7 +256,7 @@ public class api implements Serializable {
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println(leadTime("2264","90816"));
+//        System.out.println(leadTime("2264", "90816"));
 //        getOrderById("42f70df5260242adbebe305f3645d7fd");
 //        System.out.println(registerTransport("3695","90737").getId());
 //        System.out.println(getOrderById("8787ebcfb0d0471aa3826bc01785c37a"));

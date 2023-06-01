@@ -65,7 +65,7 @@ public class UserReview extends HttpServlet {
                 String start = CountStar.starReview(r.getStar());
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("<div class=\"media mb-4\">\n" +
+                response.getWriter().write("<div class=\"media mb-4\" id=\"comment_item\">\n" +
                         "                                                <img src=\"" + account.getImg() + "\" alt=\"Image\" class=\"img-fluid mr-3 mt-1\"\n" +
                         "                                                     style=\"width: 50px;border-radius: 50%; height: 50px;\">\n" +
                         "                                                <div class=\"media-body\">\n" +

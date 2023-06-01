@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
@@ -35,6 +36,25 @@ public class DateUtil {
         if (seconds > 60 && seconds / 60 < 60) return time = seconds / 60 + " phút";
         if (seconds / 60 > 60) return time = seconds / 3600 + " giờ " + (seconds / 60 - 60) + " phút";
         return time;
+    }
+    public static String monthNow() {
+        String res="";
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH) + 1; // Lấy tháng hiện tại
+        int year = cal.get(Calendar.YEAR); // Lấy năm hiện tại
+        res= month +"/" +year;
+        return res;
+    }
+
+    public static int yearNow() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR); // Lấy năm hiện tại
+        return year;
+    }  public static int monNow() {
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH) + 1; // Lấy tháng hiện tại
+
+        return month;
     }
 
 

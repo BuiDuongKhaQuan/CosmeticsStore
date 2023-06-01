@@ -160,10 +160,11 @@ public class CheckOutService {
                         .execute()
         );
     }
+    // tổng đơn hàng trong năm
     public static List<CheckOut> getAllCheckOutByYear() {
 
         return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("select * from checkout WHERE  orderDate like '%2023'").mapToBean(CheckOut.class)
+            return handle.createQuery("select * from checkout WHERE YEAR(STR_TO_DATE(orderDate, '%r %d/%m/%Y'))=year(CURRENT_DATE())").mapToBean(CheckOut.class)
                     .stream().collect(Collectors.toList());
         });
     }
@@ -171,7 +172,7 @@ public class CheckOutService {
     public static List<CheckOut> getAllCheckOutByMonth() {
 
         return JDBiConnector.me().withHandle(handle -> {
-            return handle.createQuery("select * from checkout WHERE  orderDate like '%4/2023'").mapToBean(CheckOut.class)
+            return handle.createQuery("select * from checkout WHERE  YEAR(STR_TO_DATE(orderDate, '%r %d/%m/%Y'))=year(CURRENT_DATE()) and month(STR_TO_DATE(orderDate, '%r %d/%m/%Y'))=month(CURRENT_DATE())").mapToBean(CheckOut.class)
                     .stream().collect(Collectors.toList());
         });
     }
@@ -184,6 +185,14 @@ public class CheckOutService {
                     .stream().collect(Collectors.toList());
         });
     }
+    public static List<CheckOut> getAllCheckOutDesc() {
+
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("select * from checkout ORDER by  orderDate asc  LIMIT 5").mapToBean(CheckOut.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+
     public static void main(String[] args) {
         System.out.println(getCancel());
     }

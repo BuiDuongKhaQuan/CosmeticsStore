@@ -2,8 +2,10 @@ package qht.shopmypham.com.vn.service;
 
 import qht.shopmypham.com.vn.db.JDBiConnector;
 import qht.shopmypham.com.vn.model.Account;
+import qht.shopmypham.com.vn.model.Log;
 import qht.shopmypham.com.vn.model.Power;
 import qht.shopmypham.com.vn.model.Product;
+import qht.shopmypham.com.vn.tools.DateUtil;
 import qht.shopmypham.com.vn.tools.Encode;
 
 import javax.sound.midi.MidiFileFormat;
@@ -99,7 +101,7 @@ public class AccountService {
 
     public static void updateacountMana(String acountMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update power set accountManage=? where id= ?")
+                h.createUpdate("update power set accountManage=? where idA= ?")
                         .bind(0, acountMana)
                         .bind(1, idA)
                         .execute()
@@ -108,7 +110,7 @@ public class AccountService {
 
     public static void updateproductMana(String productMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update power set productManage=? where id= ?")
+                h.createUpdate("update power set productManage=? where idA = ?")
                         .bind(0, productMana)
                         .bind(1, idA)
                         .execute()
@@ -117,7 +119,7 @@ public class AccountService {
 
     public static void updateorderMana(String orderMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update power set orderManage=? where id= ?")
+                h.createUpdate("update power set orderManage=? where idA= ?")
                         .bind(0, orderMana)
                         .bind(1, idA)
                         .execute()
@@ -126,7 +128,7 @@ public class AccountService {
 
     public static void updateblogMana(String blogMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update power set blogManage =? where id= ?")
+                h.createUpdate("update power set blogManage =? where idA= ?")
                         .bind(0, blogMana)
                         .bind(1, idA)
                         .execute()
@@ -135,7 +137,7 @@ public class AccountService {
 
     public static void updatehomeMana(String homeMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update power set homeManage =? where id= ?")
+                h.createUpdate("update power set homeManage =? where idA= ?")
                         .bind(0, homeMana)
                         .bind(1, idA)
                         .execute()
@@ -144,7 +146,7 @@ public class AccountService {
 
     public static void updateSliderMana(String sliderMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update power set sliderManage =? where id= ?")
+                h.createUpdate("update power set sliderManage =? where idA= ?")
                         .bind(0, sliderMana)
                         .bind(1, idA)
                         .execute()
@@ -153,7 +155,7 @@ public class AccountService {
 
     public static void updateVoucherMana(String voucherMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update power set voucherManage =? where id= ?")
+                h.createUpdate("update power set voucherManage =? where idA= ?")
                         .bind(0, voucherMana)
                         .bind(1, idA)
                         .execute()
@@ -162,7 +164,7 @@ public class AccountService {
 
     public static void updategenaralMana(String genaralMana, String idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update power set generalManage=? where id= ?")
+                h.createUpdate("update power set generalManage=? where idA= ?")
                         .bind(0, genaralMana)
                         .bind(1, idA)
                         .execute()
@@ -253,8 +255,9 @@ public class AccountService {
 
     // tổng số tk truy cập web trong thansg
     public static List<Account> getAccoutAccessByMonth() {
+        String s = DateUtil.monthNow();
         return JDBiConnector.me().withHandle(h ->
-                h.createQuery("SELECT a.* from log l join account a on l.`idA` = a.id WHERE (l.time) like '%4/2023' GROUP BY l.`idA`")
+                h.createQuery("SELECT a.* from log l join account a on l.`idA` = a.id WHERE MONTH(STR_TO_DATE(l.time, '%r %d/%m/%Y'))=MONTH(CURRENT_DATE()) and YEAR(STR_TO_DATE(l.time, '%r %d/%m/%Y'))=YEAR(CURRENT_DATE()) group by l.idA")
                         .mapToBean(Account.class)
                         .stream()
                         .collect(Collectors.toList())
@@ -264,29 +267,27 @@ public class AccountService {
     // khách hàng thân thiết
     public static List<Account> getAccoutLoyal() {
         return JDBiConnector.me().withHandle(h ->
-                h.createQuery("select a.*, count(c.idA) as 'solanmua',c.idCk FROM account a join  checkout c on c.idA = a.id  JOIN listproductbycheckout l on c.idCk = l.idCk WHERE c.orderDate like '%2023' GROUP BY c.idA HAVING count(c.idA) >7")
+                h.createQuery("select a.*, sum(c.idA) as 'solanmua',c.idCk FROM account a join  checkout c on c.idA = a.id  JOIN listproductbycheckout l on c.idCk = l.idCk \n" +
+                                " where  MONTH(STR_TO_DATE(c.orderDate, '%r %d/%m/%Y'))=MONTH(CURRENT_DATE()) and YEAR(STR_TO_DATE(c.orderDate, '%r %d/%m/%Y'))=year(CURRENT_DATE()) GROUP BY \n" +
+                                " c.idA HAVING sum(c.idA) >5")
                         .mapToBean(Account.class)
                         .stream()
                         .collect(Collectors.toList())
         );
     }
 
+    public static List<Log> getSignByMonth() {
+        return JDBiConnector.me().withHandle(h ->
+                h.createQuery("select l.* from log l where l.content like 'Đăng kí tài khoản thành công' and MONTH(STR_TO_DATE(l.time, '%r %d/%m/%Y'))=MONTH(CURRENT_DATE()) and YEAR(STR_TO_DATE(l.time, '%r %d/%m/%Y'))=year(CURRENT_DATE())")
+                        .mapToBean(Log.class)
+                        .stream()
+                        .collect(Collectors.toList())
+        );
+    }
     public static void main(String[] args) {
-        System.out.println(AccountService.getPowerAccount(1).getAccountManage());
-        System.out.println(AccountService.getPowerAccount(1).getSliderManage());
-        System.out.println(AccountService.getPowerAccount(1).getBlogManage());
-        System.out.println(AccountService.getPowerAccount(1).getGeneralManage());
-        System.out.println(AccountService.getPowerAccount(1).getHomeManage());
-        System.out.println(AccountService.getPowerAccount(1).getOrderManage());
-        System.out.println(AccountService.getPowerAccount(1).getProductManage());
-        System.out.println(AccountService.getPowerAccount(1).getVoucherManage());
-        System.out.println(AccountService.getPowerAccount(1).getAccountManage() == 1
-                || AccountService.getPowerAccount(1).getSliderManage() == 1
-                || AccountService.getPowerAccount(1).getBlogManage() == 1
-                || AccountService.getPowerAccount(1).getGeneralManage() == 1
-                || AccountService.getPowerAccount(1).getHomeManage() == 1
-                || AccountService.getPowerAccount(1).getOrderManage() == 1
-                || AccountService.getPowerAccount(1).getProductManage() == 1
-                || AccountService.getPowerAccount(1).getVoucherManage() == 1);
+//        System.out.println(getAccountCheckout());
+//        System.out.println(getAccountNoCheckout());
+        System.out.println(getSignByMonth());
+//        System.out.println(getAccoutLoyal());
     }
 }

@@ -34,7 +34,8 @@ public class AdminHome extends HttpServlet {
                 List<Product> productList = ProductService.getAllProduct();
                 List<Account> accountList = AccountService.getAllAccount();
                 List<Review> reviewList = ReviewService.getAllReview();
-
+                List<CheckOut> checkOutList = CheckOutService.getAllCheckOut();
+                request.setAttribute("checkOutList", checkOutList);
                 request.setAttribute("active1", "active");
                 request.setAttribute("accountList", accountList);
                 request.setAttribute("productList", productList);

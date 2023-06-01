@@ -2,7 +2,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%@ page import="qht.shopmypham.com.vn.model.PromotionProduct" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -20,8 +19,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product list</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý sản phẩm</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">

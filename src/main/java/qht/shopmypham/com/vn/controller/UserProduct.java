@@ -1,5 +1,7 @@
 package qht.shopmypham.com.vn.controller;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.CountStar;
@@ -14,6 +16,7 @@ import java.net.InetAddress;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @WebServlet(name = "Categories", value = "/product")
 public class UserProduct extends HttpServlet {
@@ -33,23 +36,22 @@ public class UserProduct extends HttpServlet {
         int idA = 0;
         if (acc != null) idA = acc.getId();
         if (command.equals("product")) {
-            List<Product> listProduct = ProductService.getAllProduct();
             String checked = "checked";
             request.setAttribute("activeProduct", "active");
             request.setAttribute("checked0", checked);
-            request.setAttribute("listProduct", listProduct);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
             content = "Truy cập trang sản phẩm";
         }
         if (command.equals("category")) {
             String cid = request.getParameter("cid");
+            System.out.println(cid);
             List<Product> productListByIdC = ProductService.getproductbyCata(cid);
             Categories categories = CategoryService.getCategoriesById(cid);
             request.setAttribute("activeProduct", "active");
             request.setAttribute("categories", categories);
             request.setAttribute("listProduct", productListByIdC);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
-            content = "Truy cập trang danh mục sản phẩm";
+            content = "Lọc sản phẩm theo danh mục";
         }
         if (command.equals("trademark")) {
             String idT = request.getParameter("idT");
@@ -58,11 +60,11 @@ public class UserProduct extends HttpServlet {
             request.setAttribute("listProduct", productList);
             request.setAttribute("trademark", trademark);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
-            content = "Truy cập trang thương hiệu";
+            content = "Lọc sản phẩm theo thương hiệu";
         }
         if (command.equals("favorite")) {
-            if (acc==null) request.getRequestDispatcher("login.jsp").forward(request,response);
-            if (acc!=null) idA = acc.getId();
+            if (acc == null) request.getRequestDispatcher("login.jsp").forward(request, response);
+            if (acc != null) idA = acc.getId();
             List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getId());
             request.setAttribute("productList", productList);
             request.getRequestDispatcher("/user-template/favorite-product.jsp").forward(request, response);
@@ -294,14 +296,14 @@ public class UserProduct extends HttpServlet {
                     CartService.deleteProductByIdpAndIda(product_id, String.valueOf(acc.getId()));
                     level = 2;
                     action = 2;
-                    content = "Xóa sản phẩm ra khỏi giỏ hàng " +product_id;
+                    content = "Xóa sản phẩm ra khỏi giỏ hàng " + product_id;
                 }
             }
             if (command.equals("deleteItem")) {
                 CartService.deleteProductByIdpAndIda(product_id, String.valueOf(acc.getId()));
                 level = 3;
                 action = 3;
-                content = "Xóa sản phẩm ra khỏi giỏ hàng " +product_id;
+                content = "Xóa sản phẩm ra khỏi giỏ hàng " + product_id;
 
             }
             if (command.equals("favorite")) {
@@ -310,20 +312,20 @@ public class UserProduct extends HttpServlet {
                     ProductService.addFavoriteProduct(product_id, String.valueOf(acc.getId()));
                     level = 2;
                     action = 1;
-                    content = "Thêm sản phẩm vào danh sách sản phẩm yêu thích " +product_id;
+                    content = "Thêm sản phẩm vào danh sách sản phẩm yêu thích " + product_id;
                 }
             }
             if (command.equals("delete-favorite")) {
                 ProductService.deleteFavoriteProduct(product_id, String.valueOf(acc.getId()));
-                level =3;
+                level = 3;
                 action = 3;
-                content = "Xóa sản phẩm khỏi danh sách sản phẩm yêu thích " +product_id;
+                content = "Xóa sản phẩm khỏi danh sách sản phẩm yêu thích " + product_id;
             }
             if (command.equals("load_list_favorite")) {
                 List<Product> productList = ProductService.getFavoriteProductByIdA(acc.getId());
-                level =2;
+                level = 2;
                 action = 1;
-                content = "Cập nhật số lượng sản phẩm yêu thích " +product_id;
+                content = "Cập nhật số lượng sản phẩm yêu thích " + product_id;
                 if (productList.size() != 0) {
                     for (Product p : productList) {
                         List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));

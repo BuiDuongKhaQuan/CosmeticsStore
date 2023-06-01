@@ -29,7 +29,7 @@ public class AdminOrder extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<CheckOut> checkOuts = CheckOutService.getAllCheckOut();
-        request.setAttribute("oder","toggled");
+        request.setAttribute("oder1","toggled");
         Collections.reverse(checkOuts);
         String command = request.getParameter("command");
         String nowDate = DateUtil.getDateNow();
@@ -50,6 +50,8 @@ public class AdminOrder extends HttpServlet {
                     List<CheckOut>listOrderYear = CheckOutService.getAllCheckOutByYear();
                     List<CheckOut>listOrderMonth = CheckOutService.getAllCheckOutByMonth();
                     List<CheckOut>listCancel = CheckOutService.getCancel();
+                    List<CheckOut>checkOutListNew = CheckOutService.getAllCheckOutDesc();
+                    request.setAttribute("checkOutListNew",checkOutListNew);
                     request.setAttribute("listCancel",listCancel);
                     request.setAttribute("checkOuts",checkOuts);
                     request.setAttribute("listOrderMonth",listOrderMonth);
@@ -110,6 +112,9 @@ public class AdminOrder extends HttpServlet {
                     String IdCk = request.getParameter("IdCk");
                     CheckOutService.deleteCheckOutById(IdCk);
                     response.sendRedirect("admin-order?command=list");
+                    content = "Xác nhận hủy đơn hàng" + IdCk;
+                    action = 3;
+                    level = 3;
                 }
                 if (command.equals("bill")) {
                     long total = 0;
@@ -124,7 +129,7 @@ public class AdminOrder extends HttpServlet {
                     Ward ward = api.getWardById(Integer.parseInt(transport.getToDistrictId()), Integer.parseInt(transport.getToWardId()));
                     String address = ward.getWardName() + ", " + district.getDistrictName() + ", " + province.getProvinceName();
                     String payment = "";
-                    if (checkOut.getIdPm() == 0) {
+                    if (checkOut.getIdPm() == 1) {
                         payment = "Thanh toán khi nhận hàng";
                     } else {
                         payment = "Paypal";

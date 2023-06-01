@@ -23,8 +23,7 @@ public class AdminGeneral extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
-        request.setAttribute("general","toggled");
-
+        request.setAttribute("general1","toggled");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;

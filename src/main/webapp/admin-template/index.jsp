@@ -3,6 +3,9 @@
 <%@ page import="qht.shopmypham.com.vn.model.Account" %>
 <%@ page import="qht.shopmypham.com.vn.model.Review" %>
 <%@ page import="java.text.NumberFormat" %>
+<%@ page import="qht.shopmypham.com.vn.model.CheckOut" %>
+<%@ page import="qht.shopmypham.com.vn.service.CheckOutService" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!doctype html>
@@ -14,8 +17,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
-    <title>:: Aero Bootstrap4 Admin :: Home</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+    <title>QST || Admin</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css"/>
     <link rel="stylesheet" href="admin-template/assets/plugins/charts-c3/plugin.css"/>
@@ -29,7 +32,7 @@
 
 <jsp:include page="header.jsp"></jsp:include>
 
- <!-- Main Content -->
+<!-- Main Content -->
 
 <section class="content">
     <div class="">
@@ -84,12 +87,11 @@
                     <div class="card widget_2 big_icon email">
                         <div class="body">
                             <%
-                                NumberFormat nf = NumberFormat.getInstance();
-                                nf.setMinimumFractionDigits(0);
+                                List<CheckOut>checkOutList = (List<CheckOut>) request.getAttribute("checkOutList");
                             %>
-                            <h6>Doanh thu</h6>
-                            <h2><%=nf.format(Product.revenue())%> <small class="info">vnd</small></h2>
-                            <small>Tổng số doanh thu</small>
+                            <h6>Đơn hàng</h6>
+                            <h2><%=checkOutList.size()%><small class="info"> đơn</small></h2>
+                            <small>Tổng đơn hàng</small>
                             <div class="progress">
                                 <div class="progress-bar l-purple" role="progressbar" aria-valuenow="39"
                                      aria-valuemin="0" aria-valuemax="100" style="width: 39%;"></div>
@@ -97,6 +99,11 @@
                         </div>
                     </div>
                 </div>
+                <%
+                    NumberFormat nf = NumberFormat.getInstance();
+                    nf.setMinimumFractionDigits(0);
+                %>
+
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="card widget_2 big_icon domains">
                         <div class="body">
@@ -138,7 +145,7 @@
                                     <div class="state_w1 mb-1 mt-1">
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <h5>2,365</h5>
+                                                <h5><%=nf.format(Product.revenue())%>đ </h5>
                                                 <span><i class="zmdi zmdi-balance"></i> Doanh thu</span>
                                             </div>
                                             <div class="sparkline" data-type="bar" data-width="97%" data-height="55px"
@@ -180,7 +187,7 @@
                                     <div class="state_w1 mb-1 mt-1">
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <h5>2,055</h5>
+                                                <h5><%=Format.formatPrice(CheckOutService.getAllCheckOut().size())%></h5>
                                                 <span><i class="zmdi zmdi-print"></i> Hóa đơn</span>
                                             </div>
                                             <div class="sparkline" data-type="bar" data-width="97%" data-height="55px"

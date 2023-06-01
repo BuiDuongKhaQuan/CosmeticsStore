@@ -1,5 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.service.VoucherService" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
@@ -15,8 +14,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
-    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý đơn hàng</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -135,7 +134,7 @@
                                             <div class="si2">
                                                 <div>Cập nhật thời gian</div>
                                                 <div>
-                                                    <p  style="margin-left: 15px"><%=transport.getUpdated_at()%>
+                                                    <p style="margin-left: 15px"><%=transport.getUpdated_at()%>
                                                     </p>
                                                 </div>
                                             </div>
@@ -146,7 +145,7 @@
                                             <div class="si2">
                                                 <div>Ngày tạo đơn</div>
                                                 <div>
-                                                    <p  style="margin-left: 15px"><%=transport.getCreated_at()%>
+                                                    <p style="margin-left: 15px"><%=transport.getCreated_at()%>
                                                     </p>
                                                 </div>
 
@@ -158,7 +157,7 @@
                                             <div class="si2">
                                                 <div>Mã vận đơn</div>
                                                 <div>
-                                                    <p  style="margin-left: 15px"><%=transport.getId()%>
+                                                    <p style="margin-left: 15px"><%=transport.getId()%>
                                                     </p>
                                                 </div>
 
@@ -249,7 +248,7 @@
                                     <div class="inf-text">Phương thức thanh toán</div>
                                     <div class="inf-m">
                                         <% if (checkOut.getIdPm() == 1) {%>
-                                        <div>Tiền mặc</div>
+                                        <div>Thanh toán khi nhận hàng</div>
                                         <%} else {%>
                                         <div>Paypal</div>
                                         <%}%>

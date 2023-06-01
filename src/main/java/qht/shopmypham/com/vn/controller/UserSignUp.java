@@ -46,18 +46,20 @@ public class UserSignUp extends HttpServlet {
                     Collections.reverse(accountList);
                     los.signUp(user, Encode.enCodeMD5(password), email, accountList.get(0).getId() + 1);
                     request.setAttribute("success", "Đăng ký thành công, mời bạn đăng nhập!");
-                    request.getRequestDispatcher("/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
                     action = 5;
                     level = 2;
                     content = "Đăng kí tài khoản thành công";
                 } else {
-                    response.sendRedirect("/login.jsp");
+                    response.sendRedirect("login.jsp");
                     action = 5;
                     level = 2;
                     content = "Đăng kí tài khoản thất bại";
                 }
             } else {
-                response.sendRedirect("/login.jsp");
+                request.setAttribute("error", "Tên tài khoản đã tồn tại!");
+                request.setAttribute("active","active");
+                request.getRequestDispatcher("login.jsp").forward(request,response);
                 action = 5;
                 level = 2;
                 content = "Đăng kí tài khoản thất bại";
