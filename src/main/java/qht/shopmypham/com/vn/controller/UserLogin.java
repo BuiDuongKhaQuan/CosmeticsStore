@@ -26,34 +26,30 @@ public class UserLogin extends HttpServlet {
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;
-        int action = 4;
+        int action = 10;
         String dateNow = DateUtil.getDateNow();
         String content = "";
         int idA = 0;
         Account acc = LoginService.getAccout(userName, Encode.enCodeMD5(passWord));
-
         if (acc == null) {
             request.setAttribute("mess", "Sai user hoặc mật khẩu!");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
-            level=3;
-            action= 2;
-            content="Đăng nhập sai  user hoặc mật khẩu";
+            level = 3;
+            content = "Đăng nhập thất bại";
         } else if (acc.getStatus() == 0) {
             idA = acc.getId();
             request.setAttribute("mess1", "Tài khoản của bạn đã bị khóa, vui lòng liên hệ với chúng tôi qua 'khaquan9a2.2016@gmail.com' !");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
-            level=3;
-            action= 2;
-            content="Tài khoản đã bị khóa";
+            level = 3;
+            content = "Đăng nhập bằng tài khoản bị khóa";
 
         } else {
             idA = acc.getId();
             HttpSession session = request.getSession();
             session.setAttribute("a", acc);
             response.sendRedirect("home");
-            level=2;
-            action= 2;
-            content="Đăng nhập thành công";
+            level = 2;
+            content = "Đăng nhập thành công";
         }
         LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
 

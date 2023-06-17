@@ -2,12 +2,14 @@ package qht.shopmypham.com.vn.controller;
 
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.GooglePojo;
+import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.tools.DateUtil;
 import qht.shopmypham.com.vn.tools.GoogleUtils;
 import qht.shopmypham.com.vn.service.LoginService;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -50,7 +52,9 @@ public class LoginGoogle extends HttpServlet {
             GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
             Account acc = LoginService.checkIdGoogle(googlePojo.getId());
             if (acc == null) {
-                LoginService.signUpGoogle(googlePojo.getId(),googlePojo.getEmail());
+                List<Account> accountList = AccountService.getAllAccount();
+                int id = accountList.get(accountList.size()-1).getId() + 1;
+                LoginService.signUpGoogle(googlePojo.getId(),googlePojo.getEmail(), id);
                 acc = LoginService.getAccoutGoogle(googlePojo.getId());
                 HttpSession session = request.getSession();
                 session.setAttribute("a", acc);

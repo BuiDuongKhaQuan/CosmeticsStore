@@ -7,6 +7,7 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -19,8 +20,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product list</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý sản phẩm</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -40,11 +41,11 @@
         <div class="block-header">
             <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Chọn sản phẩm ưu đãi</h2>
+                    <h2>Danh sách sản phẩm ưu đãi</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="admin-home"><i class="zmdi zmdi-home"></i> Admin</a></li>
-                        <li class="breadcrumb-item">Quản lí trang chủ</li>
-                        <li class="breadcrumb-item active">Chọn sản phẩm làm sản phẩm ưu đãi</li>
+                        <li class="breadcrumb-item">Quản lí sản phẩm</li>
+                        <li class="breadcrumb-item active">Danh sách sản phẩm ưu đãi</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
                             class="zmdi zmdi-sort-amount-desc"></i></button>
@@ -67,43 +68,47 @@
                                     <th>Tên sản phẩm</th>
                                     <th data-breakpoints="xs">Giá</th>
                                     <th data-breakpoints="xs md">Trang thái</th>
-                                    <th data-breakpoints="sm xs md"></th>
+                                    <th data-breakpoints="sm xs md">Thao tác</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <% List<PromotionProduct> list = (List<PromotionProduct>) request.getAttribute("promotionProducts");
                                     String pattern = "hh:mm:ss a dd/MM/yyyy";
                                     SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+                                    Selling selling = ProductService.getSelling();
                                     String status = "";
                                     for (PromotionProduct p : list) {
                                         Date date1 = formatter.parse(p.getStartDay());
                                         Date date2 = formatter.parse(p.getEndDay());
                                         Date dateNow1 = formatter.parse(DateUtil.getDateNow());
                                         if (dateNow1.after(date1) && dateNow1.before(date2)) {
-                                            status = "Đang khuyến mãi";
+                                            status = "<span class=\"col-green\">Đang khuyến mãi</span>";
                                         } else {
-                                            status = "Hết khuyến mãi";
+                                            status = "<span class=\"col-red\">Hết khuyến mãi</span>";
                                         }
                                         Product product = ProductService.getProductById(p.getIdP());
                                         List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
                                 %>
-                                <tr onclick="show<%=p.getId()%>()">
-                                    <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
+                                <tr>
+                                    <td class="cursor-pointer" onclick="show<%=p.getId()%>()"><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
                                     </td>
-                                    <td><h5><%=product.getName()%>
+                                    <td class="cursor-pointer" onclick="show<%=p.getId()%>()"><h5 class="nowrap_text"><%=product.getName()%>
                                     </h5>
                                     </td>
-                                    <td><%=product.getPrice()%>đ</td>
-                                    <td><span class="col-green"><%=status%></span></td>
+                                    <td><%=Format.formatPrice(product.getPrice())%>đ</td>
+                                    <td><%=status%></td>
                                     <td>
-                                        <a href="admin-product?command=deletePromotion&id=<%=p.getId()%>"
+                                        <% if (p.getIdP() != selling.getIdP()){%>
+                                        <a style="margin-left: 20px"
+                                           href="admin-product?command=deletePromotion&id=<%=p.getId()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
-                                                class="zmdi zmdi-delete"></i></a>
+                                                class="zmdi zmdi-delete"></i></a><%}else {%>
+                                        Sell trong tuần <%}%>
                                     </td>
                                 </tr>
                                 <div id="show<%=p.getId()%>" class="promotion">
                                     <div class="promotion-box">
-                                        <label class="title">Chi tiết
+                                        <label class="title">Chi tiết khuyến
                                             mãi</label>
                                         <i class="zmdi zmdi-close icon-close"
                                            onclick="close<%=p.getId()%>()"></i>

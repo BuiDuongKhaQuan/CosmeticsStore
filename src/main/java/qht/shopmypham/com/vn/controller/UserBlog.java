@@ -26,7 +26,6 @@ public class UserBlog extends HttpServlet {
         int idA = 0;
         List<Blog> blogList = BlogService.get8Blog();
         Account acc = (Account) request.getSession().getAttribute("a");
-        InetAddress ip = InetAddress.getLocalHost();
         request.setAttribute("activeBlog", "active");
         request.setAttribute("blogList", blogList);
         request.getRequestDispatcher("/user-template/blog.jsp").forward(request, response);

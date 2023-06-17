@@ -1,4 +1,3 @@
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.CategoryService" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
@@ -6,6 +5,9 @@
 <%@ page import="qht.shopmypham.com.vn.service.ReviewService" %>
 <%@ page import="qht.shopmypham.com.vn.service.TrademarkService" %>
 <%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
+<%@ page import="qht.shopmypham.com.vn.controller.UserHome" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -18,8 +20,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
-
+    <title>Mỹ Phẩm QST || Sản phẩm</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
@@ -86,6 +88,7 @@
                                 style="color: #b7b7b7;font-size: 15px;border: none;background: transparent;position: absolute;right: 0;padding: 0 15px;top: 0;height: 100%;"
                                 onclick="search()"><span class="icon_search"></span></button>
                     </div>
+
                     <div class="shop__sidebar__accordion">
                         <div class="accordion" id="accordionExample">
                             <div class="card">
@@ -95,14 +98,12 @@
                                 <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories">
+
                                             <ul class="nice-scroll">
                                                 <% List<Categories> listCategories = CategoryService.getAllCategory();
                                                     for (Categories c : listCategories) {
                                                 %>
-                                                <li><a href="product?command=category&cid=<%=c.getIdC()%>">
-                                                    <%= c.getNameC()%>
-                                                </a>
-                                                </li>
+                                                <input type="radio" name="cate" value="<%=c.getIdC()%>"  onchange="sendDataToServer()"> <%=c.getNameC()%><br>
                                                 <%}%>
                                             </ul>
                                         </div>
@@ -122,9 +123,7 @@
                                                     List<Trademark> list = TrademarkService.getTrademarkAll();
                                                     for (Trademark t : list) {
                                                 %>
-                                                <li>
-                                                    <a href="product?command=trademark&idT=<%=t.getId()%>"><%=t.getName()%>
-                                                    </a></li>
+                                                <input type="radio" name="trade" value="<%=t.getId()%>"  onchange="sendDataToServer()"> <%=t.getName()%><br>
                                                 <%}%>
                                             </ul>
                                         </div>
@@ -139,21 +138,16 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
-                                                <li><a href="product?command=filterPrice&price1=0&price2=100000">0-100.000
-                                                    đ</a></li>
-                                                <li><a href="product?command=filterPrice&price1=100000&price2=300000">100.000
-                                                    - 300.000 đ</a></li>
-                                                <li><a href="product?command=filterPrice&price1=300000&price2=600000">300.000
-                                                    - 600.000 đ</a></li>
-                                                <li><a href="product?command=filterPrice&price1=600000&price2=600000">600.000đ
-                                                    trở lên</a></li>
-
+                                                <input type="radio" name="price" value="null"  onchange="sendDataToServer()"> Tất cả<br>
+                                                <input type="radio" name="price" value="0"  onchange="sendDataToServer()"> 0-100.000<br>
+                                                <input type="radio" name="price" value="100000"  onchange="sendDataToServer()"> 100.000-300.000<br>
+                                                <input type="radio" name="price" value="300000"  onchange="sendDataToServer()"> 300.000-600.000<br>
+                                                <input type="radio" name="price" value="600000"  onchange="sendDataToServer()"> Trên 600.000đ<br>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card">
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
@@ -172,6 +166,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="col-lg-9">
@@ -179,8 +174,10 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <% List<Product> productList = (List<Product>) request.getAttribute("listProduct");%>
-                                <p>Hiển thị 1 - 9 trong <%=productList.size()%> kết quả</p>
+                                <% int size = (int) request.getAttribute("size");
+                                    List<Product> productList = (List<Product>) request.getAttribute("listProduct");
+                                %>
+                                <p>Hiển thị 1 - 9 trong <%=size%> kết quả</p>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -202,8 +199,6 @@
                 </div>
                 <div class="row" id="product_list">
                     <%
-                        NumberFormat nf = NumberFormat.getInstance();
-                        nf.setMinimumFractionDigits(0);
                         for (Product p : productList) {
                             List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
                     %>
@@ -260,24 +255,11 @@
                                     %>
                                     <%=CountStar.star(avgStart, reviewList.size())%>
                                 </div>
-                                <h5><%=nf.format(p.getPrice())%>đ</h5>
-                                <div class="product__color__select">
-                                    <label for="pc-4">
-                                        <input type="radio" id="pc-4">
-                                    </label>
-                                    <label class="active black" for="pc-5">
-                                        <input type="radio" id="pc-5">
-                                    </label>
-                                    <label class="grey" for="pc-6">
-                                        <input type="radio" id="pc-6">
-                                    </label>
-                                </div>
+                                <h5><%=Format.formatPrice(p.getPrice())%>đ</h5>
                             </div>
                         </div>
                     </div>
                     <%}%>
-
-
                 </div>
                 <div class="row" style="width: 100%;">
                     <div class="col-lg-12">
@@ -313,7 +295,107 @@
 <script src="user-template/js/product.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.js"></script>
 <script src="admin-template/assets/js/notification.js"></script>
+    <%if (size == UserHome.productList.size()) {%>
+<script>
+    function pagination1(item, count, id) {
+        $(document).ready(function () {
+            var itemsPerPage = item;
+            var itemsCount = count;
 
-</body>
+            $('#pagination').pagination({
+                items: itemsCount,
+                itemsOnPage: itemsPerPage,
+                cssStyle: 'light-theme',
+                prevText: 'Trang trước',
+                nextText: 'Trang tiếp',
+                onPageClick: function (pageNumber) {
+                    var startIndex = (pageNumber - 1) * itemsPerPage;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "product?command=pagination&startIndex=" + startIndex, true);
+                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                            document.getElementById("product_list").innerHTML = this.responseText;
+                        }
+                    };
+                    xhr.send();
+                }
 
+            });
+            $(id).hide().slice(0, itemsPerPage).show();
+        });
+    }
+
+    pagination1(9, <%=size%>, '#product_list #product_item');
+</script>
+    <%} else {%>
+<script>pagination(9, '#product_list #product_item');</script>
+    <%}%>
+<script>
+    function sendDataToServer() {
+        var cate = document.querySelector('input[name="cate"]:checked');
+        var trade = document.querySelector('input[name="trade"]:checked');
+        var price = document.querySelector('input[name="price"]:checked');
+        var minPrice = 0;
+        var maxPrice = 10000000000;
+
+        // Lấy giá trị minPrice và maxPrice từ giá trị priceValue
+        if (price !== null) {
+            var priceValue = parseInt(price.value);
+            if (priceValue === 0) {
+                minPrice = 0;
+                maxPrice = 100000;
+            } else if (priceValue === 100000) {
+                minPrice = 100000;
+                maxPrice = 300000;
+            } else if (priceValue === 300000) {
+                minPrice = 300000;
+                maxPrice = 600000;
+            } else if (priceValue === 600000) {
+                minPrice = 600000;
+                maxPrice = 10000000000;
+            }
+            else if (priceValue === null) {
+                minPrice = 0;
+                maxPrice = 10000000000;
+            }
+        } else {
+            // Nếu price không được chọn, sử dụng giá trị mặc định
+            minPrice = 0;
+            maxPrice = 10000000000;
+        }
+
+        var params = "";
+
+        if (cate !== null) {
+            params += "cate=" + cate.value + "&";
+        }
+        if (trade !== null) {
+            params += "trade=" + trade.value + "&";
+        }
+        // Thêm minPrice và maxPrice vào params ngay cả khi chúng là giá trị mặc định
+        params += "minPrice=" + minPrice + "&";
+        params += "maxPrice=" + maxPrice + "&";
+
+        if (params === "") {
+            console.log("Không có giá trị được chọn");
+            return;
+        }
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "product?command=filter&" + params.slice(0, -1), true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                document.getElementById("product_list").innerHTML = this.responseText;
+                pagination(9, '#product_list #product_item');
+            }
+        };
+
+        xhr.send();
+    }
+
+</script>
 </html>

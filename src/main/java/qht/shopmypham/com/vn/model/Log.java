@@ -87,28 +87,34 @@ public class Log implements Serializable {
     public String actionLog() {
         String action = "";
         if (this.getAction() == 1) {
-            action = "thêm";
+            action = "Thêm";
         }
         if (this.getAction() == 2) {
-            action = "sửa";
+            action = "Sửa";
         }
         if (this.getAction() == 3) {
-            action = "xóa";
+            action = "Xóa";
         }
         if (this.getAction() == 4) {
-            action = "truy cập";
+            action = "Truy cập";
         }
         if (this.getAction() == 5) {
-            action = "đăng ký tài khoản";
+            action = "Đăng ký tài khoản";
         }
         if (this.getAction() == 6) {
-            action = "nhận xét";
+            action = "Nhận xét";
         }
         if (this.getAction() == 7) {
-            action = "thanh toán";
+            action = "Thanh toán";
         }
         if (this.getAction() == 8) {
-            action = "hủy đơn";
+            action = "Hủy đơn";
+        }
+        if (this.getAction() == 9) {
+            action = "Quên mật khẩu";
+        }
+        if (this.getAction() == 10) {
+            action = "Đăng nhập";
         }
         return action;
     }

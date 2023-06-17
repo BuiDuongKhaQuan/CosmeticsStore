@@ -1,4 +1,3 @@
-<%@ page import="qht.shopmypham.com.vn.model.Categories" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="qht.shopmypham.com.vn.model.ImageTrend" %>
 <!doctype html>
@@ -12,8 +11,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý trang chủ</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->

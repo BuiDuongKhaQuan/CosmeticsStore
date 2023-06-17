@@ -11,8 +11,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin ::</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý đơn slider</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/summernote/dist/summernote.css"/>
@@ -146,20 +146,23 @@
         var slider_topic = document.getElementById("slider_topic").value;
         var slider_img = document.getElementById("slider_img").value;
         var status = document.getElementById("status").value;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "admin-slider", true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                showNotification("Bài đã được đăng thành công");
-                window.location.href = "admin-slider?command=list";
-            }
-        };
-        xhr.send("text=" + encodeURIComponent(slider_topic)
-            + "&img=" + encodeURIComponent(slider_img)
-            + "&status=" + encodeURIComponent(status)
-            + "&command=add");
+        if (slider_topic.trim() === '' || slider_img.trim() === '') {
+            showAlert('Vui lòng nhập đầy đủ thông tin!');
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "admin-slider", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    showNotification("Bài đã được đăng thành công");
+                    window.location.href = "admin-slider?command=list";
+                }
+            };
+            xhr.send("text=" + encodeURIComponent(slider_topic)
+                + "&img=" + encodeURIComponent(slider_img)
+                + "&status=" + encodeURIComponent(status)
+                + "&command=add");
+        }
     }
 
 

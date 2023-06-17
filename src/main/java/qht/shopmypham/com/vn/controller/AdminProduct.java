@@ -39,23 +39,25 @@ public class AdminProduct extends HttpServlet {
                     List<Product> unsold = WareHouseService.unsoldProduct();
                     List<WareHouse> wareHouseList = WareHouseService.warehouseProduct();
                     List<Product> inventoryProduct = WareHouseService.inventoryProduct();
-                    List<WareHouse> soldout = WareHouseService.soldout();
+                    List<Product> soldout = WareHouseService.soldout();
+                    List<Product> soutProduct = WareHouseService.getProductSold();
+                    request.setAttribute("productList1", productList);
                     request.setAttribute("soldout", soldout);
                     request.setAttribute("unsold", unsold);
                     request.setAttribute("inventoryProduct", inventoryProduct);
                     request.setAttribute("wareHouseList", wareHouseList);
+                    request.setAttribute("soutProduct", soutProduct);
                     request.getRequestDispatcher("/admin-template/ec-dashboard.jsp").forward(request, response);
                     content = "Truy cập trang quản lý tổng quan sản phẩm";
                 }
-
                 if (command.equals("category")) {
                     request.setAttribute("listCategories", listCategories);
                     request.getRequestDispatcher("/admin-template/ec-category-list.jsp").forward(request, response);
                     content = "Truy cập trang quản lý danh mục sản phẩm";
                 }
                 if (command.equals("list")) {
-                    request.setAttribute("listCategories", listCategories);
-                    request.setAttribute("productList", productList);
+                    List<Product> productListSell = ProductService.getProductIsSell(1);
+                    request.setAttribute("productList", productListSell);
                     request.getRequestDispatcher("/admin-template/ec-product-list.jsp").forward(request, response);
                     content = "Truy cập trang quản lý danh sách sản phẩm";
                 }
@@ -71,7 +73,20 @@ public class AdminProduct extends HttpServlet {
                     response.sendRedirect("admin-product?command=listPromotion");
                     content = "Xóa sản phẩm khuyến mãi" + id;
                 }
+                if (command.equals("listNew")) {
+                    List<NewProduct> newProducts = ProductService.getAllNewProduct();
+                    request.setAttribute("newProducts", newProducts);
+                    request.getRequestDispatcher("/admin-template/ec-product-new.jsp").forward(request, response);
+                    content = "Truy cập trang quản lý danh sách sản phẩm mới";
+                }
+                if (command.equals("deleteNew")) {
+                    String id = request.getParameter("id");
+                    ProductService.deleteNew(id);
+                    response.sendRedirect("admin-product?command=listNew");
+                    content = "Xóa sản phẩm mới" + id;
+                }
                 if (command.equals("edit")) {
+                    request.setAttribute("product", "toggled");
                     String idP = request.getParameter("IdP");
                     Product product = ProductService.getProductById(Integer.parseInt(idP));
                     List<Review> reviewList = ReviewService.getAllReviewByIdP(idP);
@@ -118,7 +133,7 @@ public class AdminProduct extends HttpServlet {
 
                     }
                     level = 3;
-                    action = 2;
+                    action = 3;
                     content = "Xóa đánh giá sản phẩm" + idP;
                 }
                 if (command.equals("size")) {
@@ -137,9 +152,8 @@ public class AdminProduct extends HttpServlet {
                     content = "Chỉnh sửa danh mục sản phẩm" + IdC;
                 }
                 if (command.equals("add")) {
-                    request.setAttribute("trademarks", trademarks);
-                    request.setAttribute("listCategories", listCategories);
-                    request.setAttribute("img", "assets/images/sm/img.png");
+                    List<Product> productListSell = ProductService.getProductIsSell(0);
+                    request.setAttribute("productList", productListSell);
                     request.getRequestDispatcher("/admin-template/ec-product-add.jsp").forward(request, response);
                     action = 1;
                     level = 2;
@@ -153,21 +167,21 @@ public class AdminProduct extends HttpServlet {
                 }
                 if (command.equals("delete")) {
                     String IdP = request.getParameter("IdP");
-                    ProductService.deleteImgProduct(IdP);
-                    ProductService.deleteProductById(IdP);
+                    ProductService.editProductIsSell(0, IdP);
                     response.sendRedirect("admin-product?command=list");
-                    action =3;
-                    level=3;
-                    content="Xóa sản phẩm"+IdP;
+                    action = 3;
+                    level = 3;
+                    content = "Xóa sản phẩm " + IdP;
                 }
                 if (command.equals("deleteC")) {
                     String IdC = request.getParameter("IdC");
                     CategoryService.deleteCategoryById(IdC);
                     response.sendRedirect("admin-product?command=category");
-                    action =3;
-                    level=3;
-                    content="Xóa danh mục sản phẩm"+IdC;
+                    action = 3;
+                    level = 3;
+                    content = "Xóa danh mục sản phẩm " + IdC;
                 }
+                request.setAttribute("product1", "toggled");
                 LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
             } else {
                 response.sendRedirect(error404);
@@ -224,22 +238,17 @@ public class AdminProduct extends HttpServlet {
 
                     ProductService.editProductById(name, trademark, description, idC, price, idP);
                     session.removeAttribute("imgs");
-                    action=2;
-                    level=2;
-                    content="Chỉnh sửa ảnh sản phẩm "+ idP;
+                    action = 2;
+                    level = 2;
+                    content = "Chỉnh sửa ảnh sản phẩm " + idP;
 
                 }
                 if (command.equals("add")) {
-                    int id = ProductService.getAllProduct().get(ProductService.getAllProduct().size() - 1).getIdP() + 1;
-                    ProductService.addProduct(String.valueOf(id), name, trademark, description, idC, price);
-                    Map<String, String> mapImg = (Map<String, String>) request.getSession().getAttribute("imgs");
-                    for (Map.Entry<String, String> entry : mapImg.entrySet()) {
-                        ProductService.addImageByIdP(String.valueOf(id), entry.getKey());
-                    }
-                    session.removeAttribute("imgs");
-                    action=1;
-                    level=2;
-                    content="Thêm sản phẩm "+ idP;
+                    String idP1 = request.getParameter("idP1");
+                    ProductService.editProductIsSell(1, idP1);
+                    action = 1;
+                    level = 2;
+                    content = "Thêm sản phẩm " + idP;
                 }
                 if (command.equals("promotion")) {
                     String date1 = request.getParameter("date1");
@@ -247,17 +256,17 @@ public class AdminProduct extends HttpServlet {
                     String price1 = request.getParameter("price");
                     String idP1 = request.getParameter("idP");
                     ProductService.addProductPromotion(idP1, price1, date1, date2);
-                    action=1;
-                    level=2;
-                    content="Thêm sản phẩm khuyến mãi "+ idP;
+                    action = 1;
+                    level = 2;
+                    content = "Thêm sản phẩm khuyến mãi " + idP;
                 }
                 if (command.equals("new")) {
                     String date_new = request.getParameter("date-new");
                     String idP1 = request.getParameter("idP");
                     ProductService.addProductNew(idP1, date_new);
-                    action=1;
-                    level=2;
-                    content="Thêm sản phẩm mới";
+                    action = 1;
+                    level = 2;
+                    content = "Thêm sản phẩm mới";
                 }
                 if (command.equals("editC")) {
                     String IdC = request.getParameter("idC");
@@ -265,25 +274,25 @@ public class AdminProduct extends HttpServlet {
                     String nameC = request.getParameter("nameC");
                     CategoryService.editCategoryById(IdC, nameC, img);
                     session.removeAttribute("imgsCategory");
-                    action=2;
-                    level=2;
-                    content="Chỉnh sửa danh mục sản phẩm "+ idC;
+                    action = 2;
+                    level = 2;
+                    content = "Chỉnh sửa danh mục sản phẩm " + idC;
                 }
                 if (command.equals("addC")) {
                     String nameC = request.getParameter("nameC");
                     String imgC = request.getParameter("imgC");
                     CategoryService.addCategory(nameC, imgC);
                     session.removeAttribute("imgsCategory");
-                    action=1;
-                    level=2;
-                    content="Thêm danh mục sản phẩm ";
+                    action = 1;
+                    level = 2;
+                    content = "Thêm danh mục sản phẩm ";
                 }
                 if (command.equals("deleteImg")) {
                     String idImg = request.getParameter("idImg");
                     ProductService.deleteImgProductById(idImg);
-                    action=3;
-                    level=3;
-                    content="Xóa hình ảnh sản phẩm " +idP;
+                    action = 3;
+                    level = 3;
+                    content = "Xóa hình ảnh sản phẩm " + idP;
                 }
                 if (command.equals("loadImgP")) {
                     List<Image> imageList = ProductService.getImages(idP);
@@ -296,9 +305,9 @@ public class AdminProduct extends HttpServlet {
                                 "                                                    <img src=\"" + img.getImg() + "\" style=\"border-radius: 5px;\">\n" +
                                 "                                                </div>");
                     }
-                    action=1;
-                    level=2;
-                    content="Thêm hình ảnh sản phẩm "+ idP;
+                    action = 1;
+                    level = 2;
+                    content = "Thêm hình ảnh sản phẩm " + idP;
                 }
                 LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
             } else {

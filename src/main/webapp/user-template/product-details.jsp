@@ -1,12 +1,11 @@
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.service.ReviewService" %>
-<%@ page import="java.time.LocalDate" %>
 <%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductCheckoutService" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -17,8 +16,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
-
+    <title>Mỹ Phẩm QST || Chi tiết sản phẩm</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
@@ -33,7 +32,10 @@
     <link rel="stylesheet" href="user-template/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="user-template/css/style.css" type="text/css">
     <link href="user-template/css/rating.css" rel="stylesheet"/>
-
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.4/simplePagination.min.css">
 </head>
 
 <body>
@@ -48,8 +50,6 @@
 <!-- Shop Details Section Begin -->
 <section class="shop-details">
     <% Product p = (Product) request.getAttribute("product");
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumFractionDigits(0);
         List<Review> reviewList = (List<Review>) request.getAttribute("reviewList");
         List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
     %>
@@ -58,8 +58,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="product__details__breadcrumb">
-                        <a href="./home">Trang chủ</a>
-                        <a href="./product">Sản phẩm</a>
+                        <a href="home">Trang chủ</a>
+                        <a href="product?command=product">Sản phẩm</a>
                         <span>Chi tiết sản phẩm</span>
                     </div>
                 </div>
@@ -125,7 +125,14 @@
                             <%=CountStar.star(avgStart, reviewList.size())%>
                             <span> - <%=reviewList.size()%> đánh giá</span>
                         </div>
-                        <h3><%=nf.format(p.getPrice())%><span></span></h3>
+                        <h3><%=Format.formatPrice(p.getPrice())%>đ
+                            <span><%if (p.isPromotion()) {%>
+                                    <del style="margin: 0 15px;color: #00000087;"
+                                    ><%=Format.formatPrice(p.getPriceDefault())%>
+                                    </del>
+                                    <%}%>
+                            </span>
+                        </h3>
                         <div class="product__details__cart__option">
                             <%--                            <div class="quantity">--%>
                             <%--                                <div class="pro-qty">--%>
@@ -197,7 +204,7 @@
                                                     for (Review r : reviewList) {
                                                         Account acc = AccountService.getAccountById(r.getIdA());
                                                 %>
-                                                <div class="media mb-4">
+                                                <div class="media mb-4" id="comment_item">
                                                     <img src="<%=acc.getImg()%>" alt="Image" class="img-fluid mr-3 mt-1"
                                                          style="width: 50px; border-radius: 50%; height: 50px;">
                                                     <div class="media-body">
@@ -214,6 +221,7 @@
                                                 </div>
                                                 <%}%>
                                             </div>
+                                            <div id="pagination"></div>
                                         </div>
                                         <div class="col-md-6" id="review">
                                             <h4 class="mb-4">Để lại đánh giá của bạn</h4>
@@ -299,7 +307,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -373,18 +380,14 @@
                             %>
                             <%=CountStar.star(avgStart1, reviewList1.size())%>
                         </div>
-                        <h5><%=nf.format(p1.getPrice())%>đ</h5>
-                        <div class="product__color__select">
-                            <label for="pc-4">
-                                <input type="radio" id="pc-4">
-                            </label>
-                            <label class="active black" for="pc-5">
-                                <input type="radio" id="pc-5">
-                            </label>
-                            <label class="grey" for="pc-6">
-                                <input type="radio" id="pc-6">
-                            </label>
+                        <div style="display: inline-flex">
+                            <h5><%=Format.formatPrice(p1.getPrice())%>đ</h5>
+                            <%if (p1.isPromotion()) {%>
+                            <del style="margin: 0 15px;color: #00000087;"><%=Format.formatPrice(p1.getPriceDefault())%>đ
+                            </del>
+                            <%}%>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -397,9 +400,22 @@
 <!-- Footer Section Begin -->
 <jsp:include page="footer.jsp"></jsp:include>
 <!-- Footer Section End -->
+<script src="user-template/js/jquery-3.3.1.min.js"></script>
+<script src="user-template/js/bootstrap.min.js"></script>
+<script src="user-template/js/jquery.nice-select.min.js"></script>
+<script src="user-template/js/jquery.nicescroll.min.js"></script>
+<script src="user-template/js/jquery.magnific-popup.min.js"></script>
+<script src="user-template/js/jquery.countdown.min.js"></script>
+<script src="user-template/js/jquery.slicknav.js"></script>
+<script src="user-template/js/mixitup.min.js"></script>
+<script src="user-template/js/owl.carousel.min.js"></script>
+<script src="user-template/js/main.js"></script>
+<script src="user-template/js/product.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.js"></script>
 
 <script>
-
+    pagination(3, '#comment #comment_item');
     const form = document.querySelector("#rating");
     const ratingInputs = form.elements.star;
 
@@ -422,6 +438,7 @@
                 loadSizeComment();
                 loadComment();
                 load();
+                pagination(3, '#comment #comment_item');
             }
         };
         xhr.send("mess=" + encodeURIComponent(mess)
@@ -449,6 +466,7 @@
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("comment").innerHTML = this.responseText;
+                pagination(3, '#comment #comment_item');
             }
         };
         xhr.send("idP=" + <%=p.getIdP()%>
@@ -479,6 +497,7 @@
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("review").innerHTML = this.responseText;
+                pagination(3, '#comment #comment_item');
             }
         };
         xhr.send("idP=" + <%=p.getIdP()%>
@@ -486,18 +505,7 @@
     }
 
 </script><!-- Js Plugins -->
-<script src="user-template/js/jquery-3.3.1.min.js"></script>
-<script src="user-template/js/bootstrap.min.js"></script>
-<script src="user-template/js/jquery.nice-select.min.js"></script>
-<script src="user-template/js/jquery.nicescroll.min.js"></script>
-<script src="user-template/js/jquery.magnific-popup.min.js"></script>
-<script src="user-template/js/jquery.countdown.min.js"></script>
-<script src="user-template/js/jquery.slicknav.js"></script>
-<script src="user-template/js/mixitup.min.js"></script>
-<script src="user-template/js/owl.carousel.min.js"></script>
-<script src="user-template/js/main.js"></script>
-<script src="user-template/js/product.js"></script>
-<script src="admin-template/assets/js/notification.js"></script>
+
 
 </body>
 

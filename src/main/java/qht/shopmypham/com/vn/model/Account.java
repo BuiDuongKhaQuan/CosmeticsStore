@@ -23,6 +23,14 @@ public class Account implements Serializable {
     public Account() {
     }
 
+    public Account(int id, String user, String pass, String fullName, int status) {
+        this.id = id;
+        this.user = user;
+        this.pass = pass;
+        this.fullName = fullName;
+        this.status = status;
+    }
+
     public Account(int id, String user, String pass, String fullName, String phone, String address, String email, String img, String idFacebook, String idGoogle, int status) {
         this.id = id;
         this.user = user;
@@ -151,9 +159,21 @@ public class Account implements Serializable {
                 && AccountService.getPowerAccount(this.getId()).getHomeManage() == 1
                 && AccountService.getPowerAccount(this.getId()).getOrderManage() == 1
                 && AccountService.getPowerAccount(this.getId()).getProductManage() == 1
-                && AccountService.getPowerAccount(this.getId()).getVoucherManage() == 1;
+                && AccountService.getPowerAccount(this.getId()).getVoucherManage() == 1
+                && AccountService.getPowerAccount(this.getId()).getWarehouseManage() == 1;
     }
 
+    public boolean mediumPower() {
+        return AccountService.getPowerAccount(this.getId()).getAccountManage() == 1
+                || AccountService.getPowerAccount(this.getId()).getSliderManage() == 1
+                || AccountService.getPowerAccount(this.getId()).getBlogManage() == 1
+                || AccountService.getPowerAccount(this.getId()).getGeneralManage() == 1
+                || AccountService.getPowerAccount(this.getId()).getHomeManage() == 1
+                || AccountService.getPowerAccount(this.getId()).getOrderManage() == 1
+                || AccountService.getPowerAccount(this.getId()).getProductManage() == 1
+                || AccountService.getPowerAccount(this.getId()).getVoucherManage() == 1
+                || AccountService.getPowerAccount(this.getId()).getWarehouseManage() == 1;
+    }
     @Override
     public String toString() {
         return "Account{" +
@@ -182,4 +202,6 @@ public class Account implements Serializable {
     public Account getAccount() {
         return AccountService.getAccountById(this.getId());
     }
+
+
 }

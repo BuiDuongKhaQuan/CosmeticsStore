@@ -8,8 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Custom Js -->
 <!-- Page Loader -->
-<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
-      type="text/css"/>
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta3/css/all.css">
+
 <div class="page-loader-wrapper">
     <div class="loader">
         <div class="m-t-30"><img class="zmdi-hc-spin" src="admin-template/assets/images/loader.svg" width="48"
@@ -232,6 +232,16 @@
     </div>
     <div class="menu">
         <ul class="list">
+            <% String blog = (String) request.getAttribute("blog1");
+                String slide = (String) request.getAttribute("slider1");
+                String account1 = (String) request.getAttribute("account1");
+                String product = (String) request.getAttribute("product1");
+                String voucher = (String) request.getAttribute("voucher1");
+                String oder = (String) request.getAttribute("oder1");
+                String general = (String) request.getAttribute("general1");
+                String home = (String) request.getAttribute("home1");
+                String warehouse = (String) request.getAttribute("warehouse1");
+            %>
             <li>
                 <div class="user-info">
                     <a class="image" href="admin-account?command=profile"><img
@@ -243,44 +253,44 @@
                     </div>
                 </div>
             </li>
+
             <li><a href="admin-home"><i class="zmdi zmdi-home"></i><span>Tổng quan</span></a></li>
 
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-blogger"></i><span>Blog</span></a>
+            <li><a href="javascript:void(0);" class="menu-toggle <%=blog%>"><i
+                    class="zmdi zmdi-blogger"></i><span>Blog</span></a>
                 <ul class="ml-menu">
-                    <li><a href="admin-blog?command=dashboard">Tổng quan</a></li>
                     <li><a href="admin-blog?command=list">Danh sách blog</a></li>
                     <li><a href="admin-blog?command=add">Đăng bài blog</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-slideshow"></i><span>Quản lí Slider</span></a>
+            <li><a href="javascript:void(0);" class="menu-toggle <%=slide%>"><i class="zmdi zmdi-slideshow"></i><span>Quản lí Slider</span></a>
                 <ul class="ml-menu">
-                    <li><a href="admin-slider?command=dashboard">Tổng quan</a></li>
                     <li><a href="admin-slider?command=list">Danh sách slider</a></li>
                     <li><a href="admin-slider?command=add">Thêm slider</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment-account"></i><span>Quản
+            <li><a href="javascript:void(0);" class="menu-toggle <%=account1%>"><i
+                    class="zmdi zmdi-assignment-account"></i><span>Quản
                         lí tài khoản</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-account?command=dashboard">Tổng quan</a></li>
-                    <li><a href="admin-account?command=accounts">Tài khoản</a></li>
                     <li><a href="admin-account?command=list">Danh sách tài khoản</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-shopping-cart"></i><span>Quản
+            <li><a href="javascript:void(0);" class="menu-toggle <%=product%>"><i
+                    class="zmdi zmdi-shopping-cart"></i><span>Quản
                         lí sản phẩm</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-product?command=dashboard">Tổng quan</a></li>
-                    <li><a href="admin-product?command=products">Sản phẩm</a></li>
                     <li><a href="admin-product?command=list">Danh sách sản phẩm</a></li>
                     <li><a href="admin-product?command=add">Thêm sản phẩm</a></li>
-                    <li><a href="admin-product?command=listPromotion">Danh sách sản phẩm khuyến mãi</a></li>
                     <li><a href="admin-product?command=category">Danh mục sản phẩm</a></li>
                     <li><a href="admin-product?command=addC">Thêm danh mục</a></li>
-
+                    <li><a href="admin-product?command=listNew">Danh sách sản phẩm mới</a></li>
+                    <li><a href="admin-product?command=listPromotion">Danh sách sản phẩm khuyến mãi</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i
+            <li><a href="javascript:void(0);" class="menu-toggle <%=voucher%>"><i
                     class="zmdi zmdi-card-giftcard"></i><span>Quản
                         lí voucher</span></a>
                 <ul class="ml-menu">
@@ -289,16 +299,15 @@
                     </li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i
+            <li><a href="javascript:void(0);" class="menu-toggle <%=oder%>"><i
                     class="zmdi zmdi-assignment"></i><span>Quản
                         lí đơn hàng</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-order?command=dashboard">Tổng quan</a></li>
-                    <li><a href="admin-order?command=orders">Đơn hàng</a></li>
                     <li><a href="admin-order?command=list">Danh sách đơn hàng</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i
+            <li><a href="javascript:void(0);" class="menu-toggle <%=general%>"><i
                     class="zmdi zmdi-widgets"></i><span>Quản lí chung</span></a>
                 <ul class="ml-menu">
                     <li><a href="admin-general?command=trademark">Quản lí thương hiệu</a></li>
@@ -307,7 +316,7 @@
                     <li><a href="admin-general?command=addQ">Thêm câu hỏi</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i
+            <li><a href="javascript:void(0);" class="menu-toggle <%=home%>"><i
                     class="zmdi zmdi-assignment"></i><span>Quản
                         lí trang chủ</span></a>
                 <ul class="ml-menu">
@@ -319,15 +328,17 @@
                     <li><a href="AdminHomeAll?command=information">Thông tin cửa hàng</a></li>
                 </ul>
             </li>
-            <li><a href="javascript:void(0);" class="menu-toggle"><i
+            <li><a href="javascript:void(0);" class="menu-toggle <%=warehouse%>"><i
                     class="zmdi zmdi-assignment"></i><span>Quản
                         lí kho hàng</span></a>
                 <ul class="ml-menu">
                     <li><a href="AdminWareHouse?command=list">Danh sách hàng</a></li>
+                    <li><a href="AdminWareHouse?command=add_warehouse">
+                        Nhập kho</a></li>
                     <li><a href="AdminWareHouse?command=add">Thêm hàng</a></li>
                 </ul>
             </li>
-
+            <li><a href="AdminLog"><i class="zmdi zmdi-home"></i><span>Quản lý log</span></a></li>
             <%--            <li>--%>
             <%--                <div class="progress-container progress-primary m-t-10">--%>
             <%--                    <span class="progress-badge">Lưu lượng truy cập tháng này</span>--%>

@@ -42,6 +42,7 @@ public class UserContact extends HttpServlet {
         String email = request.getParameter("email");
         String content1 = request.getParameter("content");
         String ipAddress = request.getRemoteAddr();
+        String command = request.getParameter("command");
         String url = request.getRequestURI();
         int level = 1;
         int action = 4;
@@ -55,10 +56,14 @@ public class UserContact extends HttpServlet {
             ContactService.addContact(null, email, content1, fullName);
         }
         Shop shop = ShopService.getShop();
-        request.setAttribute("shop", shop);
-        request.setAttribute("mess", mess);
-        request.setAttribute("activeContact", "active");
-        request.getRequestDispatcher("/user-template/contact.jsp").forward(request, response);
+        if (command == null) {
+            request.setAttribute("shop", shop);
+            request.setAttribute("mess", mess);
+            request.setAttribute("activeContact", "active");
+            request.getRequestDispatcher("/user-template/contact.jsp").forward(request, response);
+        } else {
+
+        }
         if (acc != null) idA = acc.getId();
         content="Đã liên hệ thành công với cửa hàng";
         level=2;

@@ -3,6 +3,7 @@ package qht.shopmypham.com.vn.controller;
 import com.restfb.types.User;
 import qht.shopmypham.com.vn.model.Account;
 import qht.shopmypham.com.vn.model.RestFB;
+import qht.shopmypham.com.vn.service.AccountService;
 import qht.shopmypham.com.vn.service.LogService;
 import qht.shopmypham.com.vn.service.LoginService;
 import qht.shopmypham.com.vn.tools.DateUtil;
@@ -11,6 +12,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "LoginFB", value = "/login-facebook")
 public class LoginFacebook extends HttpServlet {
@@ -38,7 +40,9 @@ public class LoginFacebook extends HttpServlet {
             User user = RestFB.getUserInfo(accessToken);
             Account acc = LoginService.checkIdfacebook(user.getId());
             if (acc == null) {
-                LoginService.signUpFacebook(user.getId(), user.getName());
+                List<Account> accountList = AccountService.getAllAccount();
+                int id = accountList.get(accountList.size()-1).getId() + 1;
+                LoginService.signUpFacebook(user.getId(), user.getName(), id);
                 acc = LoginService.getAccoutFacebook(user.getId());
                 HttpSession session = request.getSession();
                 session.setAttribute("a", acc);

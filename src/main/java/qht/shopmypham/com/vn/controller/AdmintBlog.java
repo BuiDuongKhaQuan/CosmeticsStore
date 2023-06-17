@@ -20,6 +20,7 @@ public class AdmintBlog extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account acc = (Account) request.getSession().getAttribute("a");
+        request.setAttribute("blog1","toggled");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;
@@ -37,18 +38,19 @@ public class AdmintBlog extends HttpServlet {
 
                 if (command.equals("list")) {
                     request.setAttribute("blogList", blogList);
-                    request.getRequestDispatcher("/admin-template/blog-list.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin-template/bl-blog-list.jsp").forward(request, response);
                     content = "Truy cập trang quản lý danh sách blog";
                 }
                 if (command.equals("add")) {
-                    request.getRequestDispatcher("/admin-template/blog-post.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin-template/bl-blog-post.jsp").forward(request, response);
                     content = "Truy cập trang quản lý thêm  blog";
                 }
                 if (command.equals("edit")) {
                     String IdBl = request.getParameter("IdBl");
                     Blog blog = BlogService.getBlogByIdBl(IdBl);
                     request.setAttribute("blog", blog);
-                    request.getRequestDispatcher("/admin-template/blog-edit.jsp").forward(request, response);
+                    request.getRequestDispatcher("/admin-template/bl-blog-edit.jsp").forward(request, response);
+                    action = 2;
                     content = "Truy cập trang quản lý chỉnh sửa blog " + IdBl;
                 }
                 if (command.equals("delete")) {

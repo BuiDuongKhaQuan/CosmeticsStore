@@ -946,6 +946,7 @@ ol {
 .product__item {
     overflow: hidden;
     margin-bottom: 40px;
+    padding: 5px;
 }
 
 .product__item.sale .product__item__pic .label {
@@ -1084,7 +1085,7 @@ ol {
     -webkit-transition: all, 0.3s;
     -o-transition: all, 0.3s;
     transition: all, 0.3s;
-    width: 260px;
+    width: 250px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -2561,7 +2562,7 @@ ol {
 }
 
 .checkout__input {
-    margin-bottom: 6px;
+    margin-bottom: 30px;
 }
 
 .checkout__input p {
@@ -2681,7 +2682,17 @@ ol {
 
 .checkout__order .site-btn {
     width: 100%;
-    margin-top: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #000000;
+    color: rgba(255, 255, 255, 0.97);
+    cursor: pointer;
+    text-align: center;
+}
+
+.checkout__order .site-btn:hover {
+    background-color: rgb(80, 80, 80);
+    color: rgb(225, 225, 225);
 }
 
 .checkout__order__products {
@@ -4123,17 +4134,19 @@ button:hover {
         -webkit-transform: translateY(0%)
     }
 }
-#notification, #alert{
+
+#notification, #alert {
     position: fixed;
     top: 12%;
     right: 5%;
-    background-color: #36f4ee;
+    background-color: #4cff00;
     color: #000000;
     padding: 10px;
     z-index: 99999;
     animation-name: slideDown;
     animation-duration: 1s;
 }
+
 #alert {
     background-color: red;
 }
@@ -4289,9 +4302,13 @@ button:hover {
     background-image: repeating-linear-gradient(45deg, #6fa6d6, #6fa6d6 33px, transparent 0, transparent 41px, #f18d9b 0, #f18d9b 74px, transparent 0, transparent 82px);
 }
 
-.align-items-center, .mb-02 a {
-    font-size: 1.3em;
-    color: green
+.align-items-center, .mb-02 a, .mb-01 a {
+    font-size: 1.25em;
+    color: green;
+}
+
+.mb-02 a, .mb-01 a {
+    text-transform: uppercase
 }
 
 .status-text {
@@ -4315,7 +4332,7 @@ button:hover {
 }
 
 .flex-wrap {
-    font-size: 1.3em;
+    font-size: 1.15em;
 }
 
 .flex-wrap-1 {
@@ -4335,6 +4352,10 @@ button:hover {
     flex: 1;
     border-right: 1px solid #3F3F3F;
     padding: 10px 24px 0 0;
+}
+
+.list-address h6 {
+    text-transform: none;
 }
 
 .list-status {
@@ -4376,6 +4397,8 @@ button:hover {
     width: 100%;
     color: rgba(0, 0, 0, .54);
     font-size: 14px;
+    margin-left: 30px;
+
 }
 
 .card-status {
@@ -4443,8 +4466,13 @@ button:hover {
 }
 
 .fa-light {
-    font-size: 1.18em;
+    font-size: 1.5em;
     color: #111111;
+}
+
+.small a {
+    text-transform: uppercase;
+    color: green;
 }
 
 .light-theme .current {
@@ -4473,4 +4501,36 @@ button:hover {
     background: -o-linear-gradient(top, #fff 0, #efefef 100%) !important;
     background: -ms-linear-gradient(top, #fff 0, #efefef 100%) !important;
     background: linear-gradient(top, #fff 0, #efefef 100%) !important;
+}
+
+#pagination {
+    text-align: center;
+}
+
+#pagination li {
+    display: inline-block;
+}
+
+.nice-select.open .list {
+    overflow-y: scroll;
+    height: 200px;
+    width: 100%;
+}
+
+.nice-select .list {
+    height: 200px;
+}
+
+.nice-select {
+    width: 100%;
+}
+
+.address {
+    width: 33%;
+    margin-right: 10px;
+}
+
+.flex-table i:hover, .fa-close:hover {
+    color: green !important;
+    font-size: 1.28em !important;
 }

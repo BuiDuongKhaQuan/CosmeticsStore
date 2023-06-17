@@ -5,6 +5,7 @@
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.service.AccountService" %>
 <%@ page import="qht.shopmypham.com.vn.tools.CountStar" %>
+<%@ page import="qht.shopmypham.com.vn.service.WareHouseService" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -16,8 +17,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý sản phẩm</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -223,22 +224,10 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <label for="product_trademark">Thương hiệu</label>
+                                            <label for="ware_quantity">Số lượng kho</label>
                                             <div class="form-group">
-                                                <select id="product_trademark"
-                                                        class="form-control show-tick ms select2"
-                                                        data-placeholder="Select">
-                                                    <%
-                                                        for (Trademark trademark : trademarks) {
-                                                            String selected = "";
-                                                            if (trademark.getId() == product.getIdT()) {
-                                                                selected = "selected";
-                                                            }
-                                                    %>
-                                                    <option value="<%=trademark.getId()%>" <%=selected%>><%=trademark.getName()%>
-                                                    </option>
-                                                    <%}%>
-                                                </select>
+                                                <input type="text" id="ware_quantity" readonly class="form-control"
+                                                       value="<%=WareHouseService.getWareHouse(product.getIdP()).getQuantity()%>">
                                             </div>
                                         </div>
                                     </div>
@@ -263,7 +252,25 @@
                                                 </select>
                                             </div>
                                         </div>
-
+                                        <div class="col-sm-6">
+                                            <label for="product_trademark">Thương hiệu</label>
+                                            <div class="form-group">
+                                                <select id="product_trademark"
+                                                        class="form-control show-tick ms select2"
+                                                        data-placeholder="Select">
+                                                    <%
+                                                        for (Trademark trademark : trademarks) {
+                                                            String selected = "";
+                                                            if (trademark.getId() == product.getIdT()) {
+                                                                selected = "selected";
+                                                            }
+                                                    %>
+                                                    <option value="<%=trademark.getId()%>" <%=selected%>><%=trademark.getName()%>
+                                                    </option>
+                                                    <%}%>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row clearfix">
                                         <div class="col-sm-6">
@@ -399,7 +406,7 @@
                                                         <%=CountStar.starReview(review.getStar())%>
                                                     </span>
                                                 </div>
-                                                <small class="comment-date float-sm-right"
+                                                <small class="comment-date float-sm-right" style="cursor: pointer"
                                                        onclick="deleteReview(<%=review.getIdR()%>)"> Xóa
                                                 </small>
                                             </li>
@@ -408,7 +415,6 @@
                                         </ul>
                                         <div id="pagination"></div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>

@@ -1,25 +1,16 @@
 <%@ page import="qht.shopmypham.com.vn.model.Account" %>
 <%@ page import="qht.shopmypham.com.vn.model.ListProductByCart" %>
-<%@ page import="qht.shopmypham.com.vn.service.CartService" %>
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.service.ShopService" %>
 <%@ page import="qht.shopmypham.com.vn.model.Product" %>
-<%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 2/15/2023
-  Time: 10:17 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Offcanvas Menu Begin -->
 <%
     Account acc = (Account) request.getSession().getAttribute("a");
 %>
 <link rel="stylesheet" href="user-template/css/main.css" type="text/css">
-<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
-      type="text/css"/>
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta3/css/all.css">
+
 <script>
     function showSearchMobile() {
         const formSearch = document.getElementById("search-header-mobile");
@@ -35,9 +26,9 @@
         <div class="offcanvas__links">
             <%if (acc == null) {%>
             <a href="login.jsp">ĐĂNG NHẬP</a>
-            <% } if (acc != null) {
-                if (acc.maxPower() == false) {
-            %>
+            <% }
+                if (acc != null) {
+                    if (!acc.mediumPower()) { %>
             <a href="profile?command=profile"> Xin chào <%=acc.getName()%>
             </a>
             <%} else {%>
@@ -86,7 +77,8 @@
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
-        <p>Miễn phí vẫn chuyển, bảo đảm đổi trả hoặc hoàn tiền trong 30 ngày.</p>
+        <p style="text-transform: uppercase"><%=ShopService.getShop().getShopName()%>
+        </p>
     </div>
 </div>
 <!-- Offcanvas Menu End -->
@@ -97,7 +89,8 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7 header_height">
                     <div class="header__top__left">
-                        <p>Miễn phí vẫn chuyển, bảo đảm đổi trả hoặc hoàn tiền trong 30 ngày.</p>
+                        <p style="text-transform: uppercase"><%=ShopService.getShop().getShopName()%>
+                        </p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
@@ -105,10 +98,9 @@
                         <div class="header__top__links">
                             <%if (acc == null) {%>
                             <a href="login.jsp">ĐĂNG NHẬP</a>
-                            <% }if (acc != null) {
-                                if (acc.maxPower() == false) {
-
-                            %>
+                            <% }
+                                if (acc != null) {
+                                    if (!acc.mediumPower()) { %>
                             <a href="profile?command=profile"> Xin chào <%=acc.getName()%>
                             </a>
                             <%} else {%>
@@ -152,17 +144,10 @@
                             <li class="<%=activeProduct%>"><a href="product?command=product">Sản phẩm</a></li>
                             <li class="<%=activePage%>"><a href="#">Trang</a>
                                 <ul class="dropdown">
-                                    <%if (acc != null) {%>
                                     <li><a href="auto-load?command=show"> Giỏ hàng</a></li>
                                     <li><a href="product?command=favorite">Sản phẩm yêu thích</a></li>
                                     <li><a href="profile?command=profile">Trang cá nhân</a></li>
                                     <li><a href="voucher">Kho voucher</a></li>
-                                    <%} else {%>
-                                    <li><a href="login.jsp"> Giỏ hàng</a></li>
-                                    <li><a href="login.jsp">Sản phẩm yêu thích</a></li>
-                                    <li><a href="login.jsp">Trang cá nhân</a></li>
-                                    <li><a href="voucher">Kho voucher</a></li>
-                                    <%}%>
                                 </ul>
                             </li>
                             <li class="<%=activeBlog%>"><a href="./blog">Blog</a></li>
@@ -188,14 +173,14 @@
                             List<Product> productList = acc.getFavoriteProduct();
                         %>
                         <a href="product?command=favorite"><i class="fa-light fa-heart"></i>
-                            <span id="favorite-count"><%=productList.size()%></span></a>
+                            <span style="left: 9px; top: -2px" id="favorite-count"><%=productList.size()%></span></a>
                         <a href="auto-load?command=show"><i class="fa-light fa-cart-shopping"></i>
-                            <span id="cart-count" style=""><%=list.size()%></span></a>
+                            <span style="left: 12px; top: -4px" id="cart-count"><%=list.size()%></span></a>
                         <%} else {%>
                         <a href="login.jsp"><i class="fa-light fa-heart"></i>
-                            <span>0</span></a>
+                            <span style="left: 9px; top: -2px">0</span></a>
                         <a href="login.jsp"><i class="fa-light fa-cart-shopping"></i>
-                            <span>0</span></a>
+                            <span style="left: 12px; top: -4px">0</span></a>
                         <%}%>
                     </div>
                 </div>

@@ -1,8 +1,9 @@
 <%@ page import="java.util.List" %>
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
 <%@ page import="qht.shopmypham.com.vn.service.VoucherService" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
+<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -13,8 +14,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
-    <title>:: Aero Bootstrap4 Admin :: Product detail</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý đơn hàng</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Custom Css -->
@@ -26,11 +27,14 @@
 <jsp:include page="header.jsp"></jsp:include>
 <%
     int total1 = 0;
-    NumberFormat nf = NumberFormat.getInstance();
-    nf.setMinimumFractionDigits(0);
     CheckOut checkOut = (CheckOut) request.getAttribute("checkOut");
     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
+    TransportS transport = (TransportS) request.getAttribute("transport");
+    Province province = api.getProvinceById(checkOut.getIdProvince());
+    District district = api.getDistrictById(checkOut.getIdProvince(), Integer.parseInt(transport.getToDistrictId()));
+    Ward ward = api.getWardById(Integer.parseInt(transport.getToDistrictId()), Integer.parseInt(transport.getToWardId()));
     List<ListProductByCheckOut> productByCheckOutList = (List<ListProductByCheckOut>) request.getAttribute("listProductByCheckOuts");
+    String address = ward.getWardName() + ", " + district.getDistrictName() + ", " + province.getProvinceName();
     String status = "";
     if (checkOut.getIdStatus() == 0) {
         status = "Chờ xác nhận";
@@ -71,14 +75,14 @@
                     <div class="d-flex text-muted mb-0 container-a">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="small mb-0 mb-01">
-                                <a>Mã đơn :
+                                <a href="#">Mã đơn :
                                     #<%=checkOut.getIdCk()%>
                                 </a>
                             </div>
                             <div class="small mb-0 mb-02">
                                 <i class="fa-light fa-car-side"></i>
-                                <p style="color: green"><%=status%>
-                                </p>
+                                <a href="#"><%=status%>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -88,17 +92,15 @@
                         <div class="row-1-item"></div>
                     </div>
                 </div>
-
                 <div class="card card-status">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
                             <div class="d-flex flex-wrap-1">
                                 <div>
-                                    Địa Chỉ Nhận Hàng
+                                    ĐỊA CHỈ NHẬN HÀNG
                                 </div>
                                 <div>
-                                    Shopee Xpress
-                                    SPXVN039519983431
+                                    THEO DÕI ĐƠN HÀNG TẠI ĐÂY
                                 </div>
                             </div>
                             <div class="d-flex status-container">
@@ -106,20 +108,23 @@
                                     <h6><%=checkOut.getName()%>
                                     </h6>
                                     <p><%=checkOut.getPhone()%>
-                                        <%=checkOut.getAddress()%>
+                                        <%=address%>
+                                    </p>
+                                    <h6>Địa chỉ chi tiết
+                                    </h6>
+                                    <p><%=checkOut.getDetailAddress()%>
                                     </p>
                                 </div>
                                 <div class="status-list list-status">
-                                    <div>
+                                    <div style="display: flex;padding-bottom: 17px;flex-direction: column;">
                                         <div class="status-item">
                                             <div class="si1">
                                             </div>
                                             <div class="si2">
-                                                <div></div>
-                                                <div></div>
+                                                <div>Ngày giao dự kiến</div>
                                                 <div>
-                                                    <p></p>
-                                                    <p></p>
+                                                    <p style="margin-left: 15px"><%=DateUtil.customDateTimeFormat(api.leadTime(transport.getToDistrictId(), transport.getToWardId()).get(0).getFormattedDate())%>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -127,11 +132,10 @@
                                             <div class="si1">
                                             </div>
                                             <div class="si2">
-                                                <div></div>
-                                                <div></div>
+                                                <div>Cập nhật thời gian</div>
                                                 <div>
-                                                    <p></p>
-                                                    <p></p>
+                                                    <p style="margin-left: 15px"><%=transport.getUpdated_at()%>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,48 +143,24 @@
                                             <div class="si1">
                                             </div>
                                             <div class="si2">
-                                                <div></div>
-                                                <div></div>
+                                                <div>Ngày tạo đơn</div>
                                                 <div>
-                                                    <p></p>
-                                                    <p></p>
+                                                    <p style="margin-left: 15px"><%=transport.getCreated_at()%>
+                                                    </p>
                                                 </div>
+
                                             </div>
                                         </div>
                                         <div class="status-item">
                                             <div class="si1">
                                             </div>
                                             <div class="si2">
-                                                <div></div>
-                                                <div></div>
+                                                <div>Mã vận đơn</div>
                                                 <div>
-                                                    <p></p>
-                                                    <p></p>
+                                                    <p style="margin-left: 15px"><%=transport.getId()%>
+                                                    </p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="status-item">
-                                            <div class="si1">
-                                            </div>
-                                            <div class="si2">
-                                                <div></div>
-                                                <div></div>
-                                                <div>
-                                                    <p></p>
-                                                    <p></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="status-item">
-                                            <div class="si1">
-                                            </div>
-                                            <div class="si2">
-                                                <div></div>
-                                                <div></div>
-                                                <div>
-                                                    <p></p>
-                                                    <p></p>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -220,10 +200,10 @@
                                                 </td>
                                                 <td><span class="col-green"><%=productByCheckOut.getQuantity()%></span>
                                                 </td>
-                                                <td><span class="col-green"><%= nf.format(product.getPrice())%> </span>
+                                                <td><span class="col-green"><%= Format.formatPrice(product.getPrice())%>đ </span>
                                                 </td>
                                                 <td><span
-                                                        class="col-green"><%= nf.format(product.getPrice() * productByCheckOut.getQuantity())%> </span>
+                                                        class="col-green"><%= Format.formatPrice(product.getPrice() * productByCheckOut.getQuantity())%>đ </span>
                                                 </td>
                                             </tr>
                                             <%}%>
@@ -241,25 +221,25 @@
                                 <div class="inf">
                                     <div class="inf-text">Tổng tiền hàng</div>
                                     <div class="inf-m">
-                                        <div><%=nf.format(total1)%>đ</div>
+                                        <div><%=Format.formatPrice(total1)%>đ</div>
                                     </div>
                                 </div>
                                 <div class="inf">
                                     <div class="inf-text">Phí vận chuyển</div>
                                     <div class="inf-m">
-                                        <div>25.000đ</div>
+                                        <div><%=Format.formatPrice(transport.getFee())%>đ</div>
                                     </div>
                                 </div>
                                 <div class="inf">
                                     <div class="inf-text">Giảm giá voucher</div>
                                     <div class="inf-m">
-                                        <div>- <%=nf.format(reduction)%>đ</div>
+                                        <div>- <%=Format.formatPrice(reduction)%>đ</div>
                                     </div>
                                 </div>
                                 <div class="inf">
                                     <div class="inf-text">Thành tiền</div>
                                     <div class="inf-m">
-                                        <div><%=nf.format(priceLast)%>
+                                        <div><%=Format.formatPrice(priceLast + transport.getFee())%>đ
                                         </div>
                                     </div>
                                 </div>
@@ -267,7 +247,11 @@
                                     <i class="fa-light fa-money-check-dollar"></i>
                                     <div class="inf-text">Phương thức thanh toán</div>
                                     <div class="inf-m">
-                                        <div>Tiền mặc</div>
+                                        <% if (checkOut.getIdPm() == 1) {%>
+                                        <div>Thanh toán khi nhận hàng</div>
+                                        <%} else {%>
+                                        <div>Paypal</div>
+                                        <%}%>
                                     </div>
                                 </div>
                             </div>

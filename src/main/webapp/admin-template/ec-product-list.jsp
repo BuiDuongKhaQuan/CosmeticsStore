@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="qht.shopmypham.com.vn.model.Image" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="qht.shopmypham.com.vn.tools.Format" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -14,8 +15,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product list</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý sản phẩm</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -68,16 +69,16 @@
                                 <tbody>
                                 <% List<Product> productList = (List<Product>) request.getAttribute("productList");
                                     for (Product product : productList) {
-                                        List<Image> imageList = ProductService.getImages(String.valueOf(product.getIdP()));
+                                        Image image = ProductService.getImages(String.valueOf(product.getIdP())).get(0);
                                 %>
                                 <tr>
-                                    <td><img src="<%=imageList.get(0).getImg()%>" width="48" alt="Product img">
+                                    <td><img src="<%=image.getImg()%>" width="48" alt="Product img">
                                     </td>
-                                    <td><h5><%=product.getName()%>
+                                    <td><h5 class="nowrap_text"><%=product.getName()%>
                                     </h5>
                                     </td>
-                                    <td><%=product.getPrice()%>đ</td>
-                                    <td><span class="col-green">In Stock</span></td>
+                                    <td><%=Format.formatPrice(product.getPrice())%>đ</td>
+                                    <td><%=product.wareHouseStatus()%></td>
                                     <td>
                                         <a href="admin-product?command=edit&IdP=<%=product.getIdP()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i

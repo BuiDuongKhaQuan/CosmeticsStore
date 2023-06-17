@@ -1,7 +1,8 @@
 ﻿<%@ page import="java.util.List" %>
-<%@ page import="qht.shopmypham.com.vn.model.WareHouse" %>
-<%@ page import="qht.shopmypham.com.vn.model.Product" %>
 <%@ page import="qht.shopmypham.com.vn.service.ProductService" %>
+<%@ page import="qht.shopmypham.com.vn.service.WareHouseService" %>
+<%@ page import="qht.shopmypham.com.vn.service.ProductCheckoutService" %>
+<%@ page import="qht.shopmypham.com.vn.model.*" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -14,8 +15,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin :: Product list</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý kho</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/footable-bootstrap/css/footable.bootstrap.min.css">
@@ -56,33 +57,60 @@
                     <div class="card">
                         <div class="table-responsive">
                             <table id="table_id" class="table table-hover product_item_list c_table theme-color mb-0">
+
                                 <thead>
                                 <tr>
                                     <th style="width: 30%">Tên sản phẩm</th>
-                                    <th data-breakpoints="xs">Ngày nhập</th>
-                                    <th data-breakpoints="xs md">Số lượng</th>
-                                    <th data-breakpoints="sm xs md">Số lượng nhập</th>
+                                    <th data-breakpoints="xs">Đã bán</th>
+                                    <th data-breakpoints="xs md">Còn lại</th>
+                                    <th data-breakpoints="sm xs md">Đã nhập</th>
+                                    <th data-breakpoints="sm xs md">Trạng thái</th>
                                     <th data-breakpoints="sm xs md"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <% List<WareHouse> wareHouseList = (List<WareHouse>) request.getAttribute("wareHouseList");
-                                    for (WareHouse wareHouse : wareHouseList) {
-                                        Product product = ProductService.getProductById(wareHouse.getIdP());
+                                <%
+                                    List<WareHouse> wareHouseList = (List<WareHouse>) request.getAttribute("wareHouseList");
+                                    for (int i = 0; i < wareHouseList.size(); i++) {
+                                        Product product = ProductService.getProductById(wareHouseList.get(i).getIdP());
+                                        List<ListProductByCheckOut> list = ProductCheckoutService.getProductProductCheckoutByIdP(wareHouseList.get(i).getIdP());
+                                        int total = 0;
+                                        List<WarehouseDetail> warehouseDetailList = WareHouseService.getListWarehouseDetailById(String.valueOf(wareHouseList.get(i).getIdP()));
+                                        for (WarehouseDetail d : warehouseDetailList) {
+                                            total += d.getQuantityInput();
+                                        }
                                 %>
                                 <tr>
-                                    <td><%=product.getName()%>
-                                    </td>
-                                    <td><h5><%=wareHouse.getDateInput()%>
-                                    </h5>
-                                    </td>
-                                    <td><%=wareHouse.getQuantity()%></td>
-                                    <td><%=wareHouse.getQuantityInput()%></td>
                                     <td>
-                                        <a href="AdminWareHouse?command=edit&idP=<%=wareHouse.getIdP()%>"
-                                           class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
-                                                class="zmdi zmdi-edit"></i></a>
-                                        <a href="AdminWareHouse?command=delete&idP=<%=wareHouse.getIdP()%>"
+                                        <a href="AdminWareHouse?command=detail&id=<%=wareHouseList.get(i).getIdP()%>">
+                                            <h5 class="nowrap_text"><%=product.getName()%>
+                                            </h5>
+                                        </a>
+                                    </td>
+                                    <%
+                                        if (list.size() == 0) {
+                                    %>
+                                    <td>0</td>
+                                    <td><%=total%>
+                                    </td>
+                                    <%
+                                    } else if (list.size() != 0) {
+                                        int sold = 0;
+                                        for (ListProductByCheckOut pc : list) {
+                                            sold += pc.getQuantity();
+                                    %>
+                                    <%}%>
+                                    <td><%=sold%>
+                                    </td>
+                                    <td><%=total - sold%>
+                                    </td>
+                                    <%}%>
+                                    <td><%=total%>
+                                    </td>
+                                    <td><%=product.statusIsSell()%>
+                                    </td>
+                                    <td>
+                                        <a href="AdminWareHouse?command=deleteP&idP=<%=wareHouseList.get(i).getIdP()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>
                                     </td>

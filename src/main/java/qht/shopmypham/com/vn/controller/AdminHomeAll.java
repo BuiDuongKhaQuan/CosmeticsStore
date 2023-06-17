@@ -21,6 +21,7 @@ public class AdminHomeAll extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
+        request.setAttribute("home1", "toggled");
         String ipAddress = request.getRemoteAddr();
         String url = request.getRequestURI();
         int level = 1;
@@ -34,8 +35,6 @@ public class AdminHomeAll extends HttpServlet {
             if (acc.powerAccount().getHomeManage() == 1) {
                 idA = acc.getId();
                 if (command.equals("productHome")) {
-                    Home home = HomeService.getHome();
-                    request.setAttribute("home", home);
                     request.getRequestDispatcher("/admin-template/home-product.jsp").forward(request, response);
                     content = "Truy cập trang quản lí sản phẩm trên trang chủ";
                 }
@@ -129,19 +128,22 @@ public class AdminHomeAll extends HttpServlet {
                 if (command.equals("information")) {
                     String idS = request.getParameter("idS");
                     String phone = request.getParameter("phone");
-                    String address = request.getParameter("address");
                     String slogan = request.getParameter("slogan");
                     String contact = request.getParameter("contact");
                     String email = request.getParameter("email");
                     String name = request.getParameter("name");
                     String desginer = request.getParameter("desginer");
                     String logo_header = request.getParameter("logo_header");
-                    ShopService.editShop(idS, name, logo_header, slogan, address, phone, email, desginer, contact);
+                    String provinceID = request.getParameter("provinceID");
+                    String districtID = request.getParameter("districtID");
+                    String wardID = request.getParameter("wardID");
+
+                    ShopService.editShop(idS, name, logo_header, slogan, phone, email, desginer, contact, provinceID, districtID, wardID);
                     HttpSession session = request.getSession();
                     session.removeAttribute("logo");
                     level = 2;
-                    action =2;
-                    content="Chỉnh sửa thông tin trên trang chủ "+idS;
+                    action = 2;
+                    content = "Chỉnh sửa thông tin trên trang chủ " + idS;
                 }
                 if (command.equals("category")) {
                     String idC1 = request.getParameter("idC1");
@@ -149,8 +151,8 @@ public class AdminHomeAll extends HttpServlet {
                     String idC3 = request.getParameter("idC3");
                     HomeService.edit(idC1, idC2, idC3);
                     level = 2;
-                    action =2;
-                    content="Chỉnh sửa danh mục trên trang chủ "+ idC1 + idC2 + idC3;
+                    action = 2;
+                    content = "Chỉnh sửa danh mục trên trang chủ " + idC1 + idC2 + idC3;
                 }
                 if (command.equals("quantity")) {
                     String quantityProS = request.getParameter("quantityProS");
@@ -159,8 +161,8 @@ public class AdminHomeAll extends HttpServlet {
                     String quantityBlog = request.getParameter("quantityBlog");
                     HomeService.editQuantity(quantityProP, quantityProN, quantityProS, quantityBlog);
                     level = 2;
-                    action =2;
-                    content="Chỉnh sửa sản phẩm khuyến mãi trên trang chủ";
+                    action = 2;
+                    content = "Chỉnh sửa sản phẩm khuyến mãi trên trang chủ";
                 }
                 if (command.equals("selling")) {
                     String idP = request.getParameter("idP");
@@ -170,8 +172,8 @@ public class AdminHomeAll extends HttpServlet {
                     String text3 = request.getParameter("text3");
                     ProductService.editSelling(text, text1, text2, text3, idP);
                     level = 2;
-                    action =2;
-                    content="Chỉnh sửa sản phẩm ưu đãi  trên trang chủ";
+                    action = 2;
+                    content = "Chỉnh sửa sản phẩm ưu đãi  trên trang chủ";
                 }
                 if (command.equals("imgtrend")) {
                     String action1 = request.getParameter("action");
@@ -181,8 +183,8 @@ public class AdminHomeAll extends HttpServlet {
                         String status = request.getParameter("status");
                         HomeService.editImgTrends(topic, id, status);
                         level = 2;
-                        action =2;
-                        content="Chỉnh sửa hình ảnh trend trong trang chủ";
+                        action = 2;
+                        content = "Chỉnh sửa hình ảnh trend trong trang chủ";
                     }
                     if (action1.equals("trend")) {
                         String idT = request.getParameter("idT");
@@ -192,8 +194,8 @@ public class AdminHomeAll extends HttpServlet {
                         HttpSession session = request.getSession();
                         session.removeAttribute("imgsTrends");
                         level = 2;
-                        action =2;
-                        content="Chỉnh sửa sản phẩm khuyến mãi trên trang chủ";
+                        action = 2;
+                        content = "Chỉnh sửa sản phẩm khuyến mãi trên trang chủ";
                     }
                 }
                 LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);

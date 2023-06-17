@@ -13,8 +13,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop Mỹ Phẩm QST</title>
-
+    <title>Mỹ Phẩm QST || Sản phẩm yêu thích</title>
+    <link rel="icon" href="user-template/img/icon/icon_user.jpg" type="image/x-icon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
@@ -54,8 +54,8 @@
                 <div class="breadcrumb__text">
                     <h4> Sản phẩm yêu thích</h4>
                     <div class="breadcrumb__links">
-                        <a href="./home">Trang chủ</a>
-                        <a href="./product">Sản phẩm</a>
+                        <a href="home">Trang chủ</a>
+                        <a href="product?command=product">Sản phẩm</a>
                         <span>Sản phẩm yêu thích</span>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                                         </a></td>
                                         <td class="border-0 align-middle"><a href="javascript:void(0);"
                                                                              onclick="deleteFavorite(<%=p.getIdP()%>)"
-                                                                             class="text-dark"
+                                                                             class="text-dark flex-table"
                                                                              style="margin-left: 10px;"><i
                                                 class="fa fa-trash"></i></a></td>
                                     </tr>
@@ -172,24 +172,17 @@
 <script src="user-template/js/owl.carousel.min.js"></script>
 <script src="user-template/js/main.js"></script>
 <script src="user-template/js/product.js"></script>
+<script src="admin-template/assets/js/notification.js"></script>
 
 <script>
 
     function insertItem(IdP) {
-        var div = document.getElementById("notification");
-
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "product", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                // Hiển thị thẻ div
-                div.classList.remove("hidden-noti");
-
-                // Sau 3 giây, ẩn thẻ div lại bằng cách thêm lại lớp CSS hidden
-                setTimeout(function () {
-                    div.classList.add("hidden-noti");
-                }, 2000);
+                showNotification("Sản phẩm đã được thêm vào danh sách yêu thích");
             }
         };
         xhr.send("IdP=" + IdP

@@ -20,6 +20,7 @@ public class AdminSlider extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Slider> sliderList = SliderSerivce.getAllSlider();
+        request.setAttribute("slider1","toggled");
         String command = request.getParameter("command");
         Account acc = (Account) request.getSession().getAttribute("a");
         String ipAddress = request.getRemoteAddr();
@@ -49,12 +50,14 @@ public class AdminSlider extends HttpServlet {
                     Slider slider = SliderSerivce.getSliderById(IdSl);
                     request.setAttribute("slider", slider);
                     request.getRequestDispatcher("/admin-template/slider-edit.jsp").forward(request, response);
+                    action = 2;
                     content = "Truy cập trang quản lý chỉnh sửa slider";
                 }
                 if (command.equals("delete")) {
                     String IdSl = request.getParameter("IdSl");
                     SliderSerivce.deleteSliderById(IdSl);
                     response.sendRedirect("admin-slider?command=list");
+                    action = 3;
                     content="Xóa slider "+IdSl;
 
                 }

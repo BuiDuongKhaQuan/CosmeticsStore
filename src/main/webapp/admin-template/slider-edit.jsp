@@ -12,8 +12,8 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>:: Aero Bootstrap4 Admin ::</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>QST || Quản lý đơn slider</title>
+    <link rel="icon" href="admin-template/assets/images/icon_admin.jpg" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/summernote/dist/summernote.css"/>
@@ -56,7 +56,7 @@
                     <div class="card">
                         <div class="body">
                             <input value="<%=slider.getIdSl()%>" type="hidden" name="IdSl" id="IdSl">
-                            <label for="text">Tên sản phẩm</label>
+                            <label for="text">Tên ảnh</label>
                             <div class="form-group">
                                 <input type="text" id="text" class="form-control"
                                        name="text" value="<%=slider.getText()%>">
@@ -90,7 +90,7 @@
                                 </button>
                                 <div id="show" class="promotion">
                                     <div class="promotion-box">
-                                        <label class="title">Tải lên ảnh sản phẩm</label>
+                                        <label class="title">Tải lên ảnh slider</label>
                                         <img src="user-template/img/icon/close.png" width="22px"
                                              class="zmdi zmdi-close icon-close"
                                              onclick="closeNew()">
