@@ -37,6 +37,10 @@ public class UserProduct extends HttpServlet {
         if (acc != null) idA = acc.getId();
         if (command.equals("product")) {
             String checked = "checked";
+            List<Product> productList = ProductService.get9Product(0);
+            List<Product> productList1 = ProductService.getProductIsSell(1);
+            request.setAttribute("size", productList1.size());
+            request.setAttribute("listProduct", productList);
             request.setAttribute("activeProduct", "active");
             request.setAttribute("checked0", checked);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
@@ -47,6 +51,7 @@ public class UserProduct extends HttpServlet {
             System.out.println(cid);
             List<Product> productListByIdC = ProductService.getproductbyCata(cid);
             Categories categories = CategoryService.getCategoriesById(cid);
+            request.setAttribute("size", productListByIdC.size());
             request.setAttribute("activeProduct", "active");
             request.setAttribute("categories", categories);
             request.setAttribute("listProduct", productListByIdC);
@@ -57,6 +62,7 @@ public class UserProduct extends HttpServlet {
             String idT = request.getParameter("idT");
             List<Product> productList = ProductService.getProductByIdT(idT);
             Trademark trademark = TrademarkService.getTrademarkByIdT(idT);
+            request.setAttribute("size", productList.size());
             request.setAttribute("listProduct", productList);
             request.setAttribute("trademark", trademark);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
@@ -74,9 +80,9 @@ public class UserProduct extends HttpServlet {
             String name = request.getParameter("name-product");
             request.setCharacterEncoding("UTF-8");
             List<Product> productList = ProductService.getProductByName(name);
-            String checked = "checked";
+            request.setAttribute("size", productList.size());
             request.setAttribute("activeProduct", "active");
-            request.setAttribute("checked0", checked);
+            request.setAttribute("checked0", "checked");
             request.setAttribute("listProduct", productList);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
             content = "Tìm kiếm sản phẩm trên menu";
@@ -87,8 +93,8 @@ public class UserProduct extends HttpServlet {
             List<Product> listProductBySearch = ProductService.getProductByName(name);
             request.setAttribute("txtSearch", name);
             request.setAttribute("txtSearch1", name);
+            request.setAttribute("size", listProductBySearch.size());
             content = "Tìm kiếm sản phẩm trong trang sản phẩm";
-
             for (Product p : listProductBySearch) {
                 List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
                 List<Review> reviewList = ReviewService.getAllReviewByIdP(String.valueOf(p.getIdP()));
@@ -133,17 +139,6 @@ public class UserProduct extends HttpServlet {
                         "                                    " + CountStar.star(avgStart, reviewList.size()) + "\n" +
                         "                                </div>\n" +
                         "                                <h5>" + Format.formatPrice(p.getPrice()) + "đ</h5>\n" +
-                        "                                <div class=\"product__color__select\">\n" +
-                        "                                    <label for=\"pc-4\">\n" +
-                        "                                        <input type=\"radio\" id=\"pc-4\">\n" +
-                        "                                    </label>\n" +
-                        "                                    <label class=\"active black\" for=\"pc-5\">\n" +
-                        "                                        <input type=\"radio\" id=\"pc-5\">\n" +
-                        "                                    </label>\n" +
-                        "                                    <label class=\"grey\" for=\"pc-6\">\n" +
-                        "                                        <input type=\"radio\" id=\"pc-6\">\n" +
-                        "                                    </label>\n" +
-                        "                                </div>\n" +
                         "                            </div>\n" +
                         "                        </div>\n" +
                         "                    </div>");
@@ -161,6 +156,7 @@ public class UserProduct extends HttpServlet {
                 productList = ProductService.getProductSortAscendingByPrice();
                 content = "Sắp xếp sản phẩm theo giá giảm dần";
             }
+            request.setAttribute("size", productList.size());
             for (Product p : productList) {
                 List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
                 List<Review> reviewList = ReviewService.getAllReviewByIdP(String.valueOf(p.getIdP()));
@@ -205,17 +201,6 @@ public class UserProduct extends HttpServlet {
                         "                                    " + CountStar.star(avgStart, reviewList.size()) + "\n" +
                         "                                </div>\n" +
                         "                                <h5>" + Format.formatPrice(p.getPrice()) + "đ</h5>\n" +
-                        "                                <div class=\"product__color__select\">\n" +
-                        "                                    <label for=\"pc-4\">\n" +
-                        "                                        <input type=\"radio\" id=\"pc-4\">\n" +
-                        "                                    </label>\n" +
-                        "                                    <label class=\"active black\" for=\"pc-5\">\n" +
-                        "                                        <input type=\"radio\" id=\"pc-5\">\n" +
-                        "                                    </label>\n" +
-                        "                                    <label class=\"grey\" for=\"pc-6\">\n" +
-                        "                                        <input type=\"radio\" id=\"pc-6\">\n" +
-                        "                                    </label>\n" +
-                        "                                </div>\n" +
                         "                            </div>\n" +
                         "                        </div>\n" +
                         "                    </div>");
@@ -236,13 +221,133 @@ public class UserProduct extends HttpServlet {
                     productList.add(p);
                 }
             }
+            request.setAttribute("size", productList.size());
             request.setAttribute("listProduct", productList);
             request.getRequestDispatcher("/user-template/product.jsp").forward(request, response);
             content = "Lọc sản phẩm theo giá";
 
         }
-        LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
+        if (command.equals("pagination")) {
+            int startIndex = Integer.parseInt(request.getParameter("startIndex"));
+            List<Product> productList = ProductService.get9Product(startIndex);
+            for (Product p : productList) {
+                List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
+                List<Review> reviewList = ReviewService.getAllReviewByIdP(String.valueOf(p.getIdP()));
+                double avgStart = 0;
+                double sum = 0;
+                String chr = "";
+                if (acc != null) {
+                    chr = "<li><a href=\"javascript:void(0);\"><img onclick=\"insertItem(" + p.getIdP() + ")\"\n" +
+                            "                                                                           src=\"user-template/img/icon/add-to-basket.png\"\n" +
+                            "                                                                           alt=\"\"><span>Thêm vào giỏ</span></a></li>";
+                } else {
+                    chr = "<li><a href=\"javascript:void(0);\"><img onclick=\"inform()\"\n" +
+                            "                                                                           src=\"user-template/img/icon/add-to-basket.png\"\n" +
+                            "                                                                           alt=\"\"><span>Thêm vào giỏ</span></a></li>";
+                }
+                for (Review r : reviewList) {
+                    sum += r.getStar();
+                }
+                avgStart = sum / reviewList.size();
+                response.getWriter().write("<div class=\"col-lg-4 col-md-6 col-sm-6\" id=\"product_item\">\n" +
+                        "                        <div class=\"product__item\" style=\"background-color: rgba(130,140,230,0.11)\">\n" +
+                        "                            <div class=\"product__item__pic set-bg\" style=\"background-image: url(" + imageList.get(0).getImg() + ");\"> \n" +
+                        "                                <ul class=\"product__hover\">\n" +
+                        "                                    <li><a href=\"javascript:void(0);\"><img onclick=\"addFavorite(" + p.getIdP() + ")\"\n" +
+                        "                                                                            src=\"user-template/img/icon/heart.png\"\n" +
+                        "                                                                           alt=\"\"><span>Yêu thích</span></a></li>\n" +
+                        "                                    <li><a href=\"javascript:void(0);\"><img onclick=\"category(" + p.getIdC() + ")\"\n" +
+                        "                                                                            src=\"user-template/img/icon/compare.png\"\n" +
+                        "                                                                           alt=\"\">\n" +
+                        "                                        <span>Cùng loại</span></a></li>\n" +
+                        "                                    <li><a href=\"javascript:void(0);\"><img onclick=\"detailProduct(" + p.getIdP() + ")\"\n" +
+                        "                                                                           src=\"user-template/img/icon/view.png\"\n" +
+                        "                                                                           alt=\"\"><span>Chi tiết</span></a></li>\n" +
+                        "                                   " + chr + "\n" +
+                        "                                </ul>\n" +
+                        "                            </div>\n" +
+                        "                            <div class=\"product__item__text\">\n" +
+                        "                                <h6 onclick=\"detailProduct(" + p.getIdP() + ")\" style=\"cursor: pointer\">" + p.getName() + "\n" +
+                        "                                </h6>\n" +
+                        "                                <div class=\"rating\" >\n" +
+                        "                                    " + CountStar.star(avgStart, reviewList.size()) + "\n" +
+                        "                                </div>\n" +
+                        "                                <h5>" + Format.formatPrice(p.getPrice()) + "đ</h5>\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                    </div>");
+            }
+        }
 
+        LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
+        if (command.equals("filter")) {
+            String cate = request.getParameter("cate");
+            String trade = request.getParameter("trade");
+            String minPrice = request.getParameter("minPrice");
+            String maxPrice = request.getParameter("maxPrice");
+
+            System.out.println(cate);
+            System.out.println(minPrice);
+            System.out.println(maxPrice);
+            System.out.println(trade);
+            System.out.println("----------");
+
+            List<Product> listProduct = ProductService.filterAll(cate, trade, minPrice, maxPrice);
+            request.setAttribute("size", listProduct.size());
+            for (Product p : listProduct) {
+                List<Image> imageList = ProductService.getImages(String.valueOf(p.getIdP()));
+                List<Review> reviewList = ReviewService.getAllReviewByIdP(String.valueOf(p.getIdP()));
+                double avgStart = 0;
+                double sum = 0;
+                String chr = "";
+                if (acc != null) {
+                    chr = "<li><a href=\"javascript:void(0);\"><img onclick=\"insertItem(" + p.getIdP() + ")\"\n" +
+                            "                                                                           src=\"user-template/img/icon/add-to-basket.png\"\n" +
+                            "                                                                           alt=\"\"><span>Thêm vào giỏ</span></a></li>";
+                } else {
+                    chr = "<li><a href=\"javascript:void(0);\"><img onclick=\"inform()\"\n" +
+                            "                                                                           src=\"user-template/img/icon/add-to-basket.png\"\n" +
+                            "                                                                           alt=\"\"><span>Thêm vào giỏ</span></a></li>";
+                }
+                if (listProduct.size() > 0) {
+                    for (Review r : reviewList) {
+                        sum += r.getStar();
+                    }
+                    avgStart = sum / reviewList.size();
+                    response.setContentType("application/json");
+                    response.getWriter().write("<div class=\"col-lg-4 col-md-6 col-sm-6\" id=\"product_item\">\n" +
+                            "                        <div class=\"product__item\" style=\"background-color: rgba(130,140,230,0.11)\">\n" +
+                            "                            <div class=\"product__item__pic set-bg\" style=\"background-image: url(" + imageList.get(0).getImg() + ");\"> \n" +
+                            "                                <ul class=\"product__hover\">\n" +
+                            "                                    <li><a href=\"javascript:void(0);\"><img onclick=\"addFavorite(" + p.getIdP() + ")\"\n" +
+                            "                                                                            src=\"user-template/img/icon/heart.png\"\n" +
+                            "                                                                           alt=\"\"><span>Yêu thích</span></a></li>\n" +
+                            "                                    <li><a href=\"javascript:void(0);\"><img onclick=\"category(" + p.getIdC() + ")\"\n" +
+                            "                                                                            src=\"user-template/img/icon/compare.png\"\n" +
+                            "                                                                           alt=\"\">\n" +
+                            "                                        <span>Cùng loại</span></a></li>\n" +
+                            "                                    <li><a href=\"javascript:void(0);\"><img onclick=\"detailProduct(" + p.getIdP() + ")\"\n" +
+                            "                                                                           src=\"user-template/img/icon/view.png\"\n" +
+                            "                                                                           alt=\"\"><span>Chi tiết</span></a></li>\n" +
+                            "                                   " + chr + "\n" +
+                            "                                </ul>\n" +
+                            "                            </div>\n" +
+                            "                            <div class=\"product__item__text\">\n" +
+                            "                                <h6 onclick=\"detailProduct(" + p.getIdP() + ")\" style=\"cursor: pointer\">" + p.getName() + "\n" +
+                            "                                </h6>\n" +
+                            "                                <div class=\"rating\" >\n" +
+                            "                                    " + CountStar.star(avgStart, reviewList.size()) + "\n" +
+                            "                                </div>\n" +
+                            "                                <h5>" + Format.formatPrice(p.getPrice()) + "đ</h5>\n" +
+                            "                            </div>\n" +
+                            "                        </div>\n" +
+                            "                    </div>");
+                } else {
+                    response.setContentType("application/json");
+                    response.getWriter().write("  <div class=\"col-lg-9\">Trống</div>");
+                }
+            }
+        }
     }
 
     @Override
@@ -258,6 +363,7 @@ public class UserProduct extends HttpServlet {
         String dateNow = DateUtil.getDateNow();
         String content = "";
         int idA = 0;
+
         if (acc != null) {
             idA = acc.getId();
             ListProductByCart byCart = CartService.checkProduct(product_id, String.valueOf(acc.getId()));

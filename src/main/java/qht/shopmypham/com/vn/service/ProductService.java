@@ -3,6 +3,7 @@ package qht.shopmypham.com.vn.service;
 import qht.shopmypham.com.vn.db.JDBiConnector;
 import qht.shopmypham.com.vn.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -546,4 +547,56 @@ public class ProductService {
     }
 
 
+    public static List<Product> get9Product(int startIndex) {
+        return JDBiConnector.me().withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM product where status = 1 LIMIT 9 OFFSET ?")
+                    .bind(0, startIndex)
+                    .mapToBean(Product.class)
+                    .stream().collect(Collectors.toList());
+        });
+    }
+
+    public static List<Product> filterAll(String cate, String trade, String minprice, String maxprice) {
+        List<Product> filteredList = new ArrayList<>();
+        if (cate != null && trade == null ) {
+            filteredList = JDBiConnector.me().withHandle(handle -> {
+                return handle.createQuery("SELECT * FROM product where idC=? and price > ? and price <= ?")
+                        .bind(0, cate)
+                        .bind(1, minprice)
+                        .bind(2, maxprice)
+                        .mapToBean(Product.class)
+                        .stream().collect(Collectors.toList());
+            });
+
+        }
+        if (cate == null && trade != null ) {
+            filteredList = JDBiConnector.me().withHandle(handle -> {
+                return handle.createQuery("SELECT * FROM product where idT=? and price > ? and price <= ?")
+                        .bind(0, trade)
+                        .bind(1, minprice)
+                        .bind(2, maxprice)
+                        .mapToBean(Product.class)
+                        .stream().collect(Collectors.toList());
+            });
+
+        }
+        if (cate != null && trade !=null ) {
+            filteredList = JDBiConnector.me().withHandle(handle -> {
+                return handle.createQuery("SELECT * FROM product where idC=? and idT =? and price > ? and price <= ?")
+                        .bind(0, cate)
+                        .bind(1, trade)
+                        .bind(2, minprice)
+                        .bind(3, maxprice)
+                        .mapToBean(Product.class)
+                        .stream().collect(Collectors.toList());
+            });
+        }
+
+        return filteredList;
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(filterAll("2", "0", String.valueOf(0), String.valueOf(100000000)));
+    }
 }
