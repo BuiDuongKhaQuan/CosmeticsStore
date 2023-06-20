@@ -122,6 +122,9 @@
                                     <div class="d-flex flex-wrap-1">
                                         <div>
                                             ĐỊA CHỈ NHẬN HÀNG
+                                            <% if (checkOut.getIdStatus()==0){%>
+                                            |<a href="Address?command=change&idCk=<%=checkOut.getIdCk()%>"> Đổi địa chỉ</a>
+                                        <%}%>
                                         </div>
                                         <div>
                                             THEO DÕI ĐƠN HÀNG TẠI ĐÂY

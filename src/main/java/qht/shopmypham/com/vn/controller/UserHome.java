@@ -100,7 +100,6 @@ public class UserHome extends HttpServlet {
         request.setAttribute("listSlider", listSlider);
         request.setAttribute("activeHome", "active");
         request.getRequestDispatcher("/user-template/home.jsp").forward(request, response);
-        System.out.println(provinceList);
         if (acc != null) {
             idA = acc.getId();
         }

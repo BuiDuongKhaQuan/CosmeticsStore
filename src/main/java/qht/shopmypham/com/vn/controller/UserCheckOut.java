@@ -52,6 +52,7 @@ public class UserCheckOut extends HttpServlet {
                         "                                <li>Giảm giá <span>- " + Format.formatPrice(reduction) + "đ</span></li>\n" +
                         "                                <li>Tổng thanh toán <span>" + Format.formatPrice(priceLast + calculateFee) + "đ</span></li>");
             }
+
             if (command.equals("checkout")) {
                 List<Payment> paymentList = PaymentService.getAllPayment();
                 request.setAttribute("list", list);
