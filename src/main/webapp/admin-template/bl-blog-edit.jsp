@@ -90,7 +90,7 @@
                                 </button>
                                 <div id="show" class="promotion">
                                     <div class="promotion-box">
-                                        <label class="title">Tải lên ảnh sản phẩm</label>
+                                        <label class="title">Tải lên ảnh blog</label>
                                         <img src="user-template/img/icon/close.png" width="22px"
                                              class="zmdi zmdi-close icon-close"
                                              onclick="closeNew()">

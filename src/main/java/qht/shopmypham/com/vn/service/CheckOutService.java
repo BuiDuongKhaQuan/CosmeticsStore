@@ -28,6 +28,17 @@ public class CheckOutService {
 
         );
     }
+    public static void editAddress(String idCk, String idTransport, String provinceID, String address_detail) {
+        JDBiConnector.me().withHandle(h ->
+                h.createUpdate("update checkout set idTransport = ?, idProvince = ?, detailAddress = ? where idCk = ?")
+                        .bind(0, idTransport)
+                        .bind(1, provinceID)
+                        .bind(2, address_detail)
+                        .bind(3, idCk)
+                        .execute()
+
+        );
+    }
 
     public static List<CheckOut> getCheckOutByIdA(String idA) {
 

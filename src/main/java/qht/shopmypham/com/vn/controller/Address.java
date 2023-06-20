@@ -1,9 +1,10 @@
 package qht.shopmypham.com.vn.controller;
 
 import com.google.gson.Gson;
-import qht.shopmypham.com.vn.model.District;
-import qht.shopmypham.com.vn.model.Ward;
-import qht.shopmypham.com.vn.model.api;
+import qht.shopmypham.com.vn.model.*;
+import qht.shopmypham.com.vn.service.CheckOutService;
+import qht.shopmypham.com.vn.service.ProductCheckoutService;
+import qht.shopmypham.com.vn.service.ProductService;
 import qht.shopmypham.com.vn.tools.Format;
 
 import javax.servlet.*;
@@ -93,11 +94,38 @@ public class Address extends HttpServlet {
                     "                                                    <option value=\"\">--Chọn Xã/Ấp--</option>\n" + option +
                     "                                                </select>");
         }
+        if (command.equals("change")){
+            String idCk = request.getParameter("idCk");
+            CheckOut checkOut = CheckOutService.getCheckOutByIdCk(idCk);
+            TransportS transport = api.getOrderById(checkOut.getIdTransport());
+            List<ListProductByCheckOut> list = ProductCheckoutService.getProductProductCheckoutByIdCk(idCk);
+            request.setAttribute("checkOut", checkOut);
+            request.setAttribute("fee", transport.getFee());
+            request.setAttribute("list", list);
+            request.setAttribute("activePage", "active");
+            request.getRequestDispatcher("user-template/change-address.jsp").forward(request,response);
+        }
+        if (command.equals("total-change")) {
+            String wardID = request.getParameter("wardID");
+            String districtID = request.getParameter("districtID");
+            int calculateFee = api.calculateFee(districtID, wardID);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("<li>Phí vận chuyển sau thay đổi<span>"+Format.formatPrice(calculateFee)+"đ</span></li>\n");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String command = request.getParameter("command");
+        if (command.equals("change")){
+            String address_detail = request.getParameter("address_detail");
+            String provinceID = request.getParameter("provinceID");
+            String districtID = request.getParameter("districtID");
+            String wardID = request.getParameter("wardID");
+            String idCk = request.getParameter("idCk");
+            Transport transport = api.registerTransport(districtID, wardID);
+            CheckOutService.editAddress(idCk,transport.getId(),provinceID,address_detail);
+        }
     }
 
 }

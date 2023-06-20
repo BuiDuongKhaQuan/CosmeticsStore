@@ -55,7 +55,7 @@
                         <div class="body">
                             <label>Tiêu đề</label>
                             <div class="form-group">
-                                <input id="blog_topic" type="text" class="form-control" placeholder="Tiêu đè Blog"/>
+                                <input id="blog_topic" type="text" class="form-control" placeholder="Tiêu đề Blog"/>
                             </div>
                             <labe>Hình ảnh</labe>
                             </label>
@@ -72,16 +72,16 @@
 
                                 %>
                                 <input value="<%=img%>" required type="text" class="form-control"
-                                       placeholder="Hình đại đại diện"/>
+                                       placeholder="Hình ảnh đại diện"/>
                                 <input value="<%=path%>" id="blog_img" required type="hidden"/>
                                 <% } else { %>
-                                <input id="blog_img" type="text" class="form-control" placeholder="Hình đại đại diện"/>
+                                <input id="blog_img" type="text" class="form-control" placeholder="Hình ảnh đại diện"/>
                                 <%}%>
                                 <button class="btn-primary btn" onclick="show()">Tải ảnh lên
                                 </button>
                                 <div id="show" class="promotion">
                                     <div class="promotion-box">
-                                        <label class="title">Tải lên ảnh sản phẩm</label>
+                                        <label class="title">Tải lên ảnh blog</label>
                                         <img src="user-template/img/icon/close.png" width="22px"
                                              class="zmdi zmdi-close icon-close"
                                              onclick="closeNew()">
