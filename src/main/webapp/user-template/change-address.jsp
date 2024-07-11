@@ -72,7 +72,6 @@
                     <div class="checkout__input">
                         <%
                             CheckOut checkOut = (CheckOut) request.getAttribute("checkOut");
-                            int fee = (int) request.getAttribute("fee");
                         %>
                         <p>Địa chỉ<span>*</span></p>
                         <div style="display: flex">
@@ -93,7 +92,7 @@
                                 </select>
                             </div>
                             <div class="address" id="ward" style="margin: 0">
-                                <select required="required" name="wardID" onchange="getCalculateFee()" id="wardID">
+                                <select required="required" name="wardID" id="wardID">
                                     <option value="">--Chọn Xã/Ấp--</option>
                                 </select>
                             </div>
@@ -111,19 +110,10 @@
                                    data-validation-required-message="Please enter your message">
                         </div>
                     </div>
-                </div>
+                    <div class="checkout__input__checkbox" id="myDiv">
+                        <button class="site-btn" onclick="change(<%=checkOut.getIdCk()%>)">LƯU
+                        </button>
 
-                <div class="col-lg-4 col-md-6">
-                    <div class="checkout__order">
-                        <h4 class="order__title" style="border-bottom: 0; margin-bottom: 0px">Phí vận chuyển</h4>
-                        <ul class="checkout__total__all" id="calculate_fee">
-                            <li>Phí vận chuyển hiện tại<span><%=Format.formatPrice(fee)%>đ</span></li>
-                        </ul>
-                        <div class="checkout__input__checkbox" id="myDiv">
-                            <button class="site-btn" onclick="change(<%=checkOut.getIdCk()%>)">LƯU
-                            </button>
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -186,21 +176,21 @@
         xhr.send();
     }
 
-    function getCalculateFee() {
-        var districtID = document.getElementById("districtID").value;
-        var wardID = document.getElementById("wardID").value;
-
-        // Tạo yêu cầu AJAX để lấy danh sách quận/huyện tương ứng từ servlet
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "Address?command=total-change&districtID=" + districtID + "&wardID=" + wardID, true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                document.getElementById("calculate_fee").innerHTML = this.responseText;
-            }
-        };
-        xhr.send();
-    }
+    // function getCalculateFee() {
+    //     var districtID = document.getElementById("districtID").value;
+    //     var wardID = document.getElementById("wardID").value;
+    //
+    //     // Tạo yêu cầu AJAX để lấy danh sách quận/huyện tương ứng từ servlet
+    //     var xhr = new XMLHttpRequest();
+    //     xhr.open("GET", "Address?command=total-change&districtID=" + districtID + "&wardID=" + wardID, true);
+    //     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    //     xhr.onreadystatechange = function () {
+    //         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+    //             document.getElementById("calculate_fee").innerHTML = this.responseText;
+    //         }
+    //     };
+    //     xhr.send();
+    // }
 </script>
 <script>
 

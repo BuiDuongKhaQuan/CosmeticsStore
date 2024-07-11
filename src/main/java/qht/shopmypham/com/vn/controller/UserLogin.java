@@ -30,7 +30,7 @@ public class UserLogin extends HttpServlet {
         String dateNow = DateUtil.getDateNow();
         String content = "";
         int idA = 0;
-        Account acc = LoginService.getAccout(userName, Encode.enCodeMD5(passWord));
+        Account acc = LoginService.getAccout(userName.toLowerCase(), Encode.enCodeMD5(passWord));
         if (acc == null) {
             request.setAttribute("mess", "Sai user hoặc mật khẩu!");
             request.getRequestDispatcher("/login.jsp").forward(request, response);

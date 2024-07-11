@@ -98,7 +98,7 @@
                     <div class="card">
                         <div class="body">
                             <H1 style="margin-top: 20px; color: #8f78db"><%=soutP.size()%></H1>
-                            <p>Sản phẩm chưa được bán</p>
+                            <p>Số sản phẩm đã bán</p>
                             <div class=" text-center mt-4">
                                 <div class="flex-fill bd-highlight">
                                     <small class="text-muted">Trong </small>

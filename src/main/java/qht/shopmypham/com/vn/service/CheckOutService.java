@@ -5,15 +5,17 @@ import qht.shopmypham.com.vn.model.CheckOut;
 import qht.shopmypham.com.vn.model.ListProductByCheckOut;
 import qht.shopmypham.com.vn.model.Product;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CheckOutService {
-    public static void addCheckOutByIdA(String phone, String idTransport, String idPm, String name, String note, String idA, String voucher, String orderDate, String provinceID, String address_detail) {
+
+    public static void addCheckOutByIdA(String idWard,String idDistrict, String phone, String idTransport, String idPm, String name, String note, String idA, String voucher, String orderDate, String provinceID, String address_detail) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("INSERT INTO checkout(phone,idTransport,idPm,idA,idStatus,idAdmin,orderDate" +
-                                ", confirmDate, receivedDate,name,note,idVoucher,idProvince,detailAddress) " +
-                                "VALUES (?,?,?,?,0,null,?,null,null,?,?,?,?,?)")
+                                ", confirmDate, receivedDate,name,note,idVoucher,idProvince,detailAddress, idWard, idDistrict) " +
+                                "VALUES (?,?,?,?,0,null,?,null,null,?,?,?,?,?,?,?)")
                         .bind(0, phone)
                         .bind(1, idTransport)
                         .bind(2, idPm)
@@ -24,17 +26,21 @@ public class CheckOutService {
                         .bind(7, voucher)
                         .bind(8, provinceID)
                         .bind(9, address_detail)
+                        .bind(10, idWard)
+                        .bind(11, idDistrict)
                         .execute()
 
         );
     }
-    public static void editAddress(String idCk, String idTransport, String provinceID, String address_detail) {
+    public static void editAddress(String idWard, String idDistrict, String idCk, String idTransport, String provinceID, String address_detail) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("update checkout set idTransport = ?, idProvince = ?, detailAddress = ? where idCk = ?")
+                h.createUpdate("update checkout set idTransport = ?, idProvince = ?, detailAddress = ?, idWard=?,idDistrict=? where idCk = ?")
                         .bind(0, idTransport)
                         .bind(1, provinceID)
                         .bind(2, address_detail)
-                        .bind(3, idCk)
+                        .bind(3, idWard)
+                        .bind(4, idDistrict)
+                        .bind(5, idCk)
                         .execute()
 
         );

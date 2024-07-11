@@ -12,7 +12,7 @@ public class WareHouseService {
     public static List<Product> inventoryProduct() {
         return JDBiConnector.me().withHandle(handle -> {
             return handle.createQuery("SELECT p.* from product p join warehousedetails w on p.idP = w.idP WHERE p.idP  not in (SELECT idP from listproductbycheckout)AND `status`=1 and \n" +
-                            "YEAR(STR_TO_DATE(w.dateInput, '%r %d/%m/%Y'))=year(CURRENT_DATE())-1")
+                            "YEAR(STR_TO_DATE(w.dateInput, '%r %d/%m/%Y'))=year(CURRENT_DATE())")
                     .mapToBean(Product.class)
                     .stream().collect(Collectors.toList());
         });

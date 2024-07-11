@@ -1,11 +1,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Collections" %>
-<%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="qht.shopmypham.com.vn.model.*" %>
 <%@ page import="qht.shopmypham.com.vn.service.*" %>
 <%@ page import="qht.shopmypham.com.vn.tools.Format" %>
-<%@ page import="qht.shopmypham.com.vn.tools.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
@@ -334,7 +332,6 @@
                                 for (CheckOut checkOut : checkOutList1) {
                                     List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
                                     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
-                                    TransportS transport = api.getOrderById(checkOut.getIdTransport());
                                     int total1 = 0;
                                     String status = "";
                                     if (checkOut.getIdStatus() == 0) {
@@ -438,8 +435,9 @@
                                     if (voucher != null) {
                                         reduction = total1 * voucher.getPrice() / 100;
                                     }
-                                    int priceLast = total1 - reduction;%>
-                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + transport.getFee())%>
+                                    int priceLast = total1 - reduction;
+                                    int fee = (priceLast>=100000)?0:25000;%>
+                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + fee)%>
                                     đ</h3>
                             </div>
                         </div>
@@ -458,7 +456,6 @@
                             for (CheckOut checkOut : checkOutList2) {
                                 List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
                                 Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
-                                TransportS transport = api.getOrderById(checkOut.getIdTransport());
                                 int total2 = 0;
                                 String status = "";
                                 if (checkOut.getIdStatus() == 0) {
@@ -549,8 +546,10 @@
                                     if (voucher != null) {
                                         reduction = total2 * voucher.getPrice() / 100;
                                     }
-                                    int priceLast = total2 - reduction;%>
-                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + transport.getFee())%>
+                                    int priceLast = total2 - reduction;
+                                    int fee = (priceLast>=100000)?0:25000;
+                                %>
+                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + fee)%>
                                     đ</h3>
                             </div>
                         </div>
@@ -570,7 +569,6 @@
                                 for (CheckOut checkOut : checkOutList3) {
                                     List<ListProductByCheckOut> productByCheckOutList = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
                                     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
-                                    TransportS transport = api.getOrderById(checkOut.getIdTransport());
                                     int total2 = 0;
                                     String status = "";
                                     if (checkOut.getIdStatus() == 0) {
@@ -661,8 +659,9 @@
                                     if (voucher != null) {
                                         reduction = total2 * voucher.getPrice() / 100;
                                     }
-                                    int priceLast = total2 - reduction;%>
-                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + transport.getFee())%>
+                                    int priceLast = total2 - reduction;
+                                    int fee = (priceLast>=100000)?0:25000;%>
+                                <h3 style="color: #ff4d00; margin-left: 10px"><%=Format.formatPrice(priceLast + fee)%>
                                     đ</h3>
                             </div>
                         </div>

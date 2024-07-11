@@ -85,10 +85,11 @@ public class LoginService {
     }
     public static void signUp(String user, String pass, String email, int idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("INSERT INTO account(user,pass,email,status,fullName,phone,address)" +
-                                "VALUES (?,?,?,1,?,?,?)")
-                        .bind(0, user).bind(1, pass).bind(2,email)
-                        .bind(3,"").bind(4,"").bind(5,"")
+                h.createUpdate("INSERT INTO account(id, user,pass,email,status,fullName,phone,address)" +
+                                "VALUES (?,?,?,?,0,?,?,?)")
+                        .bind(0, idA)
+                        .bind(1, user).bind(2, pass).bind(3,email)
+                        .bind(4,"").bind(5,"").bind(6,"")
                         .execute()
         );
         signUpPower(idA);
@@ -96,18 +97,20 @@ public class LoginService {
     public static void signUpFacebook(String idFacebook, String nameFacebook, int idA) {
         JDBiConnector.me().withHandle(h ->
                 h.createUpdate("INSERT INTO account(fullName,idFacebook,status)" +
-                                "VALUES (?,?,1)")
-                        .bind(0, nameFacebook).bind(1, idFacebook)
+                                "VALUES (?,?,?,1)")
+                        .bind(0,"")
+                        .bind(1, nameFacebook).bind(2, idFacebook)
                         .execute()
         );
         signUpPower(idA);
     }
     public static void signUpGoogle(String idGoogle, String email, int idA) {
         JDBiConnector.me().withHandle(h ->
-                h.createUpdate("INSERT INTO account(email,idGoogle,status)" +
-                                "VALUES (?,?,1)")
-                        .bind(0, email)
-                        .bind(1, idGoogle)
+                h.createUpdate("INSERT INTO account(user, email,idGoogle,status)" +
+                                "VALUES (?,?,?,1)")
+                        .bind(0, "")
+                        .bind(1, email)
+                        .bind(2, idGoogle)
                         .execute()
         );
         signUpPower(idA);

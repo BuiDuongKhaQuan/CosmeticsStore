@@ -59,7 +59,7 @@
                                     <th>Hình ảnh</th>
                                     <th>Tên tài khoản</th>
                                     <th data-breakpoints="xs">email</th>
-                                    <th data-breakpoints="xs md">Trang thái </th>
+                                    <th data-breakpoints="xs md">Trang thái</th>
                                     <th data-breakpoints="sm xs md">Hành động</th>
                                 </tr>
                                 </thead>
@@ -73,8 +73,18 @@
                                     <td><h5><%=account.getFullName()%>
                                     </h5>
                                     </td>
-                                    <td><%=account.getEmail()%></td>
-                                    <td><span class="col-green">Đang hoạt động</span></td>
+                                    <td><%=account.getEmail()%>
+                                    </td>
+                                    <td>
+                                        <% String status = "";
+                                            if (account.getStatus() == 1) {
+                                                status = "<span class=\"col-green\">Đang hoạt động</span>";
+                                            } else {
+                                                status = "<span class=\"col-red\">Bị khóa</span>";
+                                            }
+                                        %>
+                                        <%=status%>
+                                    </td>
                                     <td>
                                         <a href="admin-account?command=edit&IdA=<%=account.getId()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-green"><i

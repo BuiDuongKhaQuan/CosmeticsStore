@@ -55,8 +55,8 @@ public class UserForgotPass extends HttpServlet {
                 } else {
                     idA = acc.getId();
                     Email email1 = new Email();
-                    email1.setFrom("khaquan9a2.2016@gmail.com");
-                    email1.setFromPasswork("xowopqrkiyjsdsbf");
+                    email1.setFrom("thaile1004lop9a6@gmail.com");
+                    email1.setFromPasswork("ytom nvkd larf pdla");
                     email1.setTo(email);
                     email1.setSubject("Quên mật khẩu");
                     StringBuffer sb = new StringBuffer();
@@ -66,13 +66,13 @@ public class UserForgotPass extends HttpServlet {
                     sb.append("Mã có hiệu lực trong 3 phút!");
                     email1.setContent(sb.toString());
                     EmailUtil.send(email1);
-                    OTPService.addOTP(String.valueOf(acc.getId()), String.valueOf(number));
+                    OTPService.addOTP(String.valueOf(acc.getId()), String.valueOf(number), 0);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write("active");
-                    content ="Quên mật khẩu gửi otp thành công";
-                    level= 3;
-                    action= 9;
+                    content = "Quên mật khẩu gửi otp thành công";
+                    level = 3;
+                    action = 9;
                 }
             } catch (Exception e) {
                 request.setAttribute("mess", e.getMessage());
@@ -87,7 +87,7 @@ public class UserForgotPass extends HttpServlet {
             List<OTP> otpList = OTPService.getOTPByIdA(idA1);
             Collections.reverse(otpList);
             String otp = String.valueOf(otpList.get(0).getOTP());
-            if (count < 3) {
+            if (otpList.get(0).getcount() < 3) {
                 if (reOtp.equals(otp) && pass.equals(repass)) {
                     AccountService.changePasswordAccountById(idA1, Encode.enCodeMD5(pass));
                     request.getSession().removeAttribute("account_forgot_pass");
@@ -98,12 +98,14 @@ public class UserForgotPass extends HttpServlet {
                             "                    <i class=\"fa-light fa-check\"></i>\n" +
                             "                    <label>Đổi mật khẩu thành công! <a href=\"login.jsp\">Đăng nhập</a></label>\n" +
                             "                </div>");
-                    content ="Cập nhật mật khẩu mới thành công "+ idA1;
-                    level= 3;
-                    action= 2;
+                    content = "Cập nhật mật khẩu mới thành công " + idA1;
+                    level = 3;
+                    action = 2;
                 }
                 if (!reOtp.equals(otp)) {
+                    int count = otpList.get(0).getcount();
                     count++;
+                    OTPService.updateCount(count, otpList.get(0).getIdOTP());
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(" <div class=\"remember-forgot\"\n" +
@@ -112,8 +114,8 @@ public class UserForgotPass extends HttpServlet {
                             "                    <label>Sai mã OTP, nhập sai quá 3 lần tài khoản của bạn sẽ bị khóa!</label>\n" +
                             "                </div>");
                     content = "Sai otp";
-                    level=3;
-                    action=3;
+                    level = 3;
+                    action = 3;
                 }
             } else {
                 AccountService.lockUpAcountById("0", String.valueOf(acc.getId()));
@@ -124,9 +126,9 @@ public class UserForgotPass extends HttpServlet {
                         "                    <i class=\"bx bx-error-circle\" style=\"margin-right: 2px;\"></i>\n" +
                         "                    <label>Tài khoản của bạn đã bị khóa! <a href=\"contact\">Trợ giúp</a></label>\n" +
                         "                </div>");
-                content = "tài khoản đã bị khóa "+idA1;
-                level=3;
-                action=3;
+                content = "tài khoản đã bị khóa " + idA1;
+                level = 3;
+                action = 3;
             }
         }
         LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);

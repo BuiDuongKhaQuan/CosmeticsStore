@@ -163,7 +163,7 @@
                     vụ</label
                 >
             </div>
-            <button type="submit" value="submit" class="btn">Đăng ký</button>
+            <button type="submit" value="submit" class="btn" onclick="otp()">Đăng ký</button>
             <div class="login-register">
                 <p>
                     Bạn đã có tài khoản?

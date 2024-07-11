@@ -78,6 +78,20 @@ public class AdminAccount extends HttpServlet {
                     level = 4;
                     content = "Xóa tài khoản " + idA;
                 }
+                if (command.equals("lock")){
+                    String IdA = request.getParameter("id");
+                    AccountService.lockUpAcountById("0",IdA);
+                    action = 3;
+                    level = 4;
+                    content = "Khóa tài khoản " + idA;
+                }
+                if (command.equals("unLock")){
+                    String IdA = request.getParameter("id");
+                    AccountService.lockUpAcountById("1",IdA);
+                    action = 3;
+                    level = 4;
+                    content = "Mở khóa tài khoản " + idA;
+                }
                 LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
             } else {
                 response.sendRedirect(error404);

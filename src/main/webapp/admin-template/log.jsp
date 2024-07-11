@@ -100,6 +100,7 @@
                                 <%}%>
                                 </tbody>
                             </table>
+                            <a class="btn btn-info" href="AdminLog?command=export">Xuất file excel</a>
                         </div>
                     </div>
                 </div>

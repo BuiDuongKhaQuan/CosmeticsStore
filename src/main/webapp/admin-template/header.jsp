@@ -338,7 +338,7 @@
                     <li><a href="AdminWareHouse?command=add">Thêm hàng</a></li>
                 </ul>
             </li>
-            <li><a href="AdminLog"><i class="zmdi zmdi-home"></i><span>Quản lý log</span></a></li>
+            <li><a href="AdminLog?command=log"><i class="zmdi zmdi-home"></i><span>Quản lý log</span></a></li>
             <%--            <li>--%>
             <%--                <div class="progress-container progress-primary m-t-10">--%>
             <%--                    <span class="progress-badge">Lưu lượng truy cập tháng này</span>--%>

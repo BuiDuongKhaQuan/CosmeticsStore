@@ -130,9 +130,6 @@
                                     <%}%>
 
                                     <td>
-                                        <a href="admin-order?command=edit&IdCk=<%=co.getIdCk()%>"
-                                           class="btn btn-default waves-effect waves-float btn-sm waves-green"><i
-                                                class="zmdi zmdi-edit"></i></a>
                                         <a href="admin-order?command=delete&IdCk=<%=co.getIdCk()%>"
                                            class="btn btn-default waves-effect waves-float btn-sm waves-red"><i
                                                 class="zmdi zmdi-delete"></i></a>

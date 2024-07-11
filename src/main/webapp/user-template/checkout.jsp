@@ -262,13 +262,25 @@
         xhr.send();
     }
 
+    // function getCalculateFee() {
+    //     var districtID = document.getElementById("districtID").value;
+    //     var wardID = document.getElementById("wardID").value;
+    //
+    //     // Tạo yêu cầu AJAX để lấy danh sách quận/huyện tương ứng từ servlet
+    //     var xhr = new XMLHttpRequest();
+    //     xhr.open("GET", "checkout?command=total&districtID=" + districtID + "&wardID=" + wardID, true);
+    //     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    //     xhr.onreadystatechange = function () {
+    //         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+    //             document.getElementById("calculate_fee").innerHTML = this.responseText;
+    //         }
+    //     };
+    //     xhr.send();
+    // }
     function getCalculateFee() {
-        var districtID = document.getElementById("districtID").value;
-        var wardID = document.getElementById("wardID").value;
-
         // Tạo yêu cầu AJAX để lấy danh sách quận/huyện tương ứng từ servlet
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "checkout?command=total&districtID=" + districtID + "&wardID=" + wardID, true);
+        xhr.open("GET", "checkout?command=total", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {

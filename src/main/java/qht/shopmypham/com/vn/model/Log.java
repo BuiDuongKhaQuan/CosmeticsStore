@@ -118,7 +118,22 @@ public class Log implements Serializable {
         }
         return action;
     }
-
+    public String levelLog(){
+        String level = "";
+        if (this.getLevel()==1){
+            level = "Thông tin";
+        }
+        if (this.getLevel()==2){
+            level = "Thông báo";
+        }
+        if (this.getLevel()==3){
+            level = "Cảnh báo";
+        }
+        if (this.getLevel()==4){
+            level = "Nguy hiểm";
+        }
+        return level;
+    }
     public String actionIcon() {
         String action = "";
         if (this.getAction() == 1) {

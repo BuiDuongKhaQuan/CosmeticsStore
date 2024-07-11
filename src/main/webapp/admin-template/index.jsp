@@ -22,10 +22,10 @@
     <link rel="stylesheet" href="admin-template/assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="admin-template/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css"/>
     <link rel="stylesheet" href="admin-template/assets/plugins/charts-c3/plugin.css"/>
-
     <link rel="stylesheet" href="admin-template/assets/plugins/morrisjs/morris.min.css"/>
-    <!-- Custom Css -->
     <link rel="stylesheet" href="admin-template/assets/css/style.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="theme-blush">
@@ -87,7 +87,7 @@
                     <div class="card widget_2 big_icon email">
                         <div class="body">
                             <%
-                                List<CheckOut>checkOutList = (List<CheckOut>) request.getAttribute("checkOutList");
+                                List<CheckOut> checkOutList = (List<CheckOut>) request.getAttribute("checkOutList");
                             %>
                             <h6>Đơn hàng</h6>
                             <h2><%=checkOutList.size()%><small class="info"> đơn</small></h2>
@@ -187,7 +187,8 @@
                                     <div class="state_w1 mb-1 mt-1">
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <h5><%=Format.formatPrice(CheckOutService.getAllCheckOut().size())%></h5>
+                                                <h5><%=Format.formatPrice(CheckOutService.getAllCheckOut().size())%>
+                                                </h5>
                                                 <span><i class="zmdi zmdi-print"></i> Hóa đơn</span>
                                             </div>
                                             <div class="sparkline" data-type="bar" data-width="97%" data-height="55px"
@@ -199,138 +200,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="body">
-                            <div id="chart-area-spline-sracked" class="c3_chart d_sales"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row clearfix">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card mcard_4">
-                        <div class="body">
-                            <ul class="header-dropdown list-unstyled">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"
-                                       role="button" aria-haspopup="true" aria-expanded="false"> <i
-                                            class="zmdi zmdi-menu"></i> </a>
-                                    <ul class="dropdown-menu slideUp">
-                                        <li><a href="javascript:void(0);">Sửa</a></li>
-                                        <li><a href="javascript:void(0);">Xóa</a></li>
-                                        <li><a href="javascript:void(0);">Báo cáo</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <div class="img">
-                                <img src="admin-template/assets/images/lg/avatar1.jpg" class="rounded-circle" alt="profile-image">
-                            </div>
-                            <div class="user">
-                                <h5 class="mt-3 mb-1">Eliana Smith</h5>
-                                <small class="text-muted">Thiết kế UI/UX </small>
-                            </div>
-                            <ul class="list-unstyled social-links">
-                                <li><a href="javascript:void(0);"><i class="zmdi zmdi-dribbble"></i></a></li>
-                                <li><a href="javascript:void(0);"><i class="zmdi zmdi-behance"></i></a></li>
-                                <li><a href="javascript:void(0);"><i class="zmdi zmdi-pinterest"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card w_data_1">
-                        <div class="body">
-                            <div class="w_icon pink"><i class="zmdi zmdi-bug"></i></div>
-                            <h4 class="mt-3 mb-0">12.1k</h4>
-                            <span class="text-muted">Lỗi đã sửa</span>
-                            <div class="w_description text-success">
-                                <i class="zmdi zmdi-trending-up"></i>
-                                <span>15.5%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card w_data_1">
-                        <div class="body">
-                            <div class="w_icon cyan"><i class="zmdi zmdi-ticket-star"></i></div>
-                            <h4 class="mt-3 mb-1">01.8k</h4>
-                            <span class="text-muted">Đã gửi Tickers</span>
-                            <div class="w_description text-success">
-                                <i class="zmdi zmdi-trending-up"></i>
-                                <span>95.5%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="card">
-                        <div class="body">
-                            <div class="chat-widget">
-                                <ul class="list-unstyled">
-                                    <li class="left">
-                                        <img src="admin-template/assets/images/xs/avatar3.jpg" class="rounded-circle" alt="">
-                                        <ul class="list-unstyled chat_info">
-                                            <li><small>Frank 11:00AM</small></li>
-                                            <li><span class="message bg-blue">Hello, Michael</span></li>
-                                            <li><span class="message bg-blue">How are you!</span></li>
-                                        </ul>
-                                    </li>
-                                    <li class="right">
-                                        <ul class="list-unstyled chat_info">
-                                            <li><small>11:10AM</small></li>
-                                            <li><span class="message">Hello, Frank</span></li>
-                                        </ul>
-                                    </li>
-                                    <li class="right">
-                                        <ul class="list-unstyled chat_info">
-                                            <li><small>11:11AM</small></li>
-                                            <li><span class="message">I'm fine what about you?</span></li>
-                                        </ul>
-                                    </li>
-                                    <li class="left">
-                                        <img src="admin-template/assets/images/xs/avatar2.jpg" class="rounded-circle" alt="">
-                                        <ul class="list-unstyled chat_info">
-                                            <li><small>Gary 11:13AM</small></li>
-                                            <li><span class="message bg-indigo">Hello, Michael and Frank</span></li>
-                                        </ul>
-                                    </li>
-                                    <li class="left">
-                                        <img src="admin-template/assets/images/xs/avatar5.jpg" class="rounded-circle" alt="">
-                                        <ul class="list-unstyled chat_info">
-                                            <li><small>Hossein 11:14AM</small></li>
-                                            <li><span class="message bg-amber">Hello, team</span></li>
-                                            <li><span
-                                                    class="message bg-amber">Please let me know your requirements.</span>
-                                            </li>
-                                            <li><span class="message bg-amber">How would like to connect with us?</span>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="right">
-                                        <ul class="list-unstyled chat_info">
-                                            <li><small>11:15AM</small></li>
-                                            <li><span class="message">Hello, Hossein</span></li>
-                                            <li><span class="message">Meeting on conference room at 12:00PM</span></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="input-group mt-3">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="javascript:void(0);">Tim Hank</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">Hossein Shams</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">John Smith</a>
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" placeholder="Enter text here..."
-                                       aria-label="Text input with dropdown button">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="zmdi zmdi-mail-send"></i></span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -338,7 +207,7 @@
                 <div class="col-md-12 col-lg-8">
                     <div class="card">
                         <div class="header">
-                            <h2><strong>TRUY CẬP THỐNG KÊ</strong>THỐNG KÊ</h2>
+                            <h2><strong>THỐNG KÊ DOANH THU</strong> THEO THờI GIAN TÙY CHỌN</h2>
                             <ul class="header-dropdown">
                                 <li class="dropdown"><a href="javascript:void(0);" class="dropdown-toggle"
                                                         data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -354,15 +223,28 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="body">
-                            <div id="world-map-markers" class="jvector-map"></div>
+                        <div class="body" style="min-height: 600px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <canvas id="revenueChart" width="400" height="200"></canvas>
+                            <form id="dateForm" style="padding: 20px 0;
+                                                        display: flex;
+                                                        justify-content: center;
+                                                        align-items: center;
+                                                        gap: 20px">
+                                <label style="margin: 0">
+                                    Ngày bắt đầu: <input type="date" id="startDate" name="startDate">
+                                </label>
+                                <label style="margin: 0">
+                                    Ngày kết thúc: <input type="date" id="endDate" name="endDate">
+                                </label>
+                                <button class="btn btn-info" type="button" onclick="fetchData()">Submit</button>
+                            </form>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-12">
                     <div class="card">
                         <div class="header">
-                            <h2><strong>Phân bố</strong></h2>
+                            <h2><strong>THỐNG KÊ DOANH THU THEO</strong> DOANH MỤC</h2>
                             <ul class="header-dropdown">
                                 <li class="dropdown"><a href="javascript:void(0);" class="dropdown-toggle"
                                                         data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -378,9 +260,18 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="body text-center">
-                            <div id="chart-pie" class="c3_chart d_distribution"></div>
-                            <button class="btn btn-primary mt-4 mb-4">Xem thêm</button>
+                        <div class="body text-center" style="min-height: 600px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <canvas id="categoryRevenueChart" width="400" height="200"></canvas>
+                            <form id="categoryForm" style="padding: 20px 0;
+                                                        display: flex;
+                                                        justify-content: center;
+                                                        align-items: center;
+                                                        gap: 20px">
+                                <label style="margin: 0">
+                                    Tháng: <input type="month" id="month" name="month">
+                                </label>
+                                <button class="btn btn-info" type="button" onclick="fetchCategoryData()">Submit</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -439,7 +330,8 @@
 <!-- Jquery Core Js -->
 <script src="admin-template/assets/bundles/libscripts.bundle.js"></script>
 <!-- Lib Scripts Plugin Js ( jquery.v3.2.1, Bootstrap4 js) -->
-<script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script> <!-- slimscroll, waves Scripts Plugin Js -->
+<script src="admin-template/assets/bundles/vendorscripts.bundle.js"></script>
+<!-- slimscroll, waves Scripts Plugin Js -->
 
 <script src="admin-template/assets/bundles/jvectormap.bundle.js"></script> <!-- JVectorMap Plugin Js -->
 <script src="admin-template/assets/bundles/sparkline.bundle.js"></script> <!-- Sparkline Plugin Js -->
@@ -447,6 +339,139 @@
 
 <script src="admin-template/assets/bundles/mainscripts.bundle.js"></script>
 <script src="admin-template/assets/js/pages/index.js"></script>
+
+<script>
+    var revenueChart; // Biến toàn cục lưu trữ biểu đồ doanh thu
+    var categoryRevenueChart; // Biến toàn cục lưu trữ biểu đồ doanh thu theo danh mục
+
+    function initializeCharts() {
+        var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+        revenueChart = new Chart(ctxRevenue, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctxCategory = document.getElementById('categoryRevenueChart').getContext('2d');
+        categoryRevenueChart = new Chart(ctxCategory, {
+            type: 'pie',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Doanh thu theo danh mục',
+                    data: [],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.label + ': ' + context.raw + ' VND';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function fetchData() {
+        var startDate = document.getElementById('startDate').value;
+        var endDate = document.getElementById('endDate').value;
+
+        $.ajax({
+            url: 'RevenueServlet',
+            type: 'POST',
+            data: {
+                startDate: startDate,
+                endDate: endDate
+            },
+            success: function (data) {
+                var labels = [];
+                var revenues = [];
+                data.forEach(function (record) {
+                    labels.push(record.date);
+                    revenues.push(record.totalRevenue);
+                });
+
+                // Cập nhật dữ liệu biểu đồ
+                revenueChart.data.labels = labels;
+                revenueChart.data.datasets[0].data = revenues;
+                revenueChart.update();
+            }
+        });
+    }
+
+    function fetchCategoryData() {
+        var monthInput = document.getElementById('month').value;
+        var month = monthInput.split("-")[1];
+        var year = monthInput.split("-")[0];
+
+        $.ajax({
+            url: 'CategoryRevenueServlet',
+            type: 'POST',
+            data: {
+                month: month,
+                year: year
+            },
+            success: function (data) {
+                var categoryLabels = [];
+                var categoryRevenues = [];
+                data.forEach(function (record) {
+                    categoryLabels.push(record.categoryName);
+                    categoryRevenues.push(record.totalRevenue);
+                });
+
+                // Cập nhật dữ liệu biểu đồ
+                categoryRevenueChart.data.labels = categoryLabels;
+                categoryRevenueChart.data.datasets[0].data = categoryRevenues;
+                categoryRevenueChart.update();
+            }
+        });
+    }
+
+    // Khởi tạo biểu đồ khi trang được tải
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeCharts();
+    });
+</script>
 </body>
 
 

@@ -29,10 +29,9 @@
     int total1 = 0;
     CheckOut checkOut = (CheckOut) request.getAttribute("checkOut");
     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
-    TransportS transport = (TransportS) request.getAttribute("transport");
     Province province = api.getProvinceById(checkOut.getIdProvince());
-    District district = api.getDistrictById(checkOut.getIdProvince(), Integer.parseInt(transport.getToDistrictId()));
-    Ward ward = api.getWardById(Integer.parseInt(transport.getToDistrictId()), Integer.parseInt(transport.getToWardId()));
+    District district = api.getDistrictById(checkOut.getIdProvince(), Integer.parseInt(checkOut.getIdDistrict()));
+    Ward ward = api.getWardById(Integer.parseInt(checkOut.getIdDistrict()), checkOut.getIdWard());
     List<ListProductByCheckOut> productByCheckOutList = (List<ListProductByCheckOut>) request.getAttribute("listProductByCheckOuts");
     String address = ward.getWardName() + ", " + district.getDistrictName() + ", " + province.getProvinceName();
     String status = "";
@@ -123,7 +122,7 @@
                                             <div class="si2">
                                                 <div>Ngày giao dự kiến</div>
                                                 <div>
-                                                    <p style="margin-left: 15px"><%=DateUtil.customDateTimeFormat(api.leadTime(transport.getToDistrictId(), transport.getToWardId()).get(0).getFormattedDate())%>
+                                                    <p style="margin-left: 15px"><%=checkOut.getConfirmDate()==null?"Chưa có thông tin":checkOut.getConfirmDate()%>
                                                     </p>
                                                 </div>
                                             </div>
@@ -134,7 +133,7 @@
                                             <div class="si2">
                                                 <div>Cập nhật thời gian</div>
                                                 <div>
-                                                    <p style="margin-left: 15px"><%=transport.getUpdated_at()%>
+                                                    <p style="margin-left: 15px"><%=checkOut.getReceivedDate()==null?"Chưa có thông tin":checkOut.getReceivedDate()%>
                                                     </p>
                                                 </div>
                                             </div>
@@ -145,7 +144,7 @@
                                             <div class="si2">
                                                 <div>Ngày tạo đơn</div>
                                                 <div>
-                                                    <p style="margin-left: 15px"><%=transport.getCreated_at()%>
+                                                    <p style="margin-left: 15px"><%=checkOut.getOrderDate()%>
                                                     </p>
                                                 </div>
 
@@ -157,7 +156,7 @@
                                             <div class="si2">
                                                 <div>Mã vận đơn</div>
                                                 <div>
-                                                    <p style="margin-left: 15px"><%=transport.getId()%>
+                                                    <p style="margin-left: 15px"><%=checkOut.getIdTransport()%>
                                                     </p>
                                                 </div>
 
@@ -217,7 +216,8 @@
                                     if (voucher != null) {
                                         reduction = total1 * voucher.getPrice() / 100;
                                     }
-                                    int priceLast = total1 - reduction;%>
+                                    int priceLast = total1 - reduction;
+                                    int fee = (priceLast>=100000)?0:25000;%>
                                 <div class="inf">
                                     <div class="inf-text">Tổng tiền hàng</div>
                                     <div class="inf-m">
@@ -227,7 +227,7 @@
                                 <div class="inf">
                                     <div class="inf-text">Phí vận chuyển</div>
                                     <div class="inf-m">
-                                        <div><%=Format.formatPrice(transport.getFee())%>đ</div>
+                                        <div><%=Format.formatPrice(fee)%>đ</div>
                                     </div>
                                 </div>
                                 <div class="inf">
@@ -239,7 +239,7 @@
                                 <div class="inf">
                                     <div class="inf-text">Thành tiền</div>
                                     <div class="inf-m">
-                                        <div><%=Format.formatPrice(priceLast + transport.getFee())%>đ
+                                        <div><%=Format.formatPrice(priceLast + fee)%>đ
                                         </div>
                                     </div>
                                 </div>

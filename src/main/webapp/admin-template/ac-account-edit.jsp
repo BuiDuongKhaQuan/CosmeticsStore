@@ -96,6 +96,15 @@
                                                     class="btn btn-raised btn-primary btn-round waves-effect">Đặt lại
                                                 mật khẩu
                                             </button>
+                                            <%if (ac.getStatus()==0){%>
+                                            <button onclick="unLock(<%=ac.getId()%>)"
+                                                    class="btn btn-raised btn-primary btn-round waves-effect">Mở khóa
+                                            </button>
+                                            <%} else {%>
+                                            <button onclick="lockA(<%=ac.getId()%>)"
+                                                    class="btn btn-raised btn-primary btn-round waves-effect">Khóa
+                                            </button>
+                                            <%}%>
                                             <button type="submit" onclick="saveAccount(<%=ac.getId()%>)"
                                                     class="btn btn-raised btn-primary btn-round waves-effect">Lưu
                                             </button>
@@ -237,7 +246,28 @@
         };
         xhr.send();
     }
-
+    function lockA(id) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "admin-account?command=lock&id=" + id, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                showNotification('Đã khóa tài khoản');
+            }
+        };
+        xhr.send();
+    }
+    function unLock(id) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "admin-account?command=unLock&id=" + id, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                showNotification('Mở khóa thành công');
+            }
+        };
+        xhr.send();
+    }
     function saveAuthur(idA) {
         var acountMana = document.getElementById("acountMana").checked;
         var productMana = document.getElementById("productMana").checked;

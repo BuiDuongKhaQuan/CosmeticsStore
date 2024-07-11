@@ -123,10 +123,9 @@ public class AdminOrder extends HttpServlet {
                     Account account = AccountService.getAccountById(checkOut.getIdA());
                     Voucher voucher = VoucherService.getVoucherById(checkOut.getIdVoucher());
                     List<ListProductByCheckOut> list = ProductCheckoutService.getProductProductCheckoutByIdCk(String.valueOf(checkOut.getIdCk()));
-                    TransportS transport = api.getOrderById(checkOut.getIdTransport());
                     Province province = api.getProvinceById(checkOut.getIdProvince());
-                    District district = api.getDistrictById(checkOut.getIdProvince(), Integer.parseInt(transport.getToDistrictId()));
-                    Ward ward = api.getWardById(Integer.parseInt(transport.getToDistrictId()), Integer.parseInt(transport.getToWardId()));
+                    District district = api.getDistrictById(checkOut.getIdProvince(), Integer.parseInt(checkOut.getIdDistrict()));
+                    Ward ward = api.getWardById(Integer.parseInt(checkOut.getIdDistrict()), checkOut.getIdWard());
                     String address = ward.getWardName() + ", " + district.getDistrictName() + ", " + province.getProvinceName();
                     String payment = "";
                     if (checkOut.getIdPm() == 1) {
@@ -199,11 +198,11 @@ public class AdminOrder extends HttpServlet {
                     contentStream.moveTextPositionByAmount(0, -50);
                     contentStream.drawString("Tổng hàng: " + Format.formatPrice(total) + "đ");
                     contentStream.moveTextPositionByAmount(0, -20);
-                    contentStream.drawString("Phí vận chuyển: " + Format.formatPrice(transport.getFee()) + "đ");
+                    contentStream.drawString("Phí vận chuyển: " + Format.formatPrice((priceLast>=100000)?0:25000) + "đ");
                     contentStream.moveTextPositionByAmount(0, -20);
                     contentStream.drawString("Giảm giá: - " + Format.formatPrice(reduction) + "đ");
                     contentStream.moveTextPositionByAmount(0, -20);
-                    contentStream.drawString("Tổng đơn hàng: " + Format.formatPrice(priceLast + transport.getFee()) + "đ");
+                    contentStream.drawString("Tổng đơn hàng: " + Format.formatPrice(priceLast + ((priceLast>=100000)?0:25000)) + "đ");
 
                     contentStream.moveTextPositionByAmount(0, -50);
                     contentStream.drawString("Chú ý: " + checkOut.getNote());

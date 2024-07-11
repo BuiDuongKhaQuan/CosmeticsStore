@@ -10,8 +10,8 @@ public class CheckOut implements Serializable {
     int idPm;
     int idA;
     int idStatus;
-    int idAdmin,idProvince;
-    String orderDate , detailAddress;
+    int idAdmin,idProvince, idWard;
+    String orderDate , detailAddress, idDistrict;
     String confirmDate;
     String receivedDate;
     String name;
@@ -20,7 +20,7 @@ public class CheckOut implements Serializable {
     public CheckOut() {
     }
 
-    public CheckOut(int idCk, String phone, String idTransport, String idVoucher, int idPm, int idA, int idStatus, int idAdmin, int idProvince, String orderDate, String detailAddress, String confirmDate, String receivedDate, String name, String note) {
+    public CheckOut(int idCk, String phone, String idTransport, String idVoucher, int idPm, int idA, int idStatus, int idAdmin, int idProvince, int idWard, String idDistrict, String orderDate, String detailAddress, String confirmDate, String receivedDate, String name, String note) {
         this.idCk = idCk;
         this.phone = phone;
         this.idTransport = idTransport;
@@ -30,12 +30,30 @@ public class CheckOut implements Serializable {
         this.idStatus = idStatus;
         this.idAdmin = idAdmin;
         this.idProvince = idProvince;
+        this.idWard = idWard;
+        this.idDistrict = idDistrict;
         this.orderDate = orderDate;
         this.detailAddress = detailAddress;
         this.confirmDate = confirmDate;
         this.receivedDate = receivedDate;
         this.name = name;
         this.note = note;
+    }
+
+    public int getIdWard() {
+        return idWard;
+    }
+
+    public void setIdWard(int idWard) {
+        this.idWard = idWard;
+    }
+
+    public String getIdDistrict() {
+        return idDistrict;
+    }
+
+    public void setIdDistrict(String idDistrict) {
+        this.idDistrict = idDistrict;
     }
 
     @Override

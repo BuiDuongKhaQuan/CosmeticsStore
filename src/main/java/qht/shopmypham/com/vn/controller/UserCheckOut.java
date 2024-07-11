@@ -1,5 +1,6 @@
 package qht.shopmypham.com.vn.controller;
 
+import qht.shopmypham.com.vn.db.JDBiConnector;
 import qht.shopmypham.com.vn.model.*;
 import qht.shopmypham.com.vn.service.*;
 import qht.shopmypham.com.vn.tools.DateUtil;
@@ -9,7 +10,12 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.InetAddress;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,16 +47,24 @@ public class UserCheckOut extends HttpServlet {
                     reduction = totalPrice * voucher.getPrice() / 100;
                 }
                 int priceLast = totalPrice - reduction;
-                String wardID = request.getParameter("wardID");
-                String districtID = request.getParameter("districtID");
-                int calculateFee = api.calculateFee(districtID, wardID);
+//                String wardID = request.getParameter("wardID");
+//                String districtID = request.getParameter("districtID");
+//                int calculateFee = api.calculateFee(districtID, wardID);
+//                response.setContentType("application/json");
+//                response.setCharacterEncoding("UTF-8");
+//                response.getWriter().write("<li>Tổng tiền hàng <span>" + Format.formatPrice(totalPrice) + "đ</span></li>\n" +
+//                        "                                <li>Phí vận chuyển <span>" + Format.formatPrice(calculateFee) + "đ</span></li>\n" +
+//                        "                                <input type=\"hidden\" id=\"fee\" value=\"" + calculateFee + "\">\n" +
+//                        "                                <li>Giảm giá <span>- " + Format.formatPrice(reduction) + "đ</span></li>\n" +
+//                        "
+                int calculateFee = (totalPrice>=100000)?0:25000;
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("<li>Tổng tiền hàng <span>" + Format.formatPrice(totalPrice) + "đ</span></li>\n" +
                         "                                <li>Phí vận chuyển <span>" + Format.formatPrice(calculateFee) + "đ</span></li>\n" +
                         "                                <input type=\"hidden\" id=\"fee\" value=\"" + calculateFee + "\">\n" +
                         "                                <li>Giảm giá <span>- " + Format.formatPrice(reduction) + "đ</span></li>\n" +
-                        "                                <li>Tổng thanh toán <span>" + Format.formatPrice(priceLast + calculateFee) + "đ</span></li>");
+                        "    <li>Tổng thanh toán <span>" + Format.formatPrice(priceLast + calculateFee) + "đ</span></li>");
             }
 
             if (command.equals("checkout")) {
@@ -102,16 +116,31 @@ public class UserCheckOut extends HttpServlet {
             String wardID = request.getParameter("wardID");
             String payment = request.getParameter("payment");
             List<ListProductByCart> list = acc.getProductCart();
-            Transport transport = api.registerTransport(districtID, wardID);
+
+            int totalPrice = 0;
+
+            for (ListProductByCart l : list) {
+                Product p = ProductService.getProductById(l.getIdP());
+                totalPrice += (p.getPrice() * l.getQuantity());
+            }
+
+            int reduction = 0;
             if (voucher != null) {
-                CheckOutService.addCheckOutByIdA(phone, transport.getId(), payment, name, note,
+                reduction = totalPrice * voucher.getPrice() / 100;
+            }
+            int priceLast = totalPrice - reduction;
+            int calculateFee = (totalPrice >= 100000) ? 0 : 25000;
+            BigDecimal finalTotal = new BigDecimal(priceLast + calculateFee);
+
+            if (voucher != null) {
+                CheckOutService.addCheckOutByIdA( wardID, districtID,phone, "62de2c8249bf428fa738b40355a2316a", payment, name, note,
                         String.valueOf(acc.getId()), String.valueOf(voucher.getId()), nowDate, provinceID, address_detail);
                 VoucherService.editQuantityVouchert(voucher.getId(), voucher.getQuantity() - 1);
                 if ((voucher.getQuantity() - 1) == 0) {
                     VoucherService.editStatusVouchert(voucher.getId(), 0);
                 }
             } else {
-                CheckOutService.addCheckOutByIdA(phone, transport.getId(), payment, name, note, String.valueOf(acc.getId()), null, nowDate, provinceID, address_detail);
+                CheckOutService.addCheckOutByIdA( wardID, districtID,phone, "62de2c8249bf428fa738b40355a2316a", payment, name, note, String.valueOf(acc.getId()), null, nowDate, provinceID, address_detail);
             }
             session.removeAttribute("voucher");
             List<CheckOut> checkOutList = CheckOutService.getCheckOutByIdA(String.valueOf(acc.getId()));
@@ -120,11 +149,33 @@ public class UserCheckOut extends HttpServlet {
                 ProductService.upQuantityProductById(String.valueOf(ProductService.getProductById1(l.getIdP()).getQuantity() - l.getQuantity()), String.valueOf(l.getIdP()));
                 ProductCheckoutService.addProductToProductCheckout(idCk, String.valueOf(l.getIdP()), String.valueOf(l.getQuantity()));
             }
+
             CartService.deleteProductByIda(String.valueOf(acc.getId()));
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat("hh:mm:ss a dd/MM/yyyy");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date sqlDate = null;
+            try {
+                java.util.Date parsedDate = inputFormat.parse(nowDate);
+                sqlDate = Date.valueOf(outputFormat.format(parsedDate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            RevenueService.insertRevenue(sqlDate.toString(), finalTotal);
+
+            // Thêm doanh thu vào bảng CategoryRevenue
+            for (ListProductByCart l : list) {
+                Product p = ProductService.getProductById(l.getIdP());
+                Categories category = CategoryService.getCategoriesById(String.valueOf(p.getIdC()));
+                BigDecimal categoryRevenue = new BigDecimal(p.getPrice() * l.getQuantity());
+                CategoryRevenueService.insertCategoryRevenue(category.getNameC(), sqlDate.toString(),  categoryRevenue);
+            }
+
             if (acc != null) idA = acc.getId();
             LogService.addLog(idA, action, level, ipAddress, url, content, dateNow);
         } else {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
+
 }

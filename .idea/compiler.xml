@@ -10,7 +10,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="DoAnThucTapLTW" target="11" />
       <module name="ShopMyPham" target="11" />
     </bytecodeTargetLevel>
   </component>

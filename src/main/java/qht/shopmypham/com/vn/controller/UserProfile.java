@@ -54,8 +54,6 @@ public class UserProfile extends HttpServlet {
                 String idCk = request.getParameter("idCk");
                 CheckOut checkOut = CheckOutService.getCheckOutByIdCk(idCk);
                 List<ListProductByCheckOut> listProductByCheckOuts = ProductCheckoutService.getProductProductCheckoutByIdCk(idCk);
-                TransportS transport = api.getOrderById(checkOut.getIdTransport());
-                request.setAttribute("transport", transport);
                 request.setAttribute("listProductByCheckOuts", listProductByCheckOuts);
                 request.setAttribute("checkOut", checkOut);
                 request.getRequestDispatcher("user-template/order-detail.jsp").forward(request, response);

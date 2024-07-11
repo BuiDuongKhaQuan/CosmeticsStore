@@ -84,8 +84,8 @@
                             <p> Đơn hàng</p>
                             <div class="d-flex bd-highlight text-center mt-4">
                                 <div class="flex-fill bd-highlight">
-                                    <small class="text-muted">Trong</small>
-                                    <h5 class="mb-0"><%=DateUtil.monthNow()%>
+                                    <small class="text-muted">Trong năm</small>
+                                    <h5 class="mb-0"><%=DateUtil.yearNow()%>
                                     </h5>
                                 </div>
                             </div>
